@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="de">
 
@@ -7,17 +8,12 @@
 
     <title>NSAH - Nützliche Sparsame Alltags Hilfe</title>
 
-    <!-- Leaflet für die Karte -->
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     >
 
     <style>
-
-        /* =========================
-           HINTERGRUND
-           ========================= */
 
         body {
             margin: 0;
@@ -33,8 +29,10 @@
 
         .logo {
             position: absolute;
+
             top: 30px;
             left: 50%;
+
             transform: translateX(-50%);
 
             font-size: 80px;
@@ -60,6 +58,7 @@
             transform: translateX(-50%);
 
             font-size: 26px;
+
             color: white;
 
             white-space: nowrap;
@@ -67,7 +66,7 @@
 
 
         /* =========================
-           DUNKELGRAUER STRICH
+           STRICH
            ========================= */
 
         .strich {
@@ -85,18 +84,20 @@
 
 
         /* =========================
-           STARTSEITEN-BILD
+           WEBSITE BILD
            ========================= */
 
         .startbild {
             position: absolute;
 
             top: 230px;
+
             left: 50%;
 
             transform: translateX(-50%);
 
             width: 650px;
+
             max-width: 70%;
 
             height: auto;
@@ -107,8 +108,6 @@
 
             box-shadow:
                 0 0 25px rgba(255,255,255,0.08);
-
-            object-fit: contain;
         }
 
 
@@ -133,6 +132,7 @@
             border-radius: 7px;
 
             font-size: 16px;
+
             font-weight: bold;
 
             cursor: pointer;
@@ -169,15 +169,15 @@
             border-radius: 7px;
 
             font-size: 16px;
+
             font-weight: bold;
 
             cursor: pointer;
 
             z-index: 50;
 
-            display: none;
-
             align-items: center;
+
             gap: 8px;
         }
 
@@ -200,8 +200,22 @@
             object-fit: cover;
 
             border: 1px solid #555555;
+        }
 
-            flex-shrink: 0;
+
+        .profilbild-gross {
+            display: block;
+
+            width: 80px;
+            height: 80px;
+
+            margin: 0 auto 15px auto;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            border: 2px solid #444444;
         }
 
 
@@ -233,24 +247,9 @@
         }
 
 
-        .profilbild-gross {
-            display: block;
-
-            width: 80px;
-            height: 80px;
-
-            margin: 0 auto 15px auto;
-
-            border-radius: 50%;
-
-            object-fit: cover;
-
-            border: 2px solid #444444;
-        }
-
-
         .benutzer-name {
             font-size: 18px;
+
             font-weight: bold;
 
             margin-bottom: 5px;
@@ -315,6 +314,7 @@
             border-radius: 7px;
 
             font-size: 16px;
+
             font-weight: bold;
 
             cursor: pointer;
@@ -331,6 +331,23 @@
         /* =========================
            ANMELDE FENSTER
            ========================= */
+
+        .fenster-hintergrund {
+            display: none;
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background-color: rgba(0, 0, 0, 0.8);
+
+            z-index: 9999;
+        }
+
 
         .anmelde-fenster {
             position: absolute;
@@ -592,6 +609,7 @@
 
         .karten-titel {
             font-size: 20px;
+
             font-weight: bold;
         }
 
@@ -611,28 +629,29 @@
 
         #karte {
             width: 100%;
+
             height: calc(100% - 55px);
         }
 
 
         /* =========================
-           HANDY-ANSICHT
+           HANDY
            ========================= */
 
         @media (max-width: 600px) {
 
             body {
                 min-width: 0;
+
                 overflow-x: hidden;
             }
 
-
-            /* NSAH */
 
             .logo {
                 position: absolute;
 
                 top: 25px;
+
                 left: 63%;
 
                 transform: translateX(-50%);
@@ -643,12 +662,11 @@
             }
 
 
-            /* UNTERTITEL */
-
             .untertitel {
                 position: absolute;
 
                 top: 95px;
+
                 left: 63%;
 
                 transform: translateX(-50%);
@@ -665,19 +683,16 @@
             }
 
 
-            /* STARTBILD */
-
             .startbild {
                 top: 210px;
 
                 width: 85%;
+
                 max-width: 85%;
 
                 border-radius: 8px;
             }
 
-
-            /* STRICH */
 
             .strich {
                 left: 24%;
@@ -686,45 +701,36 @@
             }
 
 
-            /* ANMELDEN */
-
             .anmelden-button {
                 top: 18px;
+
                 left: 0px;
 
                 padding: 8px 11px;
 
                 font-size: 13px;
-
-                z-index: 50;
             }
 
 
-            /* KARTEN BUTTON */
-
             .karten-button {
                 top: 58px;
+
                 left: 5px;
 
                 padding: 8px 11px;
 
                 font-size: 13px;
-
-                z-index: 50;
             }
 
 
-            /* BENUTZER */
-
             .benutzer-button {
                 top: 18px;
+
                 left: 12px;
 
                 padding: 5px 10px 5px 5px;
 
                 font-size: 14px;
-
-                z-index: 50;
 
                 max-width: 150px;
 
@@ -738,54 +744,28 @@
 
             .profilbild {
                 width: 28px;
+
                 height: 28px;
             }
 
 
-            /* BENUTZER-MENÜ */
-
             .benutzer-menue {
                 top: 65px;
+
                 left: 12px;
 
                 width: calc(100% - 24px);
 
                 max-width: 260px;
-
-                z-index: 200;
             }
 
-
-            /* LOGIN-HINTERGRUND */
-
-            .fenster-hintergrund {
-                padding: 15px;
-
-                box-sizing: border-box;
-
-                overflow-y: auto;
-
-                z-index: 9999;
-            }
-
-
-            /* LOGIN-FENSTER */
 
             .anmelde-fenster {
-                position: absolute;
-
-                top: 50%;
-                left: 50%;
-
                 width: calc(100vw - 30px);
 
                 max-width: 380px;
 
                 padding: 22px;
-
-                transform: translate(-50%, -50%);
-
-                box-sizing: border-box;
 
                 max-height: calc(100vh - 30px);
 
@@ -793,14 +773,10 @@
             }
 
 
-            /* TITEL */
-
             .fenster-titel {
                 font-size: 21px;
             }
 
-
-            /* TABS */
 
             .tab {
                 padding: 12px 5px;
@@ -809,18 +785,12 @@
             }
 
 
-            /* EINGABEFELDER */
-
             .formular input {
-                width: 100%;
-
                 height: 48px;
 
                 font-size: 16px;
             }
 
-
-            /* BUTTON */
 
             .formular-button {
                 height: 48px;
@@ -829,17 +799,14 @@
             }
 
 
-            /* SCHLIESSEN */
-
             .schliessen {
                 font-size: 26px;
             }
 
 
-            /* KARTE */
-
             .karten-fenster {
                 width: 95%;
+
                 height: 85%;
             }
 
@@ -863,7 +830,7 @@
 
 
     <!-- =========================
-         BEDEUTUNG
+         UNTERTITEL
          ========================= -->
 
     <div class="untertitel">
@@ -872,25 +839,25 @@
 
 
     <!-- =========================
-         SPRITPREISE-BILD
+         WEBSITE-BILD
          ========================= -->
 
     <img
         class="startbild"
-        src="file:///C:/Users/Marlo/OneDrive/Bilder/42068048-spritpreise-in-sachsen-OlBG.jpg"
+        src="42068048-spritpreise-in-sachsen-OlBG.jpg"
         alt="Spritpreise"
     >
 
 
     <!-- =========================
-         DUNKELGRAUER STRICH
+         STRICH
          ========================= -->
 
     <div class="strich"></div>
 
 
     <!-- =========================
-         ANMELDEN BUTTON
+         ANMELDEN
          ========================= -->
 
     <button
@@ -904,7 +871,7 @@
 
 
     <!-- =========================
-         KARTEN BUTTON
+         KARTE
          ========================= -->
 
     <button
@@ -917,7 +884,7 @@
 
 
     <!-- =========================
-         BENUTZER BUTTON
+         BENUTZER
          ========================= -->
 
     <button
@@ -927,7 +894,7 @@
 
         <img
             class="profilbild"
-            src="file:///C:/Users/Marlo/Downloads/Screenshot2026-08-221720511.png"
+            src="profilbild.png"
             alt="Profilbild"
         >
 
@@ -946,27 +913,21 @@
         class="benutzer-menue"
         id="benutzerMenue">
 
-
-        <!-- PROFILBILD -->
-
         <img
             class="profilbild-gross"
-            src="file:///C:/Users/Marlo/Downloads/Screenshot2026-08-221720511.png"
+            src="profilbild.png"
             alt="Profilbild"
         >
-
 
         <div
             class="benutzer-name"
             id="benutzerName">
         </div>
 
-
         <div
             class="benutzer-email"
             id="benutzerEmail">
         </div>
-
 
         <button
             class="abmelden-button"
@@ -975,7 +936,6 @@
             Abmelden
 
         </button>
-
 
     </div>
 
@@ -988,19 +948,13 @@
         class="fenster-hintergrund"
         id="anmeldeFenster">
 
-
         <div class="anmelde-fenster">
-
 
             <div class="fenster-kopf">
 
-
                 <div class="fenster-titel">
-
                     NSAH Konto
-
                 </div>
-
 
                 <button
                     class="schliessen"
@@ -1010,16 +964,12 @@
 
                 </button>
 
-
             </div>
 
 
-            <!-- =========================
-                 TABS
-                 ========================= -->
+            <!-- TABS -->
 
             <div class="tabs">
-
 
                 <button
                     class="tab aktiv"
@@ -1030,7 +980,6 @@
 
                 </button>
 
-
                 <button
                     class="tab"
                     id="registrierenTab"
@@ -1040,40 +989,32 @@
 
                 </button>
 
-
             </div>
 
 
-            <!-- =========================
-                 ANMELDEN FORMULAR
-                 ========================= -->
+            <!-- ANMELDEN -->
 
             <div
                 class="formular aktiv"
                 id="anmeldenForm">
 
-
                 <label>
                     E-Mail
                 </label>
-
 
                 <input
                     type="email"
                     id="loginEmail"
                     placeholder="Deine E-Mail">
 
-
                 <label>
                     Passwort
                 </label>
-
 
                 <input
                     type="password"
                     id="loginPassword"
                     placeholder="Dein Passwort">
-
 
                 <button
                     class="formular-button"
@@ -1083,7 +1024,6 @@
 
                 </button>
 
-
                 <div class="hinweis">
 
                     Noch kein Konto?
@@ -1091,62 +1031,50 @@
 
                 </div>
 
-
             </div>
 
 
-            <!-- =========================
-                 REGISTRIEREN FORMULAR
-                 ========================= -->
+            <!-- REGISTRIEREN -->
 
             <div
                 class="formular"
                 id="registrierenForm">
 
-
                 <label>
                     Benutzername
                 </label>
-
 
                 <input
                     type="text"
                     id="registerUsername"
                     placeholder="Dein Benutzername">
 
-
                 <label>
                     E-Mail
                 </label>
-
 
                 <input
                     type="email"
                     id="registerEmail"
                     placeholder="Deine E-Mail">
 
-
                 <label>
                     Passwort
                 </label>
-
 
                 <input
                     type="password"
                     id="registerPassword"
                     placeholder="Dein Passwort">
 
-
                 <label>
                     Passwort wiederholen
                 </label>
-
 
                 <input
                     type="password"
                     id="registerPassword2"
                     placeholder="Passwort wiederholen">
-
 
                 <button
                     class="formular-button"
@@ -1156,12 +1084,9 @@
 
                 </button>
 
-
             </div>
 
-
         </div>
-
 
     </div>
 
@@ -1174,16 +1099,13 @@
         class="karten-hintergrund"
         id="kartenFenster">
 
-
         <div class="karten-fenster">
-
 
             <div class="karten-kopf">
 
                 <div class="karten-titel">
                     🗺️ NSAH Karte
                 </div>
-
 
                 <button
                     class="karten-schliessen"
@@ -1195,12 +1117,9 @@
 
             </div>
 
-
             <div id="karte"></div>
 
-
         </div>
-
 
     </div>
 
@@ -1213,11 +1132,6 @@
 
 
     <script>
-
-
-        /* =========================
-           KARTEN VARIABLEN
-           ========================= */
 
         let karte = null;
 
@@ -1255,10 +1169,6 @@
                 );
 
 
-                /* =========================
-                   OPENSTREETMAP
-                   ========================= */
-
                 L.tileLayer(
                     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                     {
@@ -1271,10 +1181,6 @@
                     }
                 ).addTo(karte);
 
-
-                /* =========================
-                   EIGENEN STANDORT
-                   ========================= */
 
                 if (
                     navigator.geolocation
@@ -1361,7 +1267,7 @@
 
 
         /* =========================
-           ANMELDE FENSTER ÖFFNEN
+           ANMELDEN ÖFFNEN
            ========================= */
 
         function anmeldenOeffnen() {
@@ -1374,7 +1280,7 @@
 
 
         /* =========================
-           ANMELDE FENSTER SCHLIESSEN
+           ANMELDEN SCHLIESSEN
            ========================= */
 
         function anmeldenSchliessen() {
@@ -1759,7 +1665,7 @@
 
 
         /* =========================
-           BENUTZER MENÜ ÖFFNEN
+           BENUTZER MENÜ
            ========================= */
 
         function benutzerMenueOeffnen() {
@@ -1849,7 +1755,7 @@
 
 
         /* =========================
-           BEIM SEITENSTART PRÜFEN
+           BENUTZER PRÜFEN
            ========================= */
 
         async function benutzerPruefen() {
@@ -1900,3 +1806,4 @@
 </body>
 
 </html>
+```
