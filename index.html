@@ -31,7 +31,7 @@
                     rgba(0, 0, 0, 0.30),
                     rgba(0, 0, 0, 0.30)
                 ),
-                url("Screenshot2026-08-22214731(1).png");
+                url("file:///C:/Users/Marlo/Downloads/Screenshot2026-08-22214731(1).png");
 
             background-size: cover;
             background-position: center center;
@@ -890,7 +890,9 @@
             </div>
 
 
-            <!-- TABS -->
+            <!-- =========================
+                 TABS
+            ========================= -->
 
             <div class="tabs">
 
@@ -913,7 +915,9 @@
             </div>
 
 
-            <!-- ANMELDEN FORMULAR -->
+            <!-- =========================
+                 ANMELDEN FORMULAR
+            ========================= -->
 
             <div
                 class="formular aktiv"
@@ -930,7 +934,6 @@
                     placeholder="Deine E-Mail"
                 >
 
-
                 <label>
                     Passwort
                 </label>
@@ -941,14 +944,12 @@
                     placeholder="Dein Passwort"
                 >
 
-
                 <button
                     class="formular-button"
                     onclick="anmelden()"
                 >
                     Anmelden
                 </button>
-
 
                 <div class="hinweis">
                     Noch kein Konto?
@@ -958,7 +959,9 @@
             </div>
 
 
-            <!-- REGISTRIEREN FORMULAR -->
+            <!-- =========================
+                 REGISTRIEREN FORMULAR
+            ========================= -->
 
             <div
                 class="formular"
@@ -975,7 +978,6 @@
                     placeholder="Dein Benutzername"
                 >
 
-
                 <label>
                     E-Mail
                 </label>
@@ -985,7 +987,6 @@
                     id="registerEmail"
                     placeholder="Deine E-Mail"
                 >
-
 
                 <label>
                     Passwort
@@ -997,7 +998,6 @@
                     placeholder="Dein Passwort"
                 >
 
-
                 <label>
                     Passwort wiederholen
                 </label>
@@ -1007,7 +1007,6 @@
                     id="registerPassword2"
                     placeholder="Passwort wiederholen"
                 >
-
 
                 <button
                     class="formular-button"
@@ -1049,7 +1048,6 @@
 
             </div>
 
-
             <div id="karte"></div>
 
         </div>
@@ -1061,7 +1059,9 @@
          LEAFLET
     ========================= -->
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    >
     </script>
 
 
@@ -1106,7 +1106,9 @@
                 );
 
 
-                /* OPENSTREETMAP */
+                /* =========================
+                   OPENSTREETMAP
+                ========================= */
 
                 L.tileLayer(
                     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -1121,7 +1123,9 @@
                 ).addTo(karte);
 
 
-                /* EIGENEN STANDORT */
+                /* =========================
+                   EIGENEN STANDORT
+                ========================= */
 
                 if (navigator.geolocation) {
 
@@ -1180,6 +1184,7 @@
                 function() {
 
                     if (karte) {
+
                         karte.invalidateSize();
                     }
 
