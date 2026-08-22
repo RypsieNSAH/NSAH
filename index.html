@@ -1,2 +1,1756 @@
- <html lang="de"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>NSAH - Nützliche Sparsame Alltags Hilfe</title> <!-- Leaflet für die Karte --> <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" > <style> /* ========================= HINTERGRUND ========================= */ body { margin: 0; background-color: black; color: white; font-family: Arial, sans-serif; } /* ========================= NSAH ========================= */ .logo { position: absolute; top: 30px; left: 50%; transform: translateX(-50%); font-size: 80px; font-weight: bold; /* dezenter Glow */ text-shadow: 0 0 4px rgba(255,255,255,0.7), 0 0 10px rgba(255,255,255,0.35), 0 0 18px rgba(255,255,255,0.15); } /* ========================= UNTERTITEL ========================= */ .untertitel { position: absolute; top: 110px; left: 50%; transform: translateX(-50%); font-size: 26px; color: white; white-space: nowrap; } /* ========================= DUNKELGRAUER STRICH ========================= */ .strich { position: fixed; left: 10%; top: 0; bottom: 0; width: 2px; background-color: #333333; } /* ========================= ANMELDEN BUTTON ========================= */ .anmelden-button { position: fixed; top: 25px; left: 25px; padding: 12px 20px; background-color: #222222; color: white; border: 1px solid #444444; border-radius: 7px; font-size: 16px; font-weight: bold; cursor: pointer; z-index: 50; } .anmelden-button:hover { background-color: #333333; } /* ========================= BENUTZER BUTTON ========================= */ .benutzer-button { display: none; position: fixed; top: 25px; left: 25px; padding: 12px 20px; background-color: #222222; color: white; border: 1px solid #444444; border-radius: 7px; font-size: 16px; font-weight: bold; cursor: pointer; z-index: 50; } .benutzer-button:hover { background-color: #333333; } /* ========================= BENUTZER MENÜ ========================= */ .benutzer-menue { display: none; position: fixed; top: 75px; left: 25px; width: 230px; background-color: #111111; border: 1px solid #333333; border-radius: 8px; padding: 15px; box-sizing: border-box; z-index: 200; } .benutzer-name { font-size: 18px; font-weight: bold; margin-bottom: 5px; } .benutzer-email { color: #888888; font-size: 13px; margin-bottom: 15px; word-break: break-all; } .abmelden-button { width: 100%; height: 40px; background-color: #222222; color: white; border: 1px solid #444444; border-radius: 6px; cursor: pointer; } .abmelden-button:hover { background-color: #333333; } /* ========================= KARTEN BUTTON ========================= */ .karten-button { position: fixed; top: 80px; left: 25px; padding: 12px 20px; background-color: #222222; color: white; border: 1px solid #444444; border-radius: 7px; font-size: 16px; font-weight: bold; cursor: pointer; z-index: 50; } .karten-button:hover { background-color: #333333; } /* ========================= ANMELDE FENSTER ========================= */ .anmelde-fenster { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 400px; background-color: #111111; border: 2px solid #333333; border-radius: 12px; padding: 30px; box-sizing: border-box; box-shadow: 0 0 30px rgba(255, 255, 255, 0.1); } /* ========================= FENSTER KOPF ========================= */ .fenster-kopf { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; } .fenster-titel { font-size: 25px; font-weight: bold; } /* ========================= SCHLIESSEN ========================= */ .schliessen { background: none; border: none; color: white; font-size: 28px; cursor: pointer; } /* ========================= TABS ========================= */ .tabs { display: flex; margin-bottom: 20px; } .tab { flex: 1; padding: 12px; background-color: #222222; color: #aaaaaa; border: none; cursor: pointer; font-size: 15px; } .tab.aktiv { background-color: #333333; color: white; } /* ========================= FORMULAR ========================= */ .formular { display: none; } .formular.aktiv { display: block; } .formular label { display: block; margin-bottom: 7px; color: #cccccc; } .formular input { width: 100%; height: 45px; margin-bottom: 18px; padding: 0 12px; box-sizing: border-box; background-color: #222222; color: white; border: 1px solid #444444; border-radius: 6px; outline: none; font-size: 15px; } .formular input:focus { border-color: #777777; } /* ========================= FORMULAR BUTTON ========================= */ .formular-button { width: 100%; height: 45px; background-color: #333333; color: white; border: 1px solid #555555; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; } .formular-button:hover { background-color: #444444; } /* ========================= HINWEIS ========================= */ .hinweis { margin-top: 15px; text-align: center; color: #777777; font-size: 13px; } /* ========================= KARTENFENSTER ========================= */ .karten-hintergrund { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); z-index: 1000; } .karten-fenster { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; height: 80%; background-color: #111111; border: 2px solid #333333; border-radius: 12px; overflow: hidden; } .karten-kopf { height: 55px; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; box-sizing: border-box; background-color: #151515; border-bottom: 1px solid #333333; } .karten-titel { font-size: 20px; font-weight: bold; } .karten-schliessen { background: none; border: none; color: white; font-size: 28px; cursor: pointer; } #karte { width: 100%; height: calc(100% - 55px); } /* ========================= HANDY-ANSICHT ========================= */ @media (max-width: 600px) { body { min-width: 0; overflow-x: hidden; } /* NSAH */ .logo { position: absolute; top: 25px; left: 63%; transform: translateX(-50%); font-size: 52px; white-space: nowrap; } /* UNTERTITEL */ .untertitel { position: absolute; top: 95px; left: 63%; transform: translateX(-50%); width: 75%; font-size: 18px; line-height: 1.4; text-align: center; white-space: normal; } /* STRICH */ .strich { left: 24%; width: 2px; } /* ANMELDEN */ .anmelden-button { top: 18px; left: 0px; padding: 8px 11px; font-size: 13px; z-index: 50; } /* KARTEN BUTTON */ .karten-button { top: 58px; left: 5px; padding: 8px 11px; font-size: 13px; z-index: 50; } /* BENUTZER */ .benutzer-button { top: 18px; left: 12px; padding: 10px 14px; font-size: 14px; z-index: 50; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* BENUTZER-MENÜ */ .benutzer-menue { top: 65px; left: 12px; width: calc(100% - 24px); max-width: 260px; z-index: 200; } /* LOGIN-HINTERGRUND */ .fenster-hintergrund { padding: 15px; box-sizing: border-box; overflow-y: auto; z-index: 9999; } /* LOGIN-FENSTER */ .anmelde-fenster { position: absolute; top: 50%; left: 50%; width: calc(100vw - 30px); max-width: 380px; padding: 22px; transform: translate(-50%, -50%); box-sizing: border-box; max-height: calc(100vh - 30px); overflow-y: auto; } /* TITEL */ .fenster-titel { font-size: 21px; } /* TABS */ .tab { padding: 12px 5px; font-size: 14px; } /* EINGABEFELDER */ .formular input { width: 100%; height: 48px; font-size: 16px; } /* BUTTON */ .formular-button { height: 48px; font-size: 16px; } /* SCHLIESSEN */ .schliessen { font-size: 26px; } /* KARTE */ .karten-fenster { width: 95%; height: 85%; } } </style> </head> <body> <!-- ========================= NSAH ========================= --> <div class="logo"> NSAH </div> <!-- ========================= BEDEUTUNG ========================= --> <div class="untertitel"> Nützliche Sparsame Alltags Hilfe </div> <!-- ========================= DUNKELGRAUER STRICH ========================= --> <div class="strich"></div> <!-- ========================= ANMELDEN BUTTON ========================= --> <button class="anmelden-button" id="anmeldenButton" onclick="anmeldenOeffnen()"> Anmelden </button> <!-- ========================= KARTEN BUTTON ========================= --> <button class="karten-button" onclick="kartenOeffnen()"> 🗺️ Karte </button> <!-- ========================= BENUTZER BUTTON ========================= --> <button class="benutzer-button" id="benutzerButton" onclick="benutzerMenueOeffnen()"> 👤 <span id="benutzerNameOben">Benutzer</span> </button> <!-- ========================= BENUTZER MENÜ ========================= --> <div class="benutzer-menue" id="benutzerMenue"> <div class="benutzer-name" id="benutzerName"> </div> <div class="benutzer-email" id="benutzerEmail"> </div> <button class="abmelden-button" onclick="abmelden()"> Abmelden </button> </div> <!-- ========================= ANMELDE FENSTER ========================= --> <div class="fenster-hintergrund" id="anmeldeFenster"> <div class="anmelde-fenster"> <div class="fenster-kopf"> <div class="fenster-titel"> NSAH Konto </div> <button class="schliessen" onclick="anmeldenSchliessen()"> × </button> </div> <!-- ========================= TABS ========================= --> <div class="tabs"> <button class="tab aktiv" id="anmeldenTab" onclick="anmeldenTabOeffnen()"> Anmelden </button> <button class="tab" id="registrierenTab" onclick="registrierenTabOeffnen()"> Registrieren </button> </div> <!-- ========================= ANMELDEN FORMULAR ========================= --> <div class="formular aktiv" id="anmeldenForm"> <label> E-Mail </label> <input type="email" id="loginEmail" placeholder="Deine E-Mail"> <label> Passwort </label> <input type="password" id="loginPassword" placeholder="Dein Passwort"> <button class="formular-button" onclick="anmelden()"> Anmelden </button> <div class="hinweis"> Noch kein Konto? Klicke oben auf „Registrieren“. </div> </div> <!-- ========================= REGISTRIEREN FORMULAR ========================= --> <div class="formular" id="registrierenForm"> <label> Benutzername </label> <input type="text" id="registerUsername" placeholder="Dein Benutzername"> <label> E-Mail </label> <input type="email" id="registerEmail" placeholder="Deine E-Mail"> <label> Passwort </label> <input type="password" id="registerPassword" placeholder="Dein Passwort"> <label> Passwort wiederholen </label> <input type="password" id="registerPassword2" placeholder="Passwort wiederholen"> <button class="formular-button" onclick="registrieren()"> Konto erstellen </button> </div> </div> </div> <!-- ========================= KARTENFENSTER ========================= --> <div class="karten-hintergrund" id="kartenFenster"> <div class="karten-fenster"> <div class="karten-kopf"> <div class="karten-titel"> 🗺️ NSAH Karte </div> <button class="karten-schliessen" onclick="kartenSchliessen()"> × </button> </div> <div id="karte"></div> </div> </div> <!-- LEAFLET --> <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"> </script> <script> /* ========================= KARTEN VARIABLEN ========================= */ let karte = null; let standortMarker = null; /* ========================= KARTE ÖFFNEN ========================= */ function kartenOeffnen() { document.getElementById( "kartenFenster" ).style.display = "block"; if (!karte) { karte = L.map( "karte", { worldCopyJump: false, maxBounds: [ [-90, -180], [90, 180] ], maxBoundsViscosity: 1.0 } ).setView( [20, 0], 2 ); /* ========================= OPENSTREETMAP noWrap verhindert, dass die Welt mehrfach nebeneinander erscheint. ========================= */ L.tileLayer( "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, noWrap: true, attribution: "&copy; OpenStreetMap-Mitwirkende" } ).addTo(karte); /* ========================= EIGENEN STANDORT ========================= */ if ( navigator.geolocation ) { navigator.geolocation.getCurrentPosition( function(position) { const lat = position.coords.latitude; const lon = position.coords.longitude; karte.setView( [lat, lon], 13 ); if (standortMarker) { karte.removeLayer( standortMarker ); } standortMarker = L.marker( [lat, lon] ).addTo(karte); standortMarker .bindPopup( "📍 Dein Standort" ) .openPopup(); }, function() { console.log( "Standort konnte nicht ermittelt werden." ); } ); } } setTimeout( function() { karte.invalidateSize(); }, 200 ); } /* ========================= KARTE SCHLIESSEN ========================= */ function kartenSchliessen() { document.getElementById( "kartenFenster" ).style.display = "none"; } /* ========================= ANMELDE FENSTER ÖFFNEN ========================= */ function anmeldenOeffnen() { document.getElementById( "anmeldeFenster" ).style.display = "block"; } /* ========================= ANMELDE FENSTER SCHLIESSEN ========================= */ function anmeldenSchliessen() { document.getElementById( "anmeldeFenster" ).style.display = "none"; } /* ========================= ANMELDEN TAB ========================= */ function anmeldenTabOeffnen() { document.getElementById( "anmeldenForm" ).classList.add("aktiv"); document.getElementById( "registrierenForm" ).classList.remove("aktiv"); document.getElementById( "anmeldenTab" ).classList.add("aktiv"); document.getElementById( "registrierenTab" ).classList.remove("aktiv"); } /* ========================= REGISTRIEREN TAB ========================= */ function registrierenTabOeffnen() { document.getElementById( "registrierenForm" ).classList.add("aktiv"); document.getElementById( "anmeldenForm" ).classList.remove("aktiv"); document.getElementById( "registrierenTab" ).classList.add("aktiv"); document.getElementById( "anmeldenTab" ).classList.remove("aktiv"); } /* ========================= REGISTRIEREN ========================= */ async function registrieren() { const username = document.getElementById( "registerUsername" ).value.trim(); const email = document.getElementById( "registerEmail" ).value.trim(); const password = document.getElementById( "registerPassword" ).value; const password2 = document.getElementById( "registerPassword2" ).value; if ( !username || !email || !password || !password2 ) { alert( "Bitte fülle alle Felder aus." ); return; } if (password !== password2) { alert( "Die Passwörter stimmen nicht überein." ); return; } if (password.length < 6) { alert( "Das Passwort muss mindestens 6 Zeichen haben." ); return; } try { const antwort = await fetch( "/api/register", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ username: username, email: email, password: password }) } ); const daten = await antwort.json(); if (daten.success) { alert( "Konto erfolgreich erstellt!" ); benutzerAnzeigen( daten.username, daten.email ); anmeldenSchliessen(); document.getElementById( "registerUsername" ).value = ""; document.getElementById( "registerEmail" ).value = ""; document.getElementById( "registerPassword" ).value = ""; document.getElementById( "registerPassword2" ).value = ""; } else { alert( daten.message ); } } catch (fehler) { console.error( fehler ); alert( "Der Server konnte nicht erreicht werden." ); } } /* ========================= ANMELDEN ========================= */ async function anmelden() { const email = document.getElementById( "loginEmail" ).value.trim(); const password = document.getElementById( "loginPassword" ).value; if (!email || !password) { alert( "Bitte E-Mail und Passwort eingeben." ); return; } try { const antwort = await fetch( "/api/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email, password: password }) } ); const daten = await antwort.json(); if (daten.success) { benutzerAnzeigen( daten.username, daten.email ); anmeldenSchliessen(); document.getElementById( "loginEmail" ).value = ""; document.getElementById( "loginPassword" ).value = ""; alert( "Willkommen zurück, " + daten.username + "!" ); } else { alert( daten.message ); } } catch (fehler) { console.error( fehler ); alert( "Der Server konnte nicht erreicht werden." ); } } /* ========================= BENUTZER ANZEIGEN ========================= */ function benutzerAnzeigen( username, email ) { document.getElementById( "anmeldenButton" ).style.display = "none"; document.getElementById( "benutzerButton" ).style.display = "block"; document.getElementById( "benutzerNameOben" ).textContent = username; document.getElementById( "benutzerName" ).textContent = username; document.getElementById( "benutzerEmail" ).textContent = email; } /* ========================= BENUTZER MENÜ ÖFFNEN ========================= */ function benutzerMenueOeffnen() { const menue = document.getElementById( "benutzerMenue" ); if ( menue.style.display === "block" ) { menue.style.display = "none"; } else { menue.style.display = "block"; } } /* ========================= ABMELDEN ========================= */ async function abmelden() { try { const antwort = await fetch( "/api/logout", { method: "POST" } ); const daten = await antwort.json(); if (daten.success) { document.getElementById( "benutzerButton" ).style.display = "none"; document.getElementById( "anmeldenButton" ).style.display = "block"; document.getElementById( "benutzerMenue" ).style.display = "none"; alert( "Du wurdest abgemeldet." ); } } catch (fehler) { console.error( fehler ); alert( "Beim Abmelden ist ein Fehler aufgetreten." ); } } /* ========================= BEIM SEITENSTART PRÜFEN ========================= */ async function benutzerPruefen() { try { const antwort = await fetch( "/api/me" ); const daten = await antwort.json(); if (daten.loggedIn) { benutzerAnzeigen( daten.username, daten.email ); } } catch (fehler) { console.error( "Benutzerprüfung fehlgeschlagen:", fehler ); } } /* ========================= START ========================= */ benutzerPruefen(); </script> </body> </html>
- 
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NSAH - Nützliche Sparsame Alltags Hilfe</title>
+
+    <!-- Leaflet für die Karte -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <style>
+
+        /* =========================
+           HINTERGRUND
+        ========================= */
+
+        body {
+            margin: 0;
+
+            background-color: black;
+
+            /* Dein neues Hintergrundbild */
+            background-image:
+                linear-gradient(
+                    rgba(0, 0, 0, 0.30),
+                    rgba(0, 0, 0, 0.30)
+                ),
+                url("nsah-hintergrund.png");
+
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+
+        /* =========================
+           NSAH
+        ========================= */
+
+        .logo {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+
+            font-size: 80px;
+            font-weight: bold;
+
+            /* Dezenter Glow */
+            text-shadow:
+                0 0 4px rgba(255, 255, 255, 0.7),
+                0 0 10px rgba(255, 255, 255, 0.35),
+                0 0 18px rgba(255, 255, 255, 0.15);
+        }
+
+
+        /* =========================
+           UNTERTITEL
+        ========================= */
+
+        .untertitel {
+            position: absolute;
+            top: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+
+            font-size: 26px;
+            color: white;
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================
+           DUNKELGRAUER STRICH
+        ========================= */
+
+        .strich {
+            position: fixed;
+
+            left: 10%;
+            top: 0;
+            bottom: 0;
+
+            width: 2px;
+
+            background-color: #333333;
+        }
+
+
+        /* =========================
+           ANMELDEN BUTTON
+        ========================= */
+
+        .anmelden-button {
+            position: fixed;
+
+            top: 25px;
+            left: 25px;
+
+            padding: 12px 20px;
+
+            background-color: #222222;
+            color: white;
+
+            border: 1px solid #444444;
+            border-radius: 7px;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            z-index: 50;
+        }
+
+        .anmelden-button:hover {
+            background-color: #333333;
+        }
+
+
+        /* =========================
+           BENUTZER BUTTON
+        ========================= */
+
+        .benutzer-button {
+            display: none;
+
+            position: fixed;
+
+            top: 25px;
+            left: 25px;
+
+            padding: 12px 20px;
+
+            background-color: #222222;
+            color: white;
+
+            border: 1px solid #444444;
+            border-radius: 7px;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            z-index: 50;
+        }
+
+        .benutzer-button:hover {
+            background-color: #333333;
+        }
+
+
+        /* =========================
+           BENUTZER MENÜ
+        ========================= */
+
+        .benutzer-menue {
+            display: none;
+
+            position: fixed;
+
+            top: 75px;
+            left: 25px;
+
+            width: 230px;
+
+            background-color: #111111;
+
+            border: 1px solid #333333;
+            border-radius: 8px;
+
+            padding: 15px;
+
+            box-sizing: border-box;
+
+            z-index: 200;
+        }
+
+        .benutzer-name {
+            font-size: 18px;
+            font-weight: bold;
+
+            margin-bottom: 5px;
+        }
+
+        .benutzer-email {
+            color: #888888;
+
+            font-size: 13px;
+
+            margin-bottom: 15px;
+
+            word-break: break-all;
+        }
+
+        .abmelden-button {
+            width: 100%;
+            height: 40px;
+
+            background-color: #222222;
+            color: white;
+
+            border: 1px solid #444444;
+            border-radius: 6px;
+
+            cursor: pointer;
+        }
+
+        .abmelden-button:hover {
+            background-color: #333333;
+        }
+
+
+        /* =========================
+           KARTEN BUTTON
+        ========================= */
+
+        .karten-button {
+            position: fixed;
+
+            top: 80px;
+            left: 25px;
+
+            padding: 12px 20px;
+
+            background-color: #222222;
+            color: white;
+
+            border: 1px solid #444444;
+            border-radius: 7px;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            z-index: 50;
+        }
+
+        .karten-button:hover {
+            background-color: #333333;
+        }
+
+
+        /* =========================
+           ANMELDE FENSTER HINTERGRUND
+        ========================= */
+
+        .fenster-hintergrund {
+            display: none;
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background-color: rgba(0, 0, 0, 0.8);
+
+            z-index: 9999;
+        }
+
+
+        /* =========================
+           ANMELDE FENSTER
+        ========================= */
+
+        .anmelde-fenster {
+            position: absolute;
+
+            top: 50%;
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            width: 400px;
+
+            background-color: #111111;
+
+            border: 2px solid #333333;
+            border-radius: 12px;
+
+            padding: 30px;
+
+            box-sizing: border-box;
+
+            box-shadow:
+                0 0 30px rgba(255, 255, 255, 0.1);
+        }
+
+
+        /* =========================
+           FENSTER KOPF
+        ========================= */
+
+        .fenster-kopf {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+        .fenster-titel {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           SCHLIESSEN
+        ========================= */
+
+        .schliessen {
+            background: none;
+
+            border: none;
+
+            color: white;
+
+            font-size: 28px;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================
+           TABS
+        ========================= */
+
+        .tabs {
+            display: flex;
+
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            flex: 1;
+
+            padding: 12px;
+
+            background-color: #222222;
+
+            color: #aaaaaa;
+
+            border: none;
+
+            cursor: pointer;
+
+            font-size: 15px;
+        }
+
+        .tab.aktiv {
+            background-color: #333333;
+
+            color: white;
+        }
+
+
+        /* =========================
+           FORMULAR
+        ========================= */
+
+        .formular {
+            display: none;
+        }
+
+        .formular.aktiv {
+            display: block;
+        }
+
+        .formular label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #cccccc;
+        }
+
+        .formular input {
+            width: 100%;
+            height: 45px;
+
+            margin-bottom: 18px;
+
+            padding: 0 12px;
+
+            box-sizing: border-box;
+
+            background-color: #222222;
+
+            color: white;
+
+            border: 1px solid #444444;
+
+            border-radius: 6px;
+
+            outline: none;
+
+            font-size: 15px;
+        }
+
+        .formular input:focus {
+            border-color: #777777;
+        }
+
+
+        /* =========================
+           FORMULAR BUTTON
+        ========================= */
+
+        .formular-button {
+            width: 100%;
+            height: 45px;
+
+            background-color: #333333;
+
+            color: white;
+
+            border: 1px solid #555555;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .formular-button:hover {
+            background-color: #444444;
+        }
+
+
+        /* =========================
+           HINWEIS
+        ========================= */
+
+        .hinweis {
+            margin-top: 15px;
+
+            text-align: center;
+
+            color: #777777;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           KARTENFENSTER
+        ========================= */
+
+        .karten-hintergrund {
+            display: none;
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background-color: rgba(0, 0, 0, 0.8);
+
+            z-index: 1000;
+        }
+
+        .karten-fenster {
+            position: absolute;
+
+            top: 50%;
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+
+            width: 80%;
+            height: 80%;
+
+            background-color: #111111;
+
+            border: 2px solid #333333;
+
+            border-radius: 12px;
+
+            overflow: hidden;
+        }
+
+        .karten-kopf {
+            height: 55px;
+
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 0 15px;
+
+            box-sizing: border-box;
+
+            background-color: #151515;
+
+            border-bottom: 1px solid #333333;
+        }
+
+        .karten-titel {
+            font-size: 20px;
+
+            font-weight: bold;
+        }
+
+        .karten-schliessen {
+            background: none;
+
+            border: none;
+
+            color: white;
+
+            font-size: 28px;
+
+            cursor: pointer;
+        }
+
+        #karte {
+            width: 100%;
+
+            height: calc(100% - 55px);
+        }
+
+
+        /* =========================
+           HANDY-ANSICHT
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            body {
+                min-width: 0;
+
+                overflow-x: hidden;
+
+                background-position: center center;
+            }
+
+
+            /* =========================
+               NSAH
+            ========================= */
+
+            .logo {
+                position: absolute;
+
+                top: 25px;
+                left: 63%;
+
+                transform: translateX(-50%);
+
+                font-size: 52px;
+
+                white-space: nowrap;
+            }
+
+
+            /* =========================
+               UNTERTITEL
+            ========================= */
+
+            .untertitel {
+                position: absolute;
+
+                top: 95px;
+                left: 63%;
+
+                transform: translateX(-50%);
+
+                width: 75%;
+
+                font-size: 18px;
+
+                line-height: 1.4;
+
+                text-align: center;
+
+                white-space: normal;
+            }
+
+
+            /* =========================
+               STRICH
+            ========================= */
+
+            .strich {
+                left: 24%;
+
+                width: 2px;
+            }
+
+
+            /* =========================
+               ANMELDEN
+            ========================= */
+
+            .anmelden-button {
+                top: 18px;
+                left: 0px;
+
+                padding: 8px 11px;
+
+                font-size: 13px;
+
+                z-index: 50;
+            }
+
+
+            /* =========================
+               KARTEN BUTTON
+            ========================= */
+
+            .karten-button {
+                top: 58px;
+                left: 5px;
+
+                padding: 8px 11px;
+
+                font-size: 13px;
+
+                z-index: 50;
+            }
+
+
+            /* =========================
+               BENUTZER
+            ========================= */
+
+            .benutzer-button {
+                top: 18px;
+                left: 12px;
+
+                padding: 10px 14px;
+
+                font-size: 14px;
+
+                z-index: 50;
+
+                max-width: 150px;
+
+                overflow: hidden;
+
+                text-overflow: ellipsis;
+
+                white-space: nowrap;
+            }
+
+
+            /* =========================
+               BENUTZER-MENÜ
+            ========================= */
+
+            .benutzer-menue {
+                top: 65px;
+                left: 12px;
+
+                width: calc(100% - 24px);
+
+                max-width: 260px;
+
+                z-index: 200;
+            }
+
+
+            /* =========================
+               LOGIN-HINTERGRUND
+            ========================= */
+
+            .fenster-hintergrund {
+                padding: 15px;
+
+                box-sizing: border-box;
+
+                overflow-y: auto;
+
+                z-index: 9999;
+            }
+
+
+            /* =========================
+               LOGIN-FENSTER
+            ========================= */
+
+            .anmelde-fenster {
+                position: absolute;
+
+                top: 50%;
+                left: 50%;
+
+                width: calc(100vw - 30px);
+
+                max-width: 380px;
+
+                padding: 22px;
+
+                transform: translate(-50%, -50%);
+
+                box-sizing: border-box;
+
+                max-height: calc(100vh - 30px);
+
+                overflow-y: auto;
+            }
+
+
+            /* =========================
+               TITEL
+            ========================= */
+
+            .fenster-titel {
+                font-size: 21px;
+            }
+
+
+            /* =========================
+               TABS
+            ========================= */
+
+            .tab {
+                padding: 12px 5px;
+
+                font-size: 14px;
+            }
+
+
+            /* =========================
+               EINGABEFELDER
+            ========================= */
+
+            .formular input {
+                width: 100%;
+
+                height: 48px;
+
+                font-size: 16px;
+            }
+
+
+            /* =========================
+               BUTTON
+            ========================= */
+
+            .formular-button {
+                height: 48px;
+
+                font-size: 16px;
+            }
+
+
+            /* =========================
+               SCHLIESSEN
+            ========================= */
+
+            .schliessen {
+                font-size: 26px;
+            }
+
+
+            /* =========================
+               KARTE
+            ========================= */
+
+            .karten-fenster {
+                width: 95%;
+
+                height: 85%;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         NSAH
+    ========================= -->
+
+    <div class="logo">
+        NSAH
+    </div>
+
+
+    <!-- =========================
+         BEDEUTUNG
+    ========================= -->
+
+    <div class="untertitel">
+        Nützliche Sparsame Alltags Hilfe
+    </div>
+
+
+    <!-- =========================
+         DUNKELGRAUER STRICH
+    ========================= -->
+
+    <div class="strich"></div>
+
+
+    <!-- =========================
+         ANMELDEN BUTTON
+    ========================= -->
+
+    <button
+        class="anmelden-button"
+        id="anmeldenButton"
+        onclick="anmeldenOeffnen()"
+    >
+        Anmelden
+    </button>
+
+
+    <!-- =========================
+         KARTEN BUTTON
+    ========================= -->
+
+    <button
+        class="karten-button"
+        onclick="kartenOeffnen()"
+    >
+        🗺️ Karte
+    </button>
+
+
+    <!-- =========================
+         BENUTZER BUTTON
+    ========================= -->
+
+    <button
+        class="benutzer-button"
+        id="benutzerButton"
+        onclick="benutzerMenueOeffnen()"
+    >
+        👤
+        <span id="benutzerNameOben">
+            Benutzer
+        </span>
+    </button>
+
+
+    <!-- =========================
+         BENUTZER MENÜ
+    ========================= -->
+
+    <div
+        class="benutzer-menue"
+        id="benutzerMenue"
+    >
+
+        <div
+            class="benutzer-name"
+            id="benutzerName"
+        >
+        </div>
+
+        <div
+            class="benutzer-email"
+            id="benutzerEmail"
+        >
+        </div>
+
+        <button
+            class="abmelden-button"
+            onclick="abmelden()"
+        >
+            Abmelden
+        </button>
+
+    </div>
+
+
+    <!-- =========================
+         ANMELDE FENSTER
+    ========================= -->
+
+    <div
+        class="fenster-hintergrund"
+        id="anmeldeFenster"
+    >
+
+        <div class="anmelde-fenster">
+
+
+            <!-- =========================
+                 FENSTER KOPF
+            ========================= -->
+
+            <div class="fenster-kopf">
+
+                <div class="fenster-titel">
+                    NSAH Konto
+                </div>
+
+                <button
+                    class="schliessen"
+                    onclick="anmeldenSchliessen()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <!-- =========================
+                 TABS
+            ========================= -->
+
+            <div class="tabs">
+
+                <button
+                    class="tab aktiv"
+                    id="anmeldenTab"
+                    onclick="anmeldenTabOeffnen()"
+                >
+                    Anmelden
+                </button>
+
+                <button
+                    class="tab"
+                    id="registrierenTab"
+                    onclick="registrierenTabOeffnen()"
+                >
+                    Registrieren
+                </button>
+
+            </div>
+
+
+            <!-- =========================
+                 ANMELDEN FORMULAR
+            ========================= -->
+
+            <div
+                class="formular aktiv"
+                id="anmeldenForm"
+            >
+
+                <label>
+                    E-Mail
+                </label>
+
+                <input
+                    type="email"
+                    id="loginEmail"
+                    placeholder="Deine E-Mail"
+                >
+
+
+                <label>
+                    Passwort
+                </label>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Dein Passwort"
+                >
+
+
+                <button
+                    class="formular-button"
+                    onclick="anmelden()"
+                >
+                    Anmelden
+                </button>
+
+
+                <div class="hinweis">
+                    Noch kein Konto?
+                    Klicke oben auf „Registrieren“.
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 REGISTRIEREN FORMULAR
+            ========================= -->
+
+            <div
+                class="formular"
+                id="registrierenForm"
+            >
+
+                <label>
+                    Benutzername
+                </label>
+
+                <input
+                    type="text"
+                    id="registerUsername"
+                    placeholder="Dein Benutzername"
+                >
+
+
+                <label>
+                    E-Mail
+                </label>
+
+                <input
+                    type="email"
+                    id="registerEmail"
+                    placeholder="Deine E-Mail"
+                >
+
+
+                <label>
+                    Passwort
+                </label>
+
+                <input
+                    type="password"
+                    id="registerPassword"
+                    placeholder="Dein Passwort"
+                >
+
+
+                <label>
+                    Passwort wiederholen
+                </label>
+
+                <input
+                    type="password"
+                    id="registerPassword2"
+                    placeholder="Passwort wiederholen"
+                >
+
+
+                <button
+                    class="formular-button"
+                    onclick="registrieren()"
+                >
+                    Konto erstellen
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         KARTENFENSTER
+    ========================= -->
+
+    <div
+        class="karten-hintergrund"
+        id="kartenFenster"
+    >
+
+        <div class="karten-fenster">
+
+
+            <!-- =========================
+                 KARTEN KOPF
+            ========================= -->
+
+            <div class="karten-kopf">
+
+                <div class="karten-titel">
+                    🗺️ NSAH Karte
+                </div>
+
+                <button
+                    class="karten-schliessen"
+                    onclick="kartenSchliessen()"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <!-- =========================
+                 KARTE
+            ========================= -->
+
+            <div id="karte"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         LEAFLET
+    ========================= -->
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    </script>
+
+
+    <script>
+
+
+        /* =========================
+           KARTEN VARIABLEN
+        ========================= */
+
+        let karte = null;
+
+        let standortMarker = null;
+
+
+        /* =========================
+           KARTE ÖFFNEN
+        ========================= */
+
+        function kartenOeffnen() {
+
+            document.getElementById(
+                "kartenFenster"
+            ).style.display = "block";
+
+
+            if (!karte) {
+
+                karte = L.map(
+                    "karte",
+                    {
+                        worldCopyJump: false,
+
+                        maxBounds: [
+                            [-90, -180],
+                            [90, 180]
+                        ],
+
+                        maxBoundsViscosity: 1.0
+                    }
+                ).setView(
+                    [20, 0],
+                    2
+                );
+
+
+                /* =========================
+                   OPENSTREETMAP
+                   noWrap verhindert,
+                   dass die Welt mehrfach
+                   nebeneinander erscheint.
+                ========================= */
+
+                L.tileLayer(
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                    {
+                        maxZoom: 19,
+
+                        noWrap: true,
+
+                        attribution:
+                            "&copy; OpenStreetMap-Mitwirkende"
+                    }
+                ).addTo(karte);
+
+
+                /* =========================
+                   EIGENEN STANDORT
+                ========================= */
+
+                if (navigator.geolocation) {
+
+                    navigator.geolocation.getCurrentPosition(
+
+                        function(position) {
+
+                            const lat =
+                                position.coords.latitude;
+
+                            const lon =
+                                position.coords.longitude;
+
+
+                            karte.setView(
+                                [lat, lon],
+                                13
+                            );
+
+
+                            if (standortMarker) {
+
+                                karte.removeLayer(
+                                    standortMarker
+                                );
+                            }
+
+
+                            standortMarker =
+                                L.marker(
+                                    [lat, lon]
+                                ).addTo(karte);
+
+
+                            standortMarker
+                                .bindPopup(
+                                    "📍 Dein Standort"
+                                )
+                                .openPopup();
+
+                        },
+
+                        function() {
+
+                            console.log(
+                                "Standort konnte nicht ermittelt werden."
+                            );
+
+                        }
+                    );
+                }
+            }
+
+
+            setTimeout(
+                function() {
+
+                    if (karte) {
+                        karte.invalidateSize();
+                    }
+
+                },
+                200
+            );
+        }
+
+
+        /* =========================
+           KARTE SCHLIESSEN
+        ========================= */
+
+        function kartenSchliessen() {
+
+            document.getElementById(
+                "kartenFenster"
+            ).style.display = "none";
+        }
+
+
+        /* =========================
+           ANMELDE FENSTER ÖFFNEN
+        ========================= */
+
+        function anmeldenOeffnen() {
+
+            document.getElementById(
+                "anmeldeFenster"
+            ).style.display = "block";
+        }
+
+
+        /* =========================
+           ANMELDE FENSTER SCHLIESSEN
+        ========================= */
+
+        function anmeldenSchliessen() {
+
+            document.getElementById(
+                "anmeldeFenster"
+            ).style.display = "none";
+        }
+
+
+        /* =========================
+           ANMELDEN TAB
+        ========================= */
+
+        function anmeldenTabOeffnen() {
+
+            document.getElementById(
+                "anmeldenForm"
+            ).classList.add("aktiv");
+
+
+            document.getElementById(
+                "registrierenForm"
+            ).classList.remove("aktiv");
+
+
+            document.getElementById(
+                "anmeldenTab"
+            ).classList.add("aktiv");
+
+
+            document.getElementById(
+                "registrierenTab"
+            ).classList.remove("aktiv");
+        }
+
+
+        /* =========================
+           REGISTRIEREN TAB
+        ========================= */
+
+        function registrierenTabOeffnen() {
+
+            document.getElementById(
+                "registrierenForm"
+            ).classList.add("aktiv");
+
+
+            document.getElementById(
+                "anmeldenForm"
+            ).classList.remove("aktiv");
+
+
+            document.getElementById(
+                "registrierenTab"
+            ).classList.add("aktiv");
+
+
+            document.getElementById(
+                "anmeldenTab"
+            ).classList.remove("aktiv");
+        }
+
+
+        /* =========================
+           REGISTRIEREN
+        ========================= */
+
+        async function registrieren() {
+
+            const username =
+                document.getElementById(
+                    "registerUsername"
+                ).value.trim();
+
+
+            const email =
+                document.getElementById(
+                    "registerEmail"
+                ).value.trim();
+
+
+            const password =
+                document.getElementById(
+                    "registerPassword"
+                ).value;
+
+
+            const password2 =
+                document.getElementById(
+                    "registerPassword2"
+                ).value;
+
+
+            if (
+                !username ||
+                !email ||
+                !password ||
+                !password2
+            ) {
+
+                alert(
+                    "Bitte fülle alle Felder aus."
+                );
+
+                return;
+            }
+
+
+            if (password !== password2) {
+
+                alert(
+                    "Die Passwörter stimmen nicht überein."
+                );
+
+                return;
+            }
+
+
+            if (password.length < 6) {
+
+                alert(
+                    "Das Passwort muss mindestens 6 Zeichen haben."
+                );
+
+                return;
+            }
+
+
+            try {
+
+                const antwort =
+                    await fetch(
+                        "/api/register",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    {
+                                        username: username,
+                                        email: email,
+                                        password: password
+                                    }
+                                )
+                        }
+                    );
+
+
+                const daten =
+                    await antwort.json();
+
+
+                if (daten.success) {
+
+                    alert(
+                        "Konto erfolgreich erstellt!"
+                    );
+
+
+                    benutzerAnzeigen(
+                        daten.username,
+                        daten.email
+                    );
+
+
+                    anmeldenSchliessen();
+
+
+                    document.getElementById(
+                        "registerUsername"
+                    ).value = "";
+
+
+                    document.getElementById(
+                        "registerEmail"
+                    ).value = "";
+
+
+                    document.getElementById(
+                        "registerPassword"
+                    ).value = "";
+
+
+                    document.getElementById(
+                        "registerPassword2"
+                    ).value = "";
+
+                } else {
+
+                    alert(
+                        daten.message
+                    );
+                }
+
+            } catch (fehler) {
+
+                console.error(
+                    fehler
+                );
+
+                alert(
+                    "Der Server konnte nicht erreicht werden."
+                );
+            }
+        }
+
+
+        /* =========================
+           ANMELDEN
+        ========================= */
+
+        async function anmelden() {
+
+            const email =
+                document.getElementById(
+                    "loginEmail"
+                ).value.trim();
+
+
+            const password =
+                document.getElementById(
+                    "loginPassword"
+                ).value;
+
+
+            if (!email || !password) {
+
+                alert(
+                    "Bitte E-Mail und Passwort eingeben."
+                );
+
+                return;
+            }
+
+
+            try {
+
+                const antwort =
+                    await fetch(
+                        "/api/login",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    {
+                                        email: email,
+                                        password: password
+                                    }
+                                )
+                        }
+                    );
+
+
+                const daten =
+                    await antwort.json();
+
+
+                if (daten.success) {
+
+                    benutzerAnzeigen(
+                        daten.username,
+                        daten.email
+                    );
+
+
+                    anmeldenSchliessen();
+
+
+                    document.getElementById(
+                        "loginEmail"
+                    ).value = "";
+
+
+                    document.getElementById(
+                        "loginPassword"
+                    ).value = "";
+
+
+                    alert(
+                        "Willkommen zurück, "
+                        + daten.username
+                        + "!"
+                    );
+
+                } else {
+
+                    alert(
+                        daten.message
+                    );
+                }
+
+            } catch (fehler) {
+
+                console.error(
+                    fehler
+                );
+
+                alert(
+                    "Der Server konnte nicht erreicht werden."
+                );
+            }
+        }
+
+
+        /* =========================
+           BENUTZER ANZEIGEN
+        ========================= */
+
+        function benutzerAnzeigen(
+            username,
+            email
+        ) {
+
+            document.getElementById(
+                "anmeldenButton"
+            ).style.display = "none";
+
+
+            document.getElementById(
+                "benutzerButton"
+            ).style.display = "block";
+
+
+            document.getElementById(
+                "benutzerNameOben"
+            ).textContent = username;
+
+
+            document.getElementById(
+                "benutzerName"
+            ).textContent = username;
+
+
+            document.getElementById(
+                "benutzerEmail"
+            ).textContent = email;
+        }
+
+
+        /* =========================
+           BENUTZER MENÜ ÖFFNEN
+        ========================= */
+
+        function benutzerMenueOeffnen() {
+
+            const menue =
+                document.getElementById(
+                    "benutzerMenue"
+                );
+
+
+            if (
+                menue.style.display === "block"
+            ) {
+
+                menue.style.display = "none";
+
+            } else {
+
+                menue.style.display = "block";
+            }
+        }
+
+
+        /* =========================
+           ABMELDEN
+        ========================= */
+
+        async function abmelden() {
+
+            try {
+
+                const antwort =
+                    await fetch(
+                        "/api/logout",
+                        {
+                            method: "POST"
+                        }
+                    );
+
+
+                const daten =
+                    await antwort.json();
+
+
+                if (daten.success) {
+
+                    document.getElementById(
+                        "benutzerButton"
+                    ).style.display = "none";
+
+
+                    document.getElementById(
+                        "anmeldenButton"
+                    ).style.display = "block";
+
+
+                    document.getElementById(
+                        "benutzerMenue"
+                    ).style.display = "none";
+
+
+                    alert(
+                        "Du wurdest abgemeldet."
+                    );
+                }
+
+            } catch (fehler) {
+
+                console.error(
+                    fehler
+                );
+
+                alert(
+                    "Beim Abmelden ist ein Fehler aufgetreten."
+                );
+            }
+        }
+
+
+        /* =========================
+           BEIM SEITENSTART PRÜFEN
+        ========================= */
+
+        async function benutzerPruefen() {
+
+            try {
+
+                const antwort =
+                    await fetch(
+                        "/api/me"
+                    );
+
+
+                const daten =
+                    await antwort.json();
+
+
+                if (daten.loggedIn) {
+
+                    benutzerAnzeigen(
+                        daten.username,
+                        daten.email
+                    );
+                }
+
+            } catch (fehler) {
+
+                console.error(
+                    "Benutzerprüfung fehlgeschlagen:",
+                    fehler
+                );
+            }
+        }
+
+
+        /* =========================
+           START
+        ========================= */
+
+        benutzerPruefen();
+
+    </script>
+
+</body>
+
+</html>
