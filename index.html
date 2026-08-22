@@ -7,6 +7,12 @@
 
     <title>NSAH - Nützliche Sparsame Alltags Hilfe</title>
 
+    <!-- Leaflet für die Karte -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
     <style>
 
         /* =========================
@@ -97,6 +103,8 @@
             font-weight: bold;
 
             cursor: pointer;
+
+            z-index: 50;
         }
 
 
@@ -131,10 +139,46 @@
             font-weight: bold;
 
             cursor: pointer;
+
+            z-index: 50;
         }
 
 
         .benutzer-button:hover {
+            background-color: #333333;
+        }
+
+
+        /* =========================
+           KARTEN BUTTON
+           ========================= */
+
+        .karten-button {
+            position: fixed;
+
+            top: 80px;
+            left: 25px;
+
+            padding: 12px 20px;
+
+            background-color: #222222;
+
+            color: white;
+
+            border: 1px solid #444444;
+
+            border-radius: 7px;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            z-index: 50;
+        }
+
+
+        .karten-button:hover {
             background-color: #333333;
         }
 
@@ -206,34 +250,6 @@
         .abmelden-button:hover {
             background-color: #333333;
         }
-
-/* =========================
-   KARTEN BUTTON - PC
-   ========================= */
-
-.karten-button {
-    position: fixed;
-
-    top: 80px;
-    left: 25px;
-
-    padding: 12px 20px;
-
-    background-color: #222222;
-    color: white;
-
-    border: 1px solid #444444;
-    border-radius: 7px;
-
-    font-size: 16px;
-    font-weight: bold;
-
-    cursor: pointer;
-
-    z-index: 50;
-}
-
-
 
 
         /* =========================
@@ -435,303 +451,406 @@
 
             font-size: 13px;
         }
-/* =========================
-   HANDY-ANSICHT
-   PC BLEIBT UNVERÄNDERT
-   ========================= */
 
-@media (max-width: 600px) {
 
-    body {
-        min-width: 0;
-        overflow-x: hidden;
-    }
+        /* =========================
+           KARTEN FENSTER
+           ========================= */
 
+        .karten-hintergrund {
+            display: none;
 
-    /* =========================
-       NSAH
-       ========================= */
+            position: fixed;
 
-    .logo {
-        position: absolute;
+            top: 0;
+            left: 0;
 
-        top: 25px;
-        left: 63%;
+            width: 100%;
+            height: 100%;
 
-        transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.85);
 
-        font-size: 52px;
+            z-index: 1000;
+        }
 
-        white-space: nowrap;
-    }
 
+        .karten-fenster {
+            position: absolute;
 
-    /* =========================
-       UNTERTITEL
-       ========================= */
+            top: 50%;
+            left: 50%;
 
-    .untertitel {
-        position: absolute;
+            transform: translate(-50%, -50%);
 
-        top: 95px;
-        left: 63%;
+            width: 90%;
+            height: 90%;
 
-        transform: translateX(-50%);
+            background-color: #111111;
 
-        width: 75%;
+            border: 2px solid #333333;
 
-        font-size: 18px;
+            border-radius: 12px;
 
-        line-height: 1.4;
+            overflow: hidden;
 
-        text-align: center;
+            box-shadow:
+                0 0 40px rgba(0, 0, 0, 0.8);
+        }
 
-        white-space: normal;
-    }
 
+        /* =========================
+           KARTEN KOPF
+           ========================= */
 
-    /* =========================
-       STRICH
-       ========================= */
+        .karten-kopf {
+            height: 55px;
 
-    .strich {
-        left: 24%;
+            display: flex;
 
-        width: 2px;
-    }
+            justify-content: space-between;
 
+            align-items: center;
 
-    /* =========================
-       ANMELDEN
-       ========================= */
+            padding: 0 15px;
 
-    .anmelden-button {
-    top: 18px;
-    left: 0px;
+            box-sizing: border-box;
 
-    padding: 8px 11px;
+            background-color: #151515;
 
-    font-size: 13px;
+            border-bottom: 1px solid #333333;
+        }
 
-    z-index: 50;
-}
-/* =========================
-   KARTEN BUTTON - HANDY
-   ========================= */
 
-.karten-button {
-    top: 58px;
-    left: 5px;
+        .karten-titel {
+            font-size: 20px;
 
-    padding: 8px 11px;
+            font-weight: bold;
+        }
 
-    font-size: 13px;
 
-    z-index: 50;
-}
+        .karten-schliessen {
+            background: none;
 
-    /* =========================
-       BENUTZER
-       ========================= */
+            border: none;
 
-    .benutzer-button {
-        top: 18px;
-        left: 12px;
+            color: white;
 
-        padding: 10px 14px;
+            font-size: 28px;
 
-        font-size: 14px;
+            cursor: pointer;
 
-        z-index: 50;
+            padding: 0 8px;
+        }
 
-        max-width: 150px;
 
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
+        .karten-schliessen:hover {
+            color: #aaaaaa;
+        }
 
 
-    /* =========================
-       BENUTZER-MENÜ
-       ========================= */
+        /* =========================
+           KARTEN CONTAINER
+           ========================= */
 
-    .benutzer-menue {
-        top: 65px;
-        left: 12px;
+        #karte {
+            width: 100%;
 
-        width: calc(100% - 24px);
+            height: calc(100% - 55px);
+        }
 
-        max-width: 260px;
 
-        z-index: 200;
-    }
+        /* =========================
+           STANDORT BUTTON
+           ========================= */
 
+        .standort-button {
+            position: absolute;
 
-    /* =========================
-       LOGIN-HINTERGRUND
-       ========================= */
+            right: 15px;
+            bottom: 15px;
 
-    .fenster-hintergrund {
-        padding: 15px;
+            z-index: 1000;
 
-        box-sizing: border-box;
+            padding: 10px 14px;
 
-        overflow-y: auto;
-    }
+            background-color: white;
 
+            color: black;
 
-    /* =========================
-       LOGIN-FENSTER
-       ========================= */
+            border: none;
 
-    .anmelde-fenster {
-        position: relative;
+            border-radius: 7px;
 
-        top: 50%;
-        left: 50%;
+            font-size: 14px;
 
-        width: 100%;
+            font-weight: bold;
 
-        max-width: 380px;
+            cursor: pointer;
 
-        padding: 22px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
 
-        transform: translate(-50%, -50%);
 
-        box-sizing: border-box;
-    }
+        .standort-button:hover {
+            background-color: #eeeeee;
+        }
 
 
-    /* =========================
-       TITEL
-       ========================= */
+        /* =========================
+           HANDY-ANSICHT
+           ========================= */
 
-    .fenster-titel {
-        font-size: 21px;
-    }
+        @media (max-width: 600px) {
 
+            body {
+                min-width: 0;
+                overflow-x: hidden;
+            }
 
-    /* =========================
-       TABS
-       ========================= */
 
-    .tab {
-        padding: 12px 5px;
+            /* =========================
+               NSAH
+               ========================= */
 
-        font-size: 14px;
-    }
+            .logo {
+                position: absolute;
 
+                top: 25px;
+                left: 63%;
 
-    /* =========================
-       EINGABEFELDER
-       ========================= */
+                transform: translateX(-50%);
 
-    .formular input {
-        width: 100%;
+                font-size: 52px;
 
-        height: 48px;
+                white-space: nowrap;
+            }
 
-        font-size: 16px;
-    }
 
+            /* =========================
+               UNTERTITEL
+               ========================= */
 
-    /* =========================
-       BUTTON
-       ========================= */
+            .untertitel {
+                position: absolute;
 
-    .formular-button {
-        height: 48px;
+                top: 95px;
+                left: 63%;
 
-        font-size: 16px;
-    }
+                transform: translateX(-50%);
 
+                width: 75%;
 
-    /* =========================
-       SCHLIESSEN
-       ========================= */
+                font-size: 18px;
 
-    .schliessen {
-        font-size: 26px;
-    }
+                line-height: 1.4;
 
-}
-/* =========================
-   KARTENFENSTER
-   ========================= */
+                text-align: center;
 
-.karten-hintergrund {
-    display: none;
+                white-space: normal;
+            }
 
-    position: fixed;
 
-    top: 0;
-    left: 0;
+            /* =========================
+               STRICH
+               ========================= */
 
-    width: 100%;
-    height: 100%;
+            .strich {
+                left: 24%;
 
-    background-color: rgba(0, 0, 0, 0.8);
+                width: 2px;
+            }
 
-    z-index: 100;
-}
 
-.karten-fenster {
-    position: absolute;
+            /* =========================
+               ANMELDEN
+               ========================= */
 
-    top: 50%;
-    left: 50%;
+            .anmelden-button {
+                top: 18px;
+                left: 0px;
 
-    transform: translate(-50%, -50%);
+                padding: 8px 11px;
 
-    width: 80%;
-    height: 80%;
+                font-size: 13px;
 
-    background-color: #111111;
+                z-index: 50;
+            }
 
-    border: 2px solid #333333;
-    border-radius: 12px;
 
-    overflow: hidden;
-}
+            /* =========================
+               KARTEN BUTTON
+               ========================= */
 
-.karten-kopf {
-    height: 55px;
+            .karten-button {
+                top: 58px;
+                left: 5px;
 
-    display: flex;
+                padding: 8px 11px;
 
-    justify-content: space-between;
-    align-items: center;
+                font-size: 13px;
 
-    padding: 0 15px;
+                z-index: 50;
+            }
 
-    box-sizing: border-box;
 
-    background-color: #151515;
+            /* =========================
+               BENUTZER
+               ========================= */
 
-    border-bottom: 1px solid #333333;
-}
+            .benutzer-button {
+                top: 18px;
+                left: 12px;
 
-.karten-titel {
-    font-size: 20px;
-    font-weight: bold;
-}
+                padding: 10px 14px;
 
-.karten-schliessen {
-    background: none;
-    border: none;
+                font-size: 14px;
 
-    color: white;
+                z-index: 50;
 
-    font-size: 28px;
+                max-width: 150px;
 
-    cursor: pointer;
-}
+                overflow: hidden;
 
-#karte {
-    width: 100%;
-    height: calc(100% - 55px);
-}
+                text-overflow: ellipsis;
+
+                white-space: nowrap;
+            }
+
+
+            /* =========================
+               BENUTZER-MENÜ
+               ========================= */
+
+            .benutzer-menue {
+                top: 65px;
+                left: 12px;
+
+                width: calc(100% - 24px);
+
+                max-width: 260px;
+
+                z-index: 200;
+            }
+
+
+            /* =========================
+               LOGIN-HINTERGRUND
+               ========================= */
+
+            .fenster-hintergrund {
+                padding: 15px;
+
+                box-sizing: border-box;
+
+                overflow-y: auto;
+            }
+
+
+            /* =========================
+               LOGIN-FENSTER
+               ========================= */
+
+            .anmelde-fenster {
+                position: relative;
+
+                top: 50%;
+                left: 50%;
+
+                width: 100%;
+
+                max-width: 380px;
+
+                padding: 22px;
+
+                transform: translate(-50%, -50%);
+
+                box-sizing: border-box;
+            }
+
+
+            /* =========================
+               TITEL
+               ========================= */
+
+            .fenster-titel {
+                font-size: 21px;
+            }
+
+
+            /* =========================
+               TABS
+               ========================= */
+
+            .tab {
+                padding: 12px 5px;
+
+                font-size: 14px;
+            }
+
+
+            /* =========================
+               EINGABEFELDER
+               ========================= */
+
+            .formular input {
+                width: 100%;
+
+                height: 48px;
+
+                font-size: 16px;
+            }
+
+
+            /* =========================
+               BUTTON
+               ========================= */
+
+            .formular-button {
+                height: 48px;
+
+                font-size: 16px;
+            }
+
+
+            /* =========================
+               SCHLIESSEN
+               ========================= */
+
+            .schliessen {
+                font-size: 26px;
+            }
+
+
+            /* =========================
+               KARTEN FENSTER HANDY
+               ========================= */
+
+            .karten-fenster {
+                width: 96%;
+
+                height: 92%;
+
+                border-radius: 10px;
+            }
+
+
+            .karten-titel {
+                font-size: 17px;
+            }
+
+
+            .standort-button {
+                right: 10px;
+
+                bottom: 10px;
+
+                padding: 9px 11px;
+
+                font-size: 13px;
+            }
+
+        }
+
     </style>
 
 </head>
@@ -778,13 +897,20 @@
 
     </button>
 
-<button
-    class="karten-button"
-    onclick="kartenOeffnen()">
 
-    🗺️ Karte
+    <!-- =========================
+         NEUER KARTEN BUTTON
+         ========================= -->
 
-</button>
+    <button
+        class="karten-button"
+        onclick="kartenOeffnen()">
+
+        🗺️ Karte
+
+    </button>
+
+
     <!-- =========================
          BENUTZER BUTTON
          ========================= -->
@@ -811,14 +937,12 @@
         <div
             class="benutzer-name"
             id="benutzerName">
-
         </div>
 
 
         <div
             class="benutzer-email"
             id="benutzerEmail">
-
         </div>
 
 
@@ -852,11 +976,8 @@
 
             <div class="fenster-kopf">
 
-
                 <div class="fenster-titel">
-
                     NSAH Konto
-
                 </div>
 
 
@@ -868,7 +989,6 @@
 
                 </button>
 
-
             </div>
 
 
@@ -877,7 +997,6 @@
                  ========================= -->
 
             <div class="tabs">
-
 
                 <button
                     class="tab aktiv"
@@ -897,7 +1016,6 @@
                     Registrieren
 
                 </button>
-
 
             </div>
 
@@ -1017,38 +1135,260 @@
 
             </div>
 
-
         </div>
-
 
     </div>
 
 
     <!-- =========================
-         JAVASCRIPT
+         NEUES KARTEN FENSTER
          ========================= -->
-  <div class="karten-kopf">
 
-            <div class="karten-titel">
-                🗺️ NSAH Karte
+    <div
+        class="karten-hintergrund"
+        id="kartenFenster">
+
+
+        <div class="karten-fenster">
+
+
+            <div class="karten-kopf">
+
+                <div class="karten-titel">
+                    🗺️ NSAH Weltkarte
+                </div>
+
+
+                <button
+                    class="karten-schliessen"
+                    onclick="kartenSchliessen()">
+
+                    ×
+
+                </button>
+
             </div>
 
-            <button
-                class="karten-schliessen"
-                onclick="kartenSchliessen()">
 
-                ×
+            <div id="karte"></div>
+
+
+            <!-- =========================
+                 EIGENEN STANDORT FINDEN
+                 ========================= -->
+
+            <button
+                class="standort-button"
+                onclick="eigenenStandortFinden()">
+
+                📍 Mein Standort
 
             </button>
 
-        </div>
 
-        <div id="karte"></div>
+        </div>
 
     </div>
 
-</div>
+
+    <!-- =========================
+         LEAFLET
+         ========================= -->
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    </script>
+
+
     <script>
+
+
+        /* =========================
+           KARTEN VARIABLEN
+           ========================= */
+
+        let karte = null;
+
+        let standortMarker = null;
+
+
+        /* =========================
+           KARTEN FENSTER ÖFFNEN
+           ========================= */
+
+        function kartenOeffnen() {
+
+            document.getElementById(
+                "kartenFenster"
+            ).style.display = "block";
+
+
+            /* Karte nur einmal erstellen */
+
+            if (!karte) {
+
+                karte = L.map("karte").setView(
+                    [20, 0],
+                    2
+                );
+
+
+                /* OpenStreetMap */
+
+                L.tileLayer(
+                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                    {
+                        maxZoom: 19,
+
+                        attribution:
+                            '&copy; OpenStreetMap-Mitwirkende'
+                    }
+                ).addTo(karte);
+
+
+                /* Karte richtig darstellen */
+
+                setTimeout(function () {
+
+                    karte.invalidateSize();
+
+                }, 200);
+
+
+                /* Standort automatisch suchen */
+
+                eigenenStandortFinden();
+
+            } else {
+
+                setTimeout(function () {
+
+                    karte.invalidateSize();
+
+                }, 200);
+
+            }
+
+        }
+
+
+        /* =========================
+           KARTEN FENSTER SCHLIESSEN
+           ========================= */
+
+        function kartenSchliessen() {
+
+            document.getElementById(
+                "kartenFenster"
+            ).style.display = "none";
+
+        }
+
+
+        /* =========================
+           EIGENEN STANDORT FINDEN
+           ========================= */
+
+        function eigenenStandortFinden() {
+
+            if (!navigator.geolocation) {
+
+                alert(
+                    "Dein Browser unterstützt keine Standortbestimmung."
+                );
+
+                return;
+
+            }
+
+
+            navigator.geolocation.getCurrentPosition(
+
+                function (position) {
+
+                    const latitude =
+                        position.coords.latitude;
+
+                    const longitude =
+                        position.coords.longitude;
+
+
+                    /* Karte zum Standort bewegen */
+
+                    karte.setView(
+                        [latitude, longitude],
+                        13
+                    );
+
+
+                    /* Alten Marker entfernen */
+
+                    if (standortMarker) {
+
+                        karte.removeLayer(
+                            standortMarker
+                        );
+
+                    }
+
+
+                    /* Neuen Standort-Marker erstellen */
+
+                    standortMarker =
+                        L.marker([
+                            latitude,
+                            longitude
+                        ]).addTo(karte);
+
+
+                    standortMarker.bindPopup(
+                        "📍 Dein aktueller Standort"
+                    ).openPopup();
+
+                },
+
+
+                function (fehler) {
+
+                    if (fehler.code === 1) {
+
+                        alert(
+                            "Der Zugriff auf deinen Standort wurde verweigert."
+                        );
+
+                    } else if (fehler.code === 2) {
+
+                        alert(
+                            "Dein Standort konnte nicht ermittelt werden."
+                        );
+
+                    } else if (fehler.code === 3) {
+
+                        alert(
+                            "Die Standortabfrage hat zu lange gedauert."
+                        );
+
+                    } else {
+
+                        alert(
+                            "Dein Standort konnte nicht ermittelt werden."
+                        );
+
+                    }
+
+                },
+
+                {
+                    enableHighAccuracy: true,
+
+                    timeout: 10000,
+
+                    maximumAge: 0
+                }
+
+            );
+
+        }
 
 
         /* =========================
@@ -1139,7 +1479,6 @@
 
         async function registrieren() {
 
-
             const username =
                 document.getElementById(
                     "registerUsername"
@@ -1164,8 +1503,6 @@
                 ).value;
 
 
-            /* Felder prüfen */
-
             if (
                 !username ||
                 !email ||
@@ -1182,8 +1519,6 @@
             }
 
 
-            /* Passwort vergleichen */
-
             if (password !== password2) {
 
                 alert(
@@ -1194,8 +1529,6 @@
 
             }
 
-
-            /* Passwortlänge */
 
             if (password.length < 6) {
 
@@ -1209,7 +1542,6 @@
 
 
             try {
-
 
                 const antwort =
                     await fetch(
@@ -1243,13 +1575,10 @@
 
                 if (daten.success) {
 
-
                     alert(
                         "Konto erfolgreich erstellt!"
                     );
 
-
-                    /* Benutzer anzeigen */
 
                     benutzerAnzeigen(
                         daten.username,
@@ -1257,12 +1586,8 @@
                     );
 
 
-                    /* Fenster schließen */
-
                     anmeldenSchliessen();
 
-
-                    /* Felder leeren */
 
                     document.getElementById(
                         "registerUsername"
@@ -1283,20 +1608,16 @@
                         "registerPassword2"
                     ).value = "";
 
-
                 } else {
-
 
                     alert(
                         daten.message
                     );
 
-
                 }
 
 
             } catch (fehler) {
-
 
                 console.error(
                     fehler
@@ -1306,7 +1627,6 @@
                 alert(
                     "Der Server konnte nicht erreicht werden."
                 );
-
 
             }
 
@@ -1318,7 +1638,6 @@
            ========================= */
 
         async function anmelden() {
-
 
             const email =
                 document.getElementById(
@@ -1344,7 +1663,6 @@
 
 
             try {
-
 
                 const antwort =
                     await fetch(
@@ -1376,7 +1694,6 @@
 
                 if (daten.success) {
 
-
                     benutzerAnzeigen(
                         daten.username,
                         daten.email
@@ -1402,20 +1719,16 @@
                         + "!"
                     );
 
-
                 } else {
-
 
                     alert(
                         daten.message
                     );
 
-
                 }
 
 
             } catch (fehler) {
-
 
                 console.error(
                     fehler
@@ -1425,7 +1738,6 @@
                 alert(
                     "Der Server konnte nicht erreicht werden."
                 );
-
 
             }
 
@@ -1440,7 +1752,6 @@
             username,
             email
         ) {
-
 
             document.getElementById(
                 "anmeldenButton"
@@ -1475,7 +1786,6 @@
 
         function benutzerMenueOeffnen() {
 
-
             const menue =
                 document.getElementById(
                     "benutzerMenue"
@@ -1503,9 +1813,7 @@
 
         async function abmelden() {
 
-
             try {
-
 
                 const antwort =
                     await fetch(
@@ -1521,7 +1829,6 @@
 
 
                 if (daten.success) {
-
 
                     document.getElementById(
                         "benutzerButton"
@@ -1542,12 +1849,10 @@
                         "Du wurdest abgemeldet."
                     );
 
-
                 }
 
 
             } catch (fehler) {
-
 
                 console.error(
                     fehler
@@ -1557,7 +1862,6 @@
                 alert(
                     "Beim Abmelden ist ein Fehler aufgetreten."
                 );
-
 
             }
 
@@ -1570,9 +1874,7 @@
 
         async function benutzerPruefen() {
 
-
             try {
-
 
                 const antwort =
                     await fetch(
@@ -1586,24 +1888,20 @@
 
                 if (daten.loggedIn) {
 
-
                     benutzerAnzeigen(
                         daten.username,
                         daten.email
                     );
-
 
                 }
 
 
             } catch (fehler) {
 
-
                 console.error(
                     "Benutzerprüfung fehlgeschlagen:",
                     fehler
                 );
-
 
             }
 
@@ -1618,7 +1916,6 @@
 
 
     </script>
-
 
 </body>
 
