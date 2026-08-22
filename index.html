@@ -4,21 +4,30 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>NSAH - Nützliche Sparsame Alltags Hilfe</title>
 
-<!-- LEAFLET -->
+
+<!-- =====================================================
+     LEAFLET
+===================================================== -->
+
 <link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 >
+
 
 <style>
 
-/* =========================================================
-   GRUNDLEGEND
-========================================================= */
+/* =====================================================
+   GRUNDLAGEN
+===================================================== */
 
 * {
     box-sizing: border-box;
@@ -26,6 +35,7 @@ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 
 html,
 body {
+
     margin: 0;
     padding: 0;
 
@@ -42,9 +52,9 @@ body {
 }
 
 
-/* =========================================================
+/* =====================================================
    HINTERGRUNDBILD
-========================================================= */
+===================================================== */
 
 .hintergrund-bild {
 
@@ -69,15 +79,15 @@ body {
 
     border-radius: 25px;
 
-    z-index: -1;
+    z-index: 0;
 
-    opacity: 1;
+    pointer-events: none;
 }
 
 
-/* =========================================================
+/* =====================================================
    LOGO
-========================================================= */
+===================================================== */
 
 .logo {
 
@@ -92,22 +102,20 @@ body {
 
     font-weight: bold;
 
-    color: white;
+    white-space: nowrap;
+
+    z-index: 2;
 
     text-shadow:
         0 0 4px rgba(255,255,255,0.7),
         0 0 10px rgba(255,255,255,0.35),
         0 0 18px rgba(255,255,255,0.15);
-
-    z-index: 10;
-
-    white-space: nowrap;
 }
 
 
-/* =========================================================
+/* =====================================================
    UNTERTITEL
-========================================================= */
+===================================================== */
 
 .untertitel {
 
@@ -124,13 +132,13 @@ body {
 
     white-space: nowrap;
 
-    z-index: 10;
+    z-index: 2;
 }
 
 
-/* =========================================================
-   LINIE
-========================================================= */
+/* =====================================================
+   STRICH
+===================================================== */
 
 .strich {
 
@@ -149,19 +157,52 @@ body {
 }
 
 
-/* =========================================================
-   ALLGEMEINE BUTTONS
-========================================================= */
+/* =====================================================
+   BUTTONEN
+===================================================== */
 
-button {
+.anmelden-button,
+.benutzer-button,
+.karten-button,
+.spiele-button {
 
-    font-family: Arial, sans-serif;
+    background-color: #222222;
+
+    color: white;
+
+    border: 1px solid #444444;
+
+    border-radius: 7px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.anmelden-button:hover,
+.benutzer-button:hover,
+.karten-button:hover,
+.spiele-button:hover {
+
+    background-color: #333333;
+}
+
+.anmelden-button:active,
+.benutzer-button:active,
+.karten-button:active,
+.spiele-button:active {
+
+    transform: scale(0.97);
 }
 
 
-/* =========================================================
-   ANMELDEN BUTTON
-========================================================= */
+/* =====================================================
+   ANMELDEN
+===================================================== */
 
 .anmelden-button {
 
@@ -172,111 +213,13 @@ button {
 
     padding: 12px 20px;
 
-    background-color: #222222;
-
-    color: white;
-
-    border: 1px solid #444444;
-
-    border-radius: 7px;
-
-    font-size: 16px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    z-index: 50;
-
-    transition: 0.2s;
-}
-
-.anmelden-button:hover {
-
-    background-color: #333333;
+    z-index: 100;
 }
 
 
-/* =========================================================
-   KARTEN BUTTON
-========================================================= */
-
-.karten-button {
-
-    position: fixed;
-
-    top: 80px;
-    left: 25px;
-
-    padding: 12px 20px;
-
-    background-color: #222222;
-
-    color: white;
-
-    border: 1px solid #444444;
-
-    border-radius: 7px;
-
-    font-size: 16px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    z-index: 50;
-
-    transition: 0.2s;
-}
-
-.karten-button:hover {
-
-    background-color: #333333;
-}
-
-
-/* =========================================================
-   SPIELE BUTTON
-   DIREKT UNTER DER KARTE
-========================================================= */
-
-.spiele-button {
-
-    position: fixed;
-
-    top: 135px;
-    left: 25px;
-
-    padding: 12px 20px;
-
-    background-color: #222222;
-
-    color: white;
-
-    border: 1px solid #444444;
-
-    border-radius: 7px;
-
-    font-size: 16px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    z-index: 50;
-
-    transition: 0.2s;
-}
-
-.spiele-button:hover {
-
-    background-color: #333333;
-}
-
-
-/* =========================================================
+/* =====================================================
    BENUTZER BUTTON
-========================================================= */
+===================================================== */
 
 .benutzer-button {
 
@@ -289,32 +232,55 @@ button {
 
     padding: 12px 20px;
 
-    background-color: #222222;
+    z-index: 100;
 
-    color: white;
+    max-width: 220px;
 
-    border: 1px solid #444444;
+    white-space: nowrap;
 
-    border-radius: 7px;
+    overflow: hidden;
 
-    font-size: 16px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    z-index: 50;
-}
-
-.benutzer-button:hover {
-
-    background-color: #333333;
+    text-overflow: ellipsis;
 }
 
 
-/* =========================================================
+/* =====================================================
+   KARTEN BUTTON
+===================================================== */
+
+.karten-button {
+
+    position: fixed;
+
+    top: 80px;
+    left: 25px;
+
+    padding: 12px 20px;
+
+    z-index: 100;
+}
+
+
+/* =====================================================
+   SPIELE BUTTON
+===================================================== */
+
+.spiele-button {
+
+    position: fixed;
+
+    top: 135px;
+    left: 25px;
+
+    padding: 12px 20px;
+
+    z-index: 100;
+}
+
+
+/* =====================================================
    BENUTZER MENÜ
-========================================================= */
+===================================================== */
 
 .benutzer-menue {
 
@@ -335,7 +301,7 @@ button {
 
     padding: 15px;
 
-    z-index: 200;
+    z-index: 500;
 }
 
 .benutzer-name {
@@ -375,10 +341,15 @@ button {
     cursor: pointer;
 }
 
+.abmelden-button:hover {
 
-/* =========================================================
-   HINTERGRUND FÜR FENSTER
-========================================================= */
+    background-color: #333333;
+}
+
+
+/* =====================================================
+   FENSTER HINTERGRÜNDE
+===================================================== */
 
 .fenster-hintergrund,
 .karten-hintergrund,
@@ -396,13 +367,13 @@ button {
 
     background-color: rgba(0,0,0,0.85);
 
-    z-index: 9999;
+    z-index: 9000;
 }
 
 
-/* =========================================================
+/* =====================================================
    LOGIN FENSTER
-========================================================= */
+===================================================== */
 
 .anmelde-fenster {
 
@@ -411,11 +382,11 @@ button {
     top: 50%;
     left: 50%;
 
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
 
     width: 400px;
 
-    max-width: calc(100% - 30px);
+    max-width: calc(100vw - 30px);
 
     background-color: #111111;
 
@@ -430,9 +401,9 @@ button {
 }
 
 
-/* =========================================================
+/* =====================================================
    FENSTER KOPF
-========================================================= */
+===================================================== */
 
 .fenster-kopf {
 
@@ -466,9 +437,9 @@ button {
 }
 
 
-/* =========================================================
+/* =====================================================
    TABS
-========================================================= */
+===================================================== */
 
 .tabs {
 
@@ -490,6 +461,8 @@ button {
     border: none;
 
     cursor: pointer;
+
+    font-size: 15px;
 }
 
 .tab.aktiv {
@@ -500,9 +473,9 @@ button {
 }
 
 
-/* =========================================================
+/* =====================================================
    FORMULAR
-========================================================= */
+===================================================== */
 
 .formular {
 
@@ -546,10 +519,15 @@ button {
     font-size: 15px;
 }
 
+.formular input:focus {
 
-/* =========================================================
-   FORM BUTTON
-========================================================= */
+    border-color: #777777;
+}
+
+
+/* =====================================================
+   FORMULAR BUTTON
+===================================================== */
 
 .formular-button {
 
@@ -578,9 +556,9 @@ button {
 }
 
 
-/* =========================================================
+/* =====================================================
    HINWEIS
-========================================================= */
+===================================================== */
 
 .hinweis {
 
@@ -594,9 +572,9 @@ button {
 }
 
 
-/* =========================================================
+/* =====================================================
    KARTEN FENSTER
-========================================================= */
+===================================================== */
 
 .karten-fenster {
 
@@ -605,10 +583,9 @@ button {
     top: 50%;
     left: 50%;
 
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
 
     width: 80%;
-
     height: 80%;
 
     background-color: #111111;
@@ -665,9 +642,9 @@ button {
 }
 
 
-/* =========================================================
+/* =====================================================
    SPIELE FENSTER
-========================================================= */
+===================================================== */
 
 .spiele-fenster {
 
@@ -676,13 +653,13 @@ button {
     top: 50%;
     left: 50%;
 
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
 
-    width: 650px;
+    width: 560px;
 
-    max-width: calc(100% - 30px);
+    max-width: calc(100vw - 30px);
 
-    max-height: 85vh;
+    max-height: 92vh;
 
     overflow-y: auto;
 
@@ -690,18 +667,10 @@ button {
 
     border: 2px solid #333333;
 
-    border-radius: 15px;
+    border-radius: 12px;
 
     padding: 25px;
-
-    box-shadow:
-        0 0 35px rgba(255,255,255,0.1);
 }
-
-
-/* =========================================================
-   SPIELE KOPF
-========================================================= */
 
 .spiele-kopf {
 
@@ -711,12 +680,12 @@ button {
 
     align-items: center;
 
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .spiele-titel {
 
-    font-size: 28px;
+    font-size: 25px;
 
     font-weight: bold;
 }
@@ -729,120 +698,28 @@ button {
 
     color: white;
 
-    font-size: 30px;
+    font-size: 28px;
 
     cursor: pointer;
 }
 
 
-/* =========================================================
-   SPIELE GRID
-========================================================= */
+/* =====================================================
+   SPIELE LISTE
+===================================================== */
 
-.spiele-grid {
+.spiele-liste {
 
     display: grid;
 
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
 
-    gap: 15px;
+    gap: 12px;
 }
 
+.spiel-button {
 
-/* =========================================================
-   EINZELNES SPIEL
-========================================================= */
-
-.spiel {
-
-    min-height: 130px;
-
-    background-color: #1b1b1b;
-
-    border: 1px solid #333333;
-
-    border-radius: 12px;
-
-    color: white;
-
-    cursor: pointer;
-
-    padding: 15px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    align-items: center;
-
-    text-align: center;
-
-    transition: 0.2s;
-}
-
-.spiel:hover {
-
-    background-color: #292929;
-
-    transform: translateY(-3px);
-
-    border-color: #555555;
-}
-
-.spiel-icon {
-
-    font-size: 40px;
-
-    margin-bottom: 10px;
-}
-
-.spiel-name {
-
-    font-size: 17px;
-
-    font-weight: bold;
-}
-
-
-/* =========================================================
-   SPIEL BEREICH
-========================================================= */
-
-#spielBereich {
-
-    display: none;
-
-    margin-top: 20px;
-
-    background-color: #080808;
-
-    border: 1px solid #333333;
-
-    border-radius: 10px;
-
-    padding: 15px;
-}
-
-#spielTitel {
-
-    text-align: center;
-
-    font-size: 22px;
-
-    font-weight: bold;
-
-    margin-bottom: 15px;
-}
-
-.spiel-zurueck {
-
-    width: 100%;
-
-    height: 42px;
-
-    margin-top: 15px;
+    min-height: 80px;
 
     background-color: #222222;
 
@@ -850,15 +727,102 @@ button {
 
     border: 1px solid #444444;
 
-    border-radius: 7px;
+    border-radius: 8px;
 
     cursor: pointer;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    transition: 0.2s;
+}
+
+.spiel-button:hover {
+
+    background-color: #333333;
+
+    transform: scale(1.02);
 }
 
 
-/* =========================================================
+/* =====================================================
+   SPIELBEREICH
+===================================================== */
+
+#spielBereich {
+
+    display: none;
+
+    margin-top: 20px;
+
+    padding: 18px;
+
+    background-color: #080808;
+
+    border: 1px solid #333333;
+
+    border-radius: 8px;
+
+    text-align: center;
+}
+
+#spielName {
+
+    margin-top: 0;
+
+    margin-bottom: 8px;
+}
+
+
+/* =====================================================
+   REKORD
+===================================================== */
+
+.rekord-anzeige {
+
+    margin-bottom: 15px;
+
+    padding: 10px;
+
+    background-color: #181818;
+
+    border: 1px solid #333333;
+
+    border-radius: 7px;
+
+    color: #dddddd;
+
+    font-size: 15px;
+}
+
+.rekord-wert {
+
+    font-weight: bold;
+
+    color: white;
+}
+
+
+/* =====================================================
+   SPIEL STATUS
+===================================================== */
+
+.spiel-status {
+
+    margin-top: 10px;
+
+    margin-bottom: 10px;
+
+    color: #cccccc;
+
+    font-size: 15px;
+}
+
+
+/* =====================================================
    FLAPPY BIRD
-========================================================= */
+===================================================== */
 
 #flappyCanvas {
 
@@ -870,19 +834,21 @@ button {
 
     height: auto;
 
-    margin: auto;
+    margin: 15px auto;
 
     background-color: #222222;
 
     border: 1px solid #444444;
 
     border-radius: 8px;
+
+    touch-action: manipulation;
 }
 
 
-/* =========================================================
+/* =====================================================
    SNAKE
-========================================================= */
+===================================================== */
 
 #snakeCanvas {
 
@@ -894,16 +860,49 @@ button {
 
     height: auto;
 
-    margin: auto;
+    margin: 15px auto;
 
-    background-color: #050505;
+    background-color: #111111;
 
     border: 1px solid #444444;
 
     border-radius: 8px;
+
+    touch-action: none;
 }
 
-.snake-steuerung {
+
+/* =====================================================
+   TETRIS
+===================================================== */
+
+#tetrisCanvas {
+
+    display: block;
+
+    width: 240px;
+
+    max-width: 100%;
+
+    height: auto;
+
+    margin: 15px auto;
+
+    background-color: #111111;
+
+    border: 1px solid #444444;
+
+    border-radius: 8px;
+
+    touch-action: none;
+}
+
+
+/* =====================================================
+   SPIEL STEUERUNG
+===================================================== */
+
+.steuerung {
 
     display: flex;
 
@@ -911,14 +910,18 @@ button {
 
     gap: 8px;
 
-    margin-top: 12px;
+    flex-wrap: wrap;
+
+    margin-top: 10px;
 }
 
-.snake-steuerung button {
+.steuerung button {
 
-    width: 45px;
+    min-width: 55px;
 
-    height: 40px;
+    min-height: 45px;
+
+    padding: 8px 14px;
 
     background-color: #222222;
 
@@ -931,95 +934,53 @@ button {
     cursor: pointer;
 
     font-size: 18px;
+
+    touch-action: manipulation;
 }
 
-
-/* =========================================================
-   MEMORY
-========================================================= */
-
-.memory-grid {
-
-    display: grid;
-
-    grid-template-columns: repeat(4, 1fr);
-
-    gap: 8px;
-
-    max-width: 400px;
-
-    margin: auto;
-}
-
-.memory-card {
-
-    aspect-ratio: 1 / 1;
-
-    background-color: #222222;
-
-    border: 1px solid #444444;
-
-    border-radius: 8px;
-
-    cursor: pointer;
-
-    font-size: 28px;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    color: transparent;
-}
-
-.memory-card.offen {
-
-    color: white;
+.steuerung button:hover {
 
     background-color: #333333;
 }
 
-.memory-card.gefunden {
 
-    color: white;
-
-    background-color: #444444;
-
-    cursor: default;
-}
-
-
-/* =========================================================
+/* =====================================================
    HANDY
-========================================================= */
+===================================================== */
 
 @media (max-width: 600px) {
 
-    body {
 
-        min-width: 0;
+    /* =================================================
+       BILD
 
-        overflow-x: hidden;
-    }
-
-
-    /* HINTERGRUNDBILD */
+       Genau 15 Pixel weiter nach rechts.
+       Ausgangspunkt: 75%
+       ================================================= */
 
     .hintergrund-bild {
 
-        width: 75vw;
+        left: calc(75% + 15px);
+
+        top: 50%;
+
+        width: 60vw;
 
         height: 35vh;
 
-        max-width: 90vw;
+        transform: translate(-50%, -50%);
 
-        border-radius: 18px;
+        background-size: cover;
+
+        background-position: center;
+
+        border-radius: 20px;
     }
 
 
-    /* LOGO */
+    /* =================================================
+       LOGO
+    ================================================= */
 
     .logo {
 
@@ -1027,23 +988,29 @@ button {
 
         left: 63%;
 
-        font-size: 50px;
+        transform: translateX(-50%);
+
+        font-size: 52px;
 
         white-space: nowrap;
     }
 
 
-    /* UNTERTITEL */
+    /* =================================================
+       UNTERTITEL
+    ================================================= */
 
     .untertitel {
 
-        top: 88px;
+        top: 95px;
 
         left: 63%;
 
-        width: 72%;
+        transform: translateX(-50%);
 
-        font-size: 17px;
+        width: 75%;
+
+        font-size: 18px;
 
         line-height: 1.4;
 
@@ -1053,21 +1020,27 @@ button {
     }
 
 
-    /* LINIE */
+    /* =================================================
+       STRICH
+    ================================================= */
 
     .strich {
 
         left: 24%;
+
+        width: 2px;
     }
 
 
-    /* ANMELDEN */
+    /* =================================================
+       ANMELDEN
+    ================================================= */
 
     .anmelden-button {
 
         top: 18px;
 
-        left: 5px;
+        left: 0;
 
         padding: 8px 11px;
 
@@ -1075,7 +1048,9 @@ button {
     }
 
 
-    /* KARTE */
+    /* =================================================
+       KARTE
+    ================================================= */
 
     .karten-button {
 
@@ -1089,7 +1064,9 @@ button {
     }
 
 
-    /* SPIELE */
+    /* =================================================
+       SPIELE
+    ================================================= */
 
     .spiele-button {
 
@@ -1103,7 +1080,9 @@ button {
     }
 
 
-    /* BENUTZER */
+    /* =================================================
+       BENUTZER
+    ================================================= */
 
     .benutzer-button {
 
@@ -1116,116 +1095,168 @@ button {
         font-size: 13px;
 
         max-width: 150px;
-
-        overflow: hidden;
-
-        text-overflow: ellipsis;
-
-        white-space: nowrap;
     }
 
 
-    /* BENUTZER MENÜ */
+    /* =================================================
+       BENUTZER MENÜ
+    ================================================= */
 
     .benutzer-menue {
 
-        top: 62px;
+        top: 65px;
 
-        left: 5px;
+        left: 12px;
 
-        width: calc(100% - 10px);
+        width: calc(100% - 24px);
 
         max-width: 260px;
     }
 
 
-    /* LOGIN */
+    /* =================================================
+       LOGIN
+    ================================================= */
+
+    .fenster-hintergrund {
+
+        padding: 15px;
+
+        overflow-y: auto;
+    }
+
 
     .anmelde-fenster {
 
         width: calc(100vw - 30px);
 
+        max-width: 380px;
+
+        padding: 22px;
+
         max-height: calc(100vh - 30px);
 
         overflow-y: auto;
-
-        padding: 20px;
     }
 
 
-    /* KARTE */
+    .fenster-titel {
+
+        font-size: 21px;
+    }
+
+
+    .tab {
+
+        padding: 12px 5px;
+
+        font-size: 14px;
+    }
+
+
+    .formular input {
+
+        height: 48px;
+
+        font-size: 16px;
+    }
+
+
+    .formular-button {
+
+        height: 48px;
+
+        font-size: 16px;
+    }
+
+
+    /* =================================================
+       KARTE
+    ================================================= */
 
     .karten-fenster {
 
         width: 95%;
 
         height: 85%;
-
-        border-radius: 10px;
     }
 
 
-    /* SPIELE FENSTER */
+    /* =================================================
+       SPIELE
+    ================================================= */
 
     .spiele-fenster {
 
-        width: calc(100% - 20px);
+        width: calc(100vw - 24px);
 
-        max-width: none;
+        max-width: 450px;
 
-        max-height: 90vh;
+        max-height: 92vh;
 
         padding: 18px;
-
-        border-radius: 12px;
     }
 
 
-    /* SPIELE GRID */
+    .spiele-titel {
 
-    .spiele-grid {
+        font-size: 21px;
+    }
 
-        grid-template-columns: repeat(2, 1fr);
+
+    .spiele-liste {
+
+        grid-template-columns: 1fr;
 
         gap: 10px;
     }
 
 
-    .spiel {
+    .spiel-button {
 
-        min-height: 110px;
+        min-height: 60px;
 
-        padding: 10px;
+        font-size: 16px;
     }
 
 
-    .spiel-icon {
+    #spielBereich {
 
-        font-size: 32px;
+        padding: 12px;
     }
 
 
-    .spiel-name {
+    #tetrisCanvas {
 
-        font-size: 14px;
+        width: 220px;
     }
 
+}
 
-    /* MEMORY */
 
-    .memory-grid {
+/* =====================================================
+   SEHR KLEINE HANDYS
+===================================================== */
 
-        gap: 6px;
+@media (max-width: 380px) {
+
+    .logo {
+
+        font-size: 45px;
+
+        left: 65%;
     }
 
+    .untertitel {
 
-    /* SNAKE STEUERUNG */
+        left: 65%;
 
-    .snake-steuerung button {
+        font-size: 16px;
+    }
 
-        width: 42px;
+    .spiele-fenster {
 
-        height: 38px;
+        padding: 12px;
     }
 
 }
@@ -1238,113 +1269,118 @@ button {
 <body>
 
 
-<!-- =========================================================
+<!-- =====================================================
      HINTERGRUNDBILD
-========================================================= -->
+===================================================== -->
 
 <div class="hintergrund-bild"></div>
 
 
-<!-- =========================================================
+<!-- =====================================================
      LOGO
-========================================================= -->
+===================================================== -->
 
 <div class="logo">
     NSAH
 </div>
 
 
-<!-- =========================================================
+<!-- =====================================================
      UNTERTITEL
-========================================================= -->
+===================================================== -->
 
 <div class="untertitel">
     Nützliche Sparsame Alltags Hilfe
 </div>
 
 
-<!-- =========================================================
-     LINIE
-========================================================= -->
+<!-- =====================================================
+     STRICH
+===================================================== -->
 
 <div class="strich"></div>
 
 
-<!-- =========================================================
-     ANMELDEN
-========================================================= -->
+<!-- =====================================================
+     ANMELDEN BUTTON
+===================================================== -->
 
 <button
-class="anmelden-button"
-id="anmeldenButton"
-onclick="anmeldenOeffnen()"
+    class="anmelden-button"
+    id="anmeldenButton"
+    onclick="anmeldenOeffnen()"
 >
     Anmelden
 </button>
 
 
-<!-- =========================================================
-     KARTE
-========================================================= -->
+<!-- =====================================================
+     KARTEN BUTTON
+===================================================== -->
 
 <button
-class="karten-button"
-onclick="kartenOeffnen()"
+    class="karten-button"
+    onclick="kartenOeffnen()"
 >
     🗺️ Karte
 </button>
 
 
-<!-- =========================================================
-     SPIELE
-========================================================= -->
+<!-- =====================================================
+     SPIELE BUTTON
+===================================================== -->
 
 <button
-class="spiele-button"
-onclick="spieleOeffnen()"
+    class="spiele-button"
+    onclick="spieleOeffnen()"
 >
     🎮 Spiele
 </button>
 
 
-<!-- =========================================================
-     BENUTZER
-========================================================= -->
+<!-- =====================================================
+     BENUTZER BUTTON
+===================================================== -->
 
 <button
-class="benutzer-button"
-id="benutzerButton"
-onclick="benutzerMenueOeffnen()"
+    class="benutzer-button"
+    id="benutzerButton"
+    onclick="benutzerMenueOeffnen()"
 >
+
     👤
+
     <span id="benutzerNameOben">
         Benutzer
     </span>
+
 </button>
 
 
-<!-- =========================================================
+<!-- =====================================================
      BENUTZER MENÜ
-========================================================= -->
+===================================================== -->
 
 <div
-class="benutzer-menue"
-id="benutzerMenue"
+    class="benutzer-menue"
+    id="benutzerMenue"
 >
 
     <div
-    class="benutzer-name"
-    id="benutzerName">
-    </div>
+        class="benutzer-name"
+        id="benutzerName"
+    ></div>
+
 
     <div
-    class="benutzer-email"
-    id="benutzerEmail">
-    </div>
+        class="benutzer-email"
+        id="benutzerEmail"
+    ></div>
+
 
     <button
-    class="abmelden-button"
-    onclick="abmelden()"
+        class="abmelden-button"
+        onclick="abmelden()"
     >
         Abmelden
     </button>
@@ -1352,502 +1388,370 @@ id="benutzerMenue"
 </div>
 
 
-<!-- =========================================================
+<!-- =====================================================
      LOGIN FENSTER
-========================================================= -->
+===================================================== -->
 
 <div
-class="fenster-hintergrund"
-id="anmeldeFenster"
+    class="fenster-hintergrund"
+    id="anmeldeFenster"
 >
 
-<div class="anmelde-fenster">
+    <div class="anmelde-fenster">
 
-<div class="fenster-kopf">
 
-<div class="fenster-titel">
-    NSAH Konto
+        <div class="fenster-kopf">
+
+            <div class="fenster-titel">
+                NSAH Konto
+            </div>
+
+
+            <button
+                class="schliessen"
+                onclick="anmeldenSchliessen()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="tabs">
+
+            <button
+                class="tab aktiv"
+                id="anmeldenTab"
+                onclick="anmeldenTabOeffnen()"
+            >
+                Anmelden
+            </button>
+
+
+            <button
+                class="tab"
+                id="registrierenTab"
+                onclick="registrierenTabOeffnen()"
+            >
+                Registrieren
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             ANMELDEN
+        ================================================== -->
+
+        <div
+            class="formular aktiv"
+            id="anmeldenForm"
+        >
+
+            <label>
+                E-Mail
+            </label>
+
+            <input
+                type="email"
+                id="loginEmail"
+                placeholder="Deine E-Mail"
+            >
+
+
+            <label>
+                Passwort
+            </label>
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="Dein Passwort"
+            >
+
+
+            <button
+                class="formular-button"
+                onclick="anmelden()"
+            >
+                Anmelden
+            </button>
+
+
+            <div class="hinweis">
+
+                Noch kein Konto?
+
+                Klicke oben auf „Registrieren“.
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             REGISTRIEREN
+        ================================================== -->
+
+        <div
+            class="formular"
+            id="registrierenForm"
+        >
+
+            <label>
+                Benutzername
+            </label>
+
+            <input
+                type="text"
+                id="registerUsername"
+                placeholder="Dein Benutzername"
+            >
+
+
+            <label>
+                E-Mail
+            </label>
+
+            <input
+                type="email"
+                id="registerEmail"
+                placeholder="Deine E-Mail"
+            >
+
+
+            <label>
+                Passwort
+            </label>
+
+            <input
+                type="password"
+                id="registerPassword"
+                placeholder="Dein Passwort"
+            >
+
+
+            <label>
+                Passwort wiederholen
+            </label>
+
+            <input
+                type="password"
+                id="registerPassword2"
+                placeholder="Passwort wiederholen"
+            >
+
+
+            <button
+                class="formular-button"
+                onclick="registrieren()"
+            >
+                Konto erstellen
+            </button>
+
+        </div>
+
+    </div>
+
 </div>
 
-<button
-class="schliessen"
-onclick="anmeldenSchliessen()"
->
-    ×
-</button>
 
-</div>
-
-
-<div class="tabs">
-
-<button
-class="tab aktiv"
-id="anmeldenTab"
-onclick="anmeldenTabOeffnen()"
->
-    Anmelden
-</button>
-
-<button
-class="tab"
-id="registrierenTab"
-onclick="registrierenTabOeffnen()"
->
-    Registrieren
-</button>
-
-</div>
-
-
-<!-- ANMELDEN -->
-
-<div
-class="formular aktiv"
-id="anmeldenForm"
->
-
-<label>
-    E-Mail
-</label>
-
-<input
-type="email"
-id="loginEmail"
-placeholder="Deine E-Mail"
->
-
-<label>
-    Passwort
-</label>
-
-<input
-type="password"
-id="loginPassword"
-placeholder="Dein Passwort"
->
-
-<button
-class="formular-button"
-onclick="anmelden()"
->
-    Anmelden
-</button>
-
-<div class="hinweis">
-    Noch kein Konto?
-    Klicke oben auf „Registrieren“.
-</div>
-
-</div>
-
-
-<!-- REGISTRIEREN -->
-
-<div
-class="formular"
-id="registrierenForm"
->
-
-<label>
-    Benutzername
-</label>
-
-<input
-type="text"
-id="registerUsername"
-placeholder="Dein Benutzername"
->
-
-<label>
-    E-Mail
-</label>
-
-<input
-type="email"
-id="registerEmail"
-placeholder="Deine E-Mail"
->
-
-<label>
-    Passwort
-</label>
-
-<input
-type="password"
-id="registerPassword"
-placeholder="Dein Passwort"
->
-
-<label>
-    Passwort wiederholen
-</label>
-
-<input
-type="password"
-id="registerPassword2"
-placeholder="Passwort wiederholen"
->
-
-<button
-class="formular-button"
-onclick="registrieren()"
->
-    Konto erstellen
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =========================================================
+<!-- =====================================================
      KARTEN FENSTER
-========================================================= -->
+===================================================== -->
 
 <div
-class="karten-hintergrund"
-id="kartenFenster"
+    class="karten-hintergrund"
+    id="kartenFenster"
 >
 
-<div class="karten-fenster">
+    <div class="karten-fenster">
 
-<div class="karten-kopf">
 
-<div class="karten-titel">
-    🗺️ NSAH Karte
+        <div class="karten-kopf">
+
+            <div class="karten-titel">
+                🗺️ NSAH Karte
+            </div>
+
+
+            <button
+                class="karten-schliessen"
+                onclick="kartenSchliessen()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div id="karte"></div>
+
+    </div>
+
 </div>
 
-<button
-class="karten-schliessen"
-onclick="kartenSchliessen()"
->
-    ×
-</button>
 
-</div>
-
-<div id="karte"></div>
-
-</div>
-
-</div>
-
-
-<!-- =========================================================
+<!-- =====================================================
      SPIELE FENSTER
-========================================================= -->
+===================================================== -->
 
 <div
-class="spiele-hintergrund"
-id="spieleFenster"
+    class="spiele-hintergrund"
+    id="spieleFenster"
 >
 
-<div class="spiele-fenster">
+    <div class="spiele-fenster">
 
 
-<div class="spiele-kopf">
+        <div class="spiele-kopf">
 
-<div class="spiele-titel">
-    🎮 Spiele
-</div>
-
-<button
-class="spiele-schliessen"
-onclick="spieleSchliessen()"
->
-    ×
-</button>
-
-</div>
+            <div class="spiele-titel">
+                🎮 Spiele
+            </div>
 
 
-<!-- =========================================================
-     6 SPIELE
-========================================================= -->
+            <button
+                class="spiele-schliessen"
+                onclick="spieleSchliessen()"
+            >
+                ×
+            </button>
 
-<div
-class="spiele-grid"
-id="spieleGrid"
->
-
-
-<button
-class="spiel"
-onclick="spielStarten('flappy')"
->
-
-<div class="spiel-icon">
-    🐦
-</div>
-
-<div class="spiel-name">
-    Flappy Bird
-</div>
-
-</button>
+        </div>
 
 
-<button
-class="spiel"
-onclick="spielStarten('snake')"
->
+        <!-- =================================================
+             NUR 3 SPIELE
+        ================================================== -->
 
-<div class="spiel-icon">
-    🐍
-</div>
-
-<div class="spiel-name">
-    Snake
-</div>
-
-</button>
+        <div class="spiele-liste">
 
 
-<button
-class="spiel"
-onclick="spielStarten('memory')"
->
-
-<div class="spiel-icon">
-    🧠
-</div>
-
-<div class="spiel-name">
-    Memory
-</div>
-
-</button>
+            <button
+                class="spiel-button"
+                onclick="spielStarten('Flappy Bird')"
+            >
+                🐦 Flappy Bird
+            </button>
 
 
-<button
-class="spiel"
-onclick="spielStarten('reaktion')"
->
-
-<div class="spiel-icon">
-    ⚡
-</div>
-
-<div class="spiel-name">
-    Reaktion
-</div>
-
-</button>
+            <button
+                class="spiel-button"
+                onclick="spielStarten('Snake')"
+            >
+                🐍 Snake
+            </button>
 
 
-<button
-class="spiel"
-onclick="spielStarten('tetris')"
->
+            <button
+                class="spiel-button"
+                onclick="spielStarten('Tetris')"
+            >
+                🧱 Tetris
+            </button>
 
-<div class="spiel-icon">
-    🧱
-</div>
-
-<div class="spiel-name">
-    Tetris
-</div>
-
-</button>
+        </div>
 
 
-<button
-class="spiel"
-onclick="spielStarten('vier')"
->
+        <!-- =================================================
+             SPIELBEREICH
+        ================================================== -->
 
-<div class="spiel-icon">
-    🔴
-</div>
+        <div
+            id="spielBereich"
+        >
 
-<div class="spiel-name">
-    4 gewinnt
-</div>
+            <h2 id="spielName">
+                Spiel
+            </h2>
 
-</button>
 
+            <div
+                class="rekord-anzeige"
+                id="rekordAnzeige"
+            >
+                🏆 Rekord:
+                <span
+                    class="rekord-wert"
+                    id="rekordWert"
+                >
+                    0
+                </span>
+            </div>
+
+
+            <div
+                class="spiel-status"
+                id="spielStatus"
+            >
+                Spiel wird geladen...
+            </div>
+
+
+            <button
+                class="formular-button"
+                onclick="spielSchliessen()"
+            >
+                Spiel schließen
+            </button>
+
+        </div>
+
+    </div>
 
 </div>
 
 
-<!-- =========================================================
-     SPIEL BEREICH
-========================================================= -->
-
-<div
-id="spielBereich"
->
-
-<div id="spielTitel">
-    Spiel
-</div>
-
-
-<!-- FLAPPY -->
-
-<div
-id="flappyBereich"
-style="display:none;"
->
-
-<canvas
-id="flappyCanvas"
-width="400"
-height="500"
->
-</canvas>
-
-</div>
-
-
-<!-- SNAKE -->
-
-<div
-id="snakeBereich"
-style="display:none;"
->
-
-<canvas
-id="snakeCanvas"
-width="400"
-height="400"
->
-</canvas>
-
-<div class="snake-steuerung">
-
-<button onclick="snakeRichtung('links')">
-    ◀
-</button>
-
-<button onclick="snakeRichtung('oben')">
-    ▲
-</button>
-
-<button onclick="snakeRichtung('unten')">
-    ▼
-</button>
-
-<button onclick="snakeRichtung('rechts')">
-    ▶
-</button>
-
-</div>
-
-</div>
-
-
-<!-- MEMORY -->
-
-<div
-id="memoryBereich"
-style="display:none;"
->
-
-<div
-class="memory-grid"
-id="memoryGrid"
->
-</div>
-
-</div>
-
-
-<!-- REAKTION -->
-
-<div
-id="reaktionBereich"
-style="display:none; text-align:center;"
->
-
-<p>
-    Warte auf Grün und klicke so schnell wie möglich!
-</p>
-
-<button
-id="reaktionButton"
-class="formular-button"
-onclick="reaktionStarten()"
->
-    Start
-</button>
-
-</div>
-
-
-<!-- TETRIS -->
-
-<div
-id="tetrisBereich"
-style="display:none; text-align:center;"
->
-
-<p>
-    🧱 Tetris
-</p>
-
-<p>
-    Dieses Spiel kann später erweitert werden.
-</p>
-
-</div>
-
-
-<!-- 4 GEWINNT -->
-
-<div
-id="vierBereich"
-style="display:none; text-align:center;"
->
-
-<p>
-    🔴 4 gewinnt
-</p>
-
-<p>
-    Dieses Spiel kann später erweitert werden.
-</p>
-
-</div>
-
-
-<button
-class="spiel-zurueck"
-onclick="spieleZurueck()"
->
-    ← Zurück zu den Spielen
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =========================================================
+<!-- =====================================================
      LEAFLET
-========================================================= -->
+===================================================== -->
 
 <script
-src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
->
-</script>
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
 
 
 <script>
 
-/* =========================================================
+/* =====================================================
+   BENUTZER / REKORD VARIABLEN
+===================================================== */
+
+let aktuellerBenutzer = null;
+
+let aktuellesSpiel = null;
+
+
+/* =====================================================
    KARTE
-========================================================= */
+===================================================== */
 
 let karte = null;
 
 let standortMarker = null;
 
+
+/* =====================================================
+   SPIEL VARIABLEN
+===================================================== */
+
+let flappyAktiv = false;
+
+let snakeAktiv = false;
+
+let tetrisAktiv = false;
+
+let flappyAnimation = null;
+
+let snakeInterval = null;
+
+let tetrisInterval = null;
+
+
+/* =====================================================
+   KARTE ÖFFNEN
+===================================================== */
 
 function kartenOeffnen() {
 
@@ -1865,15 +1769,15 @@ function kartenOeffnen() {
                 worldCopyJump: false,
 
                 maxBounds: [
-                    [-90,-180],
-                    [90,180]
+                    [-90, -180],
+                    [90, 180]
                 ],
 
                 maxBoundsViscosity: 1.0
 
             }
         ).setView(
-            [20,0],
+            [20, 0],
             2
         );
 
@@ -1893,9 +1797,7 @@ function kartenOeffnen() {
         ).addTo(karte);
 
 
-        if (
-            navigator.geolocation
-        ) {
+        if (navigator.geolocation) {
 
             navigator.geolocation.getCurrentPosition(
 
@@ -1909,7 +1811,7 @@ function kartenOeffnen() {
 
 
                     karte.setView(
-                        [lat,lon],
+                        [lat, lon],
                         13
                     );
 
@@ -1919,20 +1821,21 @@ function kartenOeffnen() {
                         karte.removeLayer(
                             standortMarker
                         );
+
                     }
 
 
                     standortMarker =
                         L.marker(
-                            [lat,lon]
+                            [lat, lon]
                         ).addTo(karte);
 
 
                     standortMarker
-                    .bindPopup(
-                        "📍 Dein Standort"
-                    )
-                    .openPopup();
+                        .bindPopup(
+                            "📍 Dein Standort"
+                        )
+                        .openPopup();
 
                 },
 
@@ -1963,9 +1866,12 @@ function kartenOeffnen() {
         },
         200
     );
-
 }
 
+
+/* =====================================================
+   KARTE SCHLIESSEN
+===================================================== */
 
 function kartenSchliessen() {
 
@@ -1975,56 +1881,56 @@ function kartenSchliessen() {
 }
 
 
-/* =========================================================
-   SPIELE
-========================================================= */
+/* =====================================================
+   SPIELE ÖFFNEN
+===================================================== */
 
 function spieleOeffnen() {
 
     document.getElementById(
         "spieleFenster"
     ).style.display = "block";
-
 }
 
 
+/* =====================================================
+   SPIELE SCHLIESSEN
+===================================================== */
+
 function spieleSchliessen() {
+
+    spieleStoppen();
 
     document.getElementById(
         "spieleFenster"
     ).style.display = "none";
 
-    spieleZurueck();
-}
-
-
-function spieleZurueck() {
-
-    document.getElementById(
-        "spieleGrid"
-    ).style.display = "grid";
-
-
     document.getElementById(
         "spielBereich"
     ).style.display = "none";
-
-
-    stoppeSpiele();
 }
 
 
-/* =========================================================
+/* =====================================================
    SPIEL STARTEN
-========================================================= */
+===================================================== */
 
-function spielStarten(
-    spiel
-) {
+function spielStarten(name) {
 
-    document.getElementById(
-        "spieleGrid"
-    ).style.display = "none";
+    if (!aktuellerBenutzer) {
+
+        alert(
+            "Bitte melde dich an, damit dein persönlicher Rekord gespeichert und angezeigt werden kann."
+        );
+
+        return;
+    }
+
+
+    spieleStoppen();
+
+
+    aktuellesSpiel = name;
 
 
     document.getElementById(
@@ -2033,132 +1939,144 @@ function spielStarten(
 
 
     document.getElementById(
-        "flappyBereich"
-    ).style.display = "none";
+        "spielName"
+    ).textContent = name;
 
 
-    document.getElementById(
-        "snakeBereich"
-    ).style.display = "none";
+    rekordAnzeigen();
 
 
-    document.getElementById(
-        "memoryBereich"
-    ).style.display = "none";
+    if (name === "Flappy Bird") {
 
-
-    document.getElementById(
-        "reaktionBereich"
-    ).style.display = "none";
-
-
-    document.getElementById(
-        "tetrisBereich"
-    ).style.display = "none";
-
-
-    document.getElementById(
-        "vierBereich"
-    ).style.display = "none";
-
-
-    if (spiel === "flappy") {
-
-        document.getElementById(
-            "spielTitel"
-        ).textContent =
-            "🐦 Flappy Bird";
-
-        document.getElementById(
-            "flappyBereich"
-        ).style.display = "block";
-
-        flappyStarten();
+        flappyBirdStarten();
 
     }
 
 
-    if (spiel === "snake") {
-
-        document.getElementById(
-            "spielTitel"
-        ).textContent =
-            "🐍 Snake";
-
-        document.getElementById(
-            "snakeBereich"
-        ).style.display = "block";
+    if (name === "Snake") {
 
         snakeStarten();
 
     }
 
 
-    if (spiel === "memory") {
+    if (name === "Tetris") {
 
-        document.getElementById(
-            "spielTitel"
-        ).textContent =
-            "🧠 Memory";
-
-        document.getElementById(
-            "memoryBereich"
-        ).style.display = "block";
-
-        memoryStarten();
-
-    }
-
-
-    if (spiel === "reaktion") {
-
-        document.getElementById(
-            "spielTitel"
-        ).textContent =
-            "⚡ Reaktion";
-
-        document.getElementById(
-            "reaktionBereich"
-        ).style.display = "block";
-
-    }
-
-
-    if (spiel === "tetris") {
-
-        document.getElementById(
-            "spielTitel"
-        ).textContent =
-            "🧱 Tetris";
-
-        document.getElementById(
-            "tetrisBereich"
-        ).style.display = "block";
-
-    }
-
-
-    if (spiel === "vier") {
-
-        document.getElementById(
-            "spielTitel"
-        ).textContent =
-            "🔴 4 gewinnt";
-
-        document.getElementById(
-            "vierBereich"
-        ).style.display = "block";
+        tetrisStarten();
 
     }
 
 }
 
 
-/* =========================================================
-   SPIELE STOPPEN
-========================================================= */
+/* =====================================================
+   REKORD KEY
+===================================================== */
 
-function stoppeSpiele() {
+function rekordKey() {
+
+    if (!aktuellerBenutzer) {
+
+        return null;
+    }
+
+
+    return (
+        "NSAH_REKORD_" +
+        aktuellerBenutzer +
+        "_" +
+        aktuellesSpiel
+    );
+}
+
+
+/* =====================================================
+   REKORD HOLEN
+===================================================== */
+
+function rekordHolen() {
+
+    const key =
+        rekordKey();
+
+
+    if (!key) {
+
+        return 0;
+    }
+
+
+    return parseInt(
+        localStorage.getItem(key) || "0"
+    );
+}
+
+
+/* =====================================================
+   REKORD SPEICHERN
+===================================================== */
+
+function rekordSpeichern(wert) {
+
+    if (!aktuellerBenutzer) {
+
+        return;
+    }
+
+
+    const alterRekord =
+        rekordHolen();
+
+
+    if (wert > alterRekord) {
+
+        localStorage.setItem(
+            rekordKey(),
+            String(wert)
+        );
+
+        rekordAnzeigen();
+
+    }
+
+}
+
+
+/* =====================================================
+   REKORD ANZEIGEN
+===================================================== */
+
+function rekordAnzeigen() {
+
+    const rekord =
+        rekordHolen();
+
+
+    document.getElementById(
+        "rekordWert"
+    ).textContent =
+        rekord;
+
+
+    document.getElementById(
+        "rekordAnzeige"
+    ).style.display =
+        "block";
+}
+
+
+/* =====================================================
+   SPIELE STOPPEN
+===================================================== */
+
+function spieleStoppen() {
+
+    flappyAktiv = false;
+
+    snakeAktiv = false;
+
+    tetrisAktiv = false;
+
 
     if (flappyAnimation) {
 
@@ -2170,227 +2088,339 @@ function stoppeSpiele() {
     }
 
 
-    if (snakeTimer) {
+    if (snakeInterval) {
 
         clearInterval(
-            snakeTimer
+            snakeInterval
         );
 
-        snakeTimer = null;
+        snakeInterval = null;
     }
 
-}
+
+    if (tetrisInterval) {
+
+        clearInterval(
+            tetrisInterval
+        );
+
+        tetrisInterval = null;
+    }
 
 
-/* =========================================================
-   FLAPPY BIRD
-========================================================= */
-
-let flappyAnimation = null;
-
-let flappyBird = null;
-
-let flappyRohr = null;
-
-let flappyPunkte = 0;
-
-let flappyGameOver = false;
-
-
-function flappyStarten() {
-
-    const canvas =
+    const flappy =
         document.getElementById(
             "flappyCanvas"
         );
 
+    if (flappy) {
+
+        flappy.remove();
+    }
+
+
+    const snake =
+        document.getElementById(
+            "snakeCanvas"
+        );
+
+    if (snake) {
+
+        snake.remove();
+    }
+
+
+    const tetris =
+        document.getElementById(
+            "tetrisCanvas"
+        );
+
+    if (tetris) {
+
+        tetris.remove();
+    }
+
+
+    const steuerungen =
+        document.querySelectorAll(
+            ".spiel-steuerung"
+        );
+
+
+    steuerungen.forEach(
+        function(element) {
+
+            element.remove();
+
+        }
+    );
+}
+
+
+/* =====================================================
+   SPIEL SCHLIESSEN
+===================================================== */
+
+function spielSchliessen() {
+
+    spieleStoppen();
+
+
+    document.getElementById(
+        "spielBereich"
+    ).style.display = "none";
+}
+
+
+/* =====================================================
+   FLAPPY BIRD
+===================================================== */
+
+function flappyBirdStarten() {
+
+    const bereich =
+        document.getElementById(
+            "spielBereich"
+        );
+
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+
+    canvas.id =
+        "flappyCanvas";
+
+
+    canvas.width = 400;
+
+    canvas.height = 500;
+
+
+    bereich.insertBefore(
+        canvas,
+        document.getElementById(
+            "spielStatus"
+        )
+    );
+
+
     const ctx =
-        canvas.getContext("2d");
+        canvas.getContext(
+            "2d"
+        );
 
 
-    flappyBird = {
+    let birdY = 250;
 
-        x: 80,
+    let velocity = 0;
 
-        y: 220,
+    const gravity = 0.45;
 
-        radius: 15,
+    const jump = -7;
 
-        velocity: 0
+    let score = 0;
 
-    };
+    let gameOver = false;
 
+    let pipeX = 400;
 
-    flappyRohr = {
+    let pipeGap = 150;
 
-        x: 400,
-
-        gapY: 250,
-
-        gap: 150
-
-    };
+    let pipeTop =
+        Math.floor(
+            Math.random() * 200
+        ) + 50;
 
 
-    flappyPunkte = 0;
+    flappyAktiv = true;
 
-    flappyGameOver = false;
+
+    document.getElementById(
+        "spielStatus"
+    ).textContent =
+        "Tippe oder klicke zum Fliegen!";
+
+
+    function springen() {
+
+        if (!flappyAktiv) {
+
+            return;
+        }
+
+
+        if (gameOver) {
+
+            flappyBirdStarten();
+
+            return;
+        }
+
+
+        velocity = jump;
+    }
+
+
+    canvas.addEventListener(
+        "click",
+        springen
+    );
+
+
+    canvas.addEventListener(
+        "touchstart",
+        function(event) {
+
+            event.preventDefault();
+
+            springen();
+
+        },
+        {
+            passive: false
+        }
+    );
 
 
     function zeichnen() {
 
-        ctx.clearRect(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
-
-
-        /* Hintergrund */
-
-        ctx.fillStyle = "#111";
-
-        ctx.fillRect(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
-
-
-        /* Rohre */
-
-        ctx.fillStyle = "#555";
-
-
-        ctx.fillRect(
-            flappyRohr.x,
-            0,
-            50,
-            flappyRohr.gapY - flappyRohr.gap / 2
-        );
-
-
-        ctx.fillRect(
-            flappyRohr.x,
-            flappyRohr.gapY + flappyRohr.gap / 2,
-            50,
-            canvas.height
-        );
-
-
-        /* Vogel */
-
-        ctx.fillStyle = "white";
-
-        ctx.beginPath();
-
-        ctx.arc(
-            flappyBird.x,
-            flappyBird.y,
-            flappyBird.radius,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
-
-
-        /* Punkte */
-
-        ctx.fillStyle = "white";
-
-        ctx.font = "24px Arial";
-
-        ctx.fillText(
-            "Punkte: " + flappyPunkte,
-            15,
-            30
-        );
-
-
-        if (flappyGameOver) {
-
-            ctx.font = "28px Arial";
-
-            ctx.textAlign = "center";
-
-            ctx.fillText(
-                "Game Over",
-                canvas.width / 2,
-                canvas.height / 2
-            );
-
-            ctx.font = "16px Arial";
-
-            ctx.fillText(
-                "Tippe / klicke zum Neustart",
-                canvas.width / 2,
-                canvas.height / 2 + 30
-            );
-
-            ctx.textAlign = "left";
+        if (!flappyAktiv) {
 
             return;
-
         }
 
 
-        flappyBird.velocity += 0.35;
+        ctx.fillStyle =
+            "#202020";
 
-        flappyBird.y +=
-            flappyBird.velocity;
-
-
-        flappyRohr.x -= 2;
-
-
-        if (
-            flappyRohr.x < -50
-        ) {
-
-            flappyRohr.x =
-                canvas.width;
-
-            flappyRohr.gapY =
-                150 +
-                Math.random() * 200;
-
-            flappyPunkte++;
-
-        }
+        ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
 
 
-        if (
-            flappyBird.y < 0 ||
-            flappyBird.y > canvas.height
-        ) {
+        /* BODEN */
 
-            flappyGameOver = true;
+        ctx.fillStyle =
+            "#444444";
 
-        }
+        ctx.fillRect(
+            0,
+            475,
+            canvas.width,
+            25
+        );
 
 
-        if (
-            flappyBird.x + flappyBird.radius >
-                flappyRohr.x &&
-            flappyBird.x - flappyBird.radius <
-                flappyRohr.x + 50 &&
-            (
-                flappyBird.y -
-                flappyBird.radius <
-                flappyRohr.gapY -
-                flappyRohr.gap / 2 ||
+        /* ROHR */
 
-                flappyBird.y +
-                flappyBird.radius >
-                flappyRohr.gapY +
-                flappyRohr.gap / 2
-            )
-        ) {
+        ctx.fillStyle =
+            "#555555";
 
-            flappyGameOver = true;
+
+        ctx.fillRect(
+            pipeX,
+            0,
+            55,
+            pipeTop
+        );
+
+
+        ctx.fillRect(
+            pipeX,
+            pipeTop + pipeGap,
+            55,
+            475 - pipeTop - pipeGap
+        );
+
+
+        /* VOGEL */
+
+        ctx.font =
+            "34px Arial";
+
+        ctx.fillText(
+            "🐦",
+            70,
+            birdY
+        );
+
+
+        if (!gameOver) {
+
+            velocity += gravity;
+
+            birdY += velocity;
+
+
+            pipeX -= 2;
+
+
+            if (pipeX < -60) {
+
+                pipeX = 400;
+
+                pipeTop =
+                    Math.floor(
+                        Math.random() * 220
+                    ) + 40;
+
+                score++;
+
+                rekordSpeichern(
+                    score
+                );
+
+            }
+
+
+            const birdX = 70;
+
+            const birdSize = 28;
+
+
+            const kollidiertRohr =
+
+                birdX + birdSize > pipeX &&
+
+                birdX < pipeX + 55 &&
+
+                (
+                    birdY - birdSize < pipeTop ||
+
+                    birdY > pipeTop + pipeGap
+                );
+
+
+            if (
+                birdY > 475 ||
+                birdY < 0 ||
+                kollidiertRohr
+            ) {
+
+                gameOver = true;
+
+                document.getElementById(
+                    "spielStatus"
+                ).textContent =
+                    "Game Over! Klick zum Neustarten. Punktzahl: " +
+                    score;
+
+            }
+
+
+            document.getElementById(
+                "spielStatus"
+            ).textContent =
+                "Punkte: " +
+                score +
+                " | Rekord: " +
+                rekordHolen();
 
         }
 
@@ -2399,192 +2429,214 @@ function flappyStarten() {
             requestAnimationFrame(
                 zeichnen
             );
-
     }
-
-
-    function springen() {
-
-        if (flappyGameOver) {
-
-            flappyStarten();
-
-            return;
-
-        }
-
-        flappyBird.velocity = -6;
-
-    }
-
-
-    canvas.onclick = springen;
-
-    canvas.ontouchstart =
-        function(event) {
-
-            event.preventDefault();
-
-            springen();
-
-        };
 
 
     zeichnen();
-
 }
 
 
-/* =========================================================
+/* =====================================================
    SNAKE
-========================================================= */
-
-let snake = [];
-
-let snakeFutter = {};
-
-let snakeRichtungAktuell = "rechts";
-
-let snakeTimer = null;
-
+===================================================== */
 
 function snakeStarten() {
 
-    const canvas =
+    const bereich =
         document.getElementById(
-            "snakeCanvas"
+            "spielBereich"
         );
 
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+
+    canvas.id =
+        "snakeCanvas";
+
+
+    canvas.width = 400;
+
+    canvas.height = 400;
+
+
+    bereich.insertBefore(
+        canvas,
+        document.getElementById(
+            "spielStatus"
+        )
+    );
+
+
     const ctx =
-        canvas.getContext("2d");
+        canvas.getContext(
+            "2d"
+        );
 
 
-    snake = [
+    const feld =
+        20;
 
+
+    let snake = [
         {
-            x: 10,
-            y: 10
-        },
-
-        {
-            x: 9,
-            y: 10
-        },
-
-        {
-            x: 8,
-            y: 10
+            x: 200,
+            y: 200
         }
-
     ];
 
 
-    snakeRichtungAktuell =
-        "rechts";
-
-
-    snakeFutter = {
-
-        x:
-            Math.floor(
-                Math.random() * 20
-            ),
-
-        y:
-            Math.floor(
-                Math.random() * 20
-            )
-
+    let richtung = {
+        x: feld,
+        y: 0
     };
 
 
-    if (snakeTimer) {
+    let essen =
+        neuesEssen();
 
-        clearInterval(
-            snakeTimer
-        );
 
+    let score = 0;
+
+    let gameOver = false;
+
+
+    snakeAktiv = true;
+
+
+    document.getElementById(
+        "spielStatus"
+    ).textContent =
+        "Benutze Pfeiltasten oder die Buttons.";
+
+
+    function neuesEssen() {
+
+        return {
+
+            x:
+                Math.floor(
+                    Math.random() *
+                    (canvas.width / feld)
+                ) * feld,
+
+            y:
+                Math.floor(
+                    Math.random() *
+                    (canvas.height / feld)
+                ) * feld
+
+        };
     }
 
 
-    snakeTimer =
-        setInterval(
-            snakeSpiel,
-            130
+    function zeichnen() {
+
+        ctx.fillStyle =
+            "#111111";
+
+        ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
         );
 
 
-    function snakeSpiel() {
+        /* ESSEN */
+
+        ctx.font =
+            "20px Arial";
+
+        ctx.fillText(
+            "🍎",
+            essen.x,
+            essen.y + 18
+        );
+
+
+        /* SCHLANGE */
+
+        ctx.fillStyle =
+            "#eeeeee";
+
+
+        snake.forEach(
+            function(teil) {
+
+                ctx.fillRect(
+                    teil.x,
+                    teil.y,
+                    feld - 2,
+                    feld - 2
+                );
+
+            }
+        );
+
+
+        if (gameOver) {
+
+            ctx.font =
+                "24px Arial";
+
+            ctx.fillText(
+                "Game Over",
+                140,
+                190
+            );
+
+            return;
+        }
+
 
         const kopf = {
-            x: snake[0].x,
-            y: snake[0].y
+
+            x:
+                snake[0].x +
+                richtung.x,
+
+            y:
+                snake[0].y +
+                richtung.y
+
         };
 
 
-        if (
-            snakeRichtungAktuell === "rechts"
-        ) {
-
-            kopf.x++;
-
-        }
-
-
-        if (
-            snakeRichtungAktuell === "links"
-        ) {
-
-            kopf.x--;
-
-        }
-
-
-        if (
-            snakeRichtungAktuell === "oben"
-        ) {
-
-            kopf.y--;
-
-        }
-
-
-        if (
-            snakeRichtungAktuell === "unten"
-        ) {
-
-            kopf.y++;
-
-        }
-
+        /* WAND */
 
         if (
             kopf.x < 0 ||
-            kopf.x >= 20 ||
+            kopf.x >= canvas.width ||
             kopf.y < 0 ||
-            kopf.y >= 20
+            kopf.y >= canvas.height
         ) {
 
-            snakeStarten();
+            snakeGameOver();
 
             return;
-
         }
 
 
+        /* SELBST */
+
         for (
-            let teil of snake
+            let i = 0;
+            i < snake.length;
+            i++
         ) {
 
             if (
-                teil.x === kopf.x &&
-                teil.y === kopf.y
+                kopf.x === snake[i].x &&
+                kopf.y === snake[i].y
             ) {
 
-                snakeStarten();
+                snakeGameOver();
 
                 return;
-
             }
 
         }
@@ -2595,33 +2647,360 @@ function snakeStarten() {
         );
 
 
+        /* ESSEN */
+
         if (
-            kopf.x === snakeFutter.x &&
-            kopf.y === snakeFutter.y
+            kopf.x === essen.x &&
+            kopf.y === essen.y
         ) {
 
-            snakeFutter = {
+            score++;
 
-                x:
-                    Math.floor(
-                        Math.random() * 20
-                    ),
+            rekordSpeichern(
+                score
+            );
 
-                y:
-                    Math.floor(
-                        Math.random() * 20
-                    )
+            essen =
+                neuesEssen();
 
-            };
-
-        } else {
+        }
+        else {
 
             snake.pop();
 
         }
 
 
-        ctx.clearRect(
+        document.getElementById(
+            "spielStatus"
+        ).textContent =
+            "Punkte: " +
+            score +
+            " | Rekord: " +
+            rekordHolen();
+    }
+
+
+    function snakeGameOver() {
+
+        gameOver = true;
+
+        document.getElementById(
+            "spielStatus"
+        ).textContent =
+            "Game Over! Punktzahl: " +
+            score +
+            ". Drücke eine Richtung zum Neustart.";
+    }
+
+
+    function richtungSetzen(x,y) {
+
+        if (gameOver) {
+
+            snake = [
+                {
+                    x: 200,
+                    y: 200
+                }
+            ];
+
+            richtung = {
+                x: x,
+                y: y
+            };
+
+            essen =
+                neuesEssen();
+
+            score = 0;
+
+            gameOver = false;
+
+            return;
+        }
+
+
+        if (
+            richtung.x + x === 0 &&
+            richtung.y + y === 0
+        ) {
+
+            return;
+        }
+
+
+        richtung = {
+            x: x,
+            y: y
+        };
+    }
+
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "ArrowUp"
+            ) {
+
+                richtungSetzen(
+                    0,
+                    -feld
+                );
+
+            }
+
+            if (
+                event.key === "ArrowDown"
+            ) {
+
+                richtungSetzen(
+                    0,
+                    feld
+                );
+
+            }
+
+            if (
+                event.key === "ArrowLeft"
+            ) {
+
+                richtungSetzen(
+                    -feld,
+                    0
+                );
+
+            }
+
+            if (
+                event.key === "ArrowRight"
+            ) {
+
+                richtungSetzen(
+                    feld,
+                    0
+                );
+
+            }
+
+        }
+    );
+
+
+    const steuerung =
+        document.createElement(
+            "div"
+        );
+
+
+    steuerung.className =
+        "spiel-steuerung steuerung";
+
+
+    steuerung.innerHTML = `
+
+        <button onclick="snakeRichtung(0,-20)">
+            ⬆️
+        </button>
+
+        <button onclick="snakeRichtung(-20,0)">
+            ⬅️
+        </button>
+
+        <button onclick="snakeRichtung(0,20)">
+            ⬇️
+        </button>
+
+        <button onclick="snakeRichtung(20,0)">
+            ➡️
+        </button>
+
+    `;
+
+
+    bereich.appendChild(
+        steuerung
+    );
+
+
+    window.snakeRichtung =
+        function(x,y) {
+
+            richtungSetzen(
+                x,
+                y
+            );
+
+        };
+
+
+    snakeInterval =
+        setInterval(
+            zeichnen,
+            120
+        );
+}
+
+
+/* =====================================================
+   TETRIS
+===================================================== */
+
+function tetrisStarten() {
+
+    const bereich =
+        document.getElementById(
+            "spielBereich"
+        );
+
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+
+    canvas.id =
+        "tetrisCanvas";
+
+
+    canvas.width = 240;
+
+    canvas.height = 480;
+
+
+    bereich.insertBefore(
+        canvas,
+        document.getElementById(
+            "spielStatus"
+        )
+    );
+
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    const spalten = 10;
+
+    const zeilen = 20;
+
+    const groesse = 24;
+
+
+    let feld =
+        Array.from(
+            {
+                length: zeilen
+            },
+            function() {
+
+                return Array(
+                    spalten
+                ).fill(0);
+
+            }
+        );
+
+
+    const formen = [
+
+        [
+            [1,1,1,1]
+        ],
+
+        [
+            [1,1],
+            [1,1]
+        ],
+
+        [
+            [0,1,0],
+            [1,1,1]
+        ],
+
+        [
+            [1,0,0],
+            [1,1,1]
+        ],
+
+        [
+            [0,0,1],
+            [1,1,1]
+        ],
+
+        [
+            [0,1,1],
+            [1,1,0]
+        ],
+
+        [
+            [1,1,0],
+            [0,1,1]
+        ]
+
+    ];
+
+
+    let stein =
+        neuerTetrisStein();
+
+
+    let score = 0;
+
+    let gameOver = false;
+
+
+    tetrisAktiv = true;
+
+
+    document.getElementById(
+        "spielStatus"
+    ).textContent =
+        "Pfeiltasten oder Buttons zum Spielen.";
+
+
+    function neuerTetrisStein() {
+
+        const form =
+            formen[
+                Math.floor(
+                    Math.random() *
+                    formen.length
+                )
+            ];
+
+
+        return {
+
+            form:
+                form.map(
+                    function(row) {
+
+                        return row.slice();
+
+                    }
+                ),
+
+            x: 3,
+
+            y: 0
+
+        };
+
+    }
+
+
+    function zeichneFeld() {
+
+        ctx.fillStyle =
+            "#111111";
+
+        ctx.fillRect(
             0,
             0,
             canvas.width,
@@ -2629,400 +3008,534 @@ function snakeStarten() {
         );
 
 
-        const groesse =
-            canvas.width / 20;
+        for (
+            let y = 0;
+            y < zeilen;
+            y++
+        ) {
+
+            for (
+                let x = 0;
+                x < spalten;
+                x++
+            ) {
+
+                if (
+                    feld[y][x]
+                ) {
+
+                    zeichneBlock(
+                        x,
+                        y
+                    );
+
+                }
+
+            }
+
+        }
 
 
-        ctx.fillStyle = "white";
+        stein.form.forEach(
+            function(row,y) {
+
+                row.forEach(
+                    function(value,x) {
+
+                        if (value) {
+
+                            zeichneBlock(
+                                stein.x + x,
+                                stein.y + y
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    }
+
+
+    function zeichneBlock(x,y) {
+
+        ctx.fillStyle =
+            "#dddddd";
+
+        ctx.fillRect(
+            x * groesse + 1,
+            y * groesse + 1,
+            groesse - 2,
+            groesse - 2
+        );
+    }
+
+
+    function passt(x,y,form) {
+
+        for (
+            let row = 0;
+            row < form.length;
+            row++
+        ) {
+
+            for (
+                let col = 0;
+                col < form[row].length;
+                col++
+            ) {
+
+                if (!form[row][col]) {
+
+                    continue;
+                }
+
+
+                const nx =
+                    x + col;
+
+                const ny =
+                    y + row;
+
+
+                if (
+                    nx < 0 ||
+                    nx >= spalten ||
+                    ny >= zeilen
+                ) {
+
+                    return false;
+
+                }
+
+
+                if (
+                    ny >= 0 &&
+                    feld[ny][nx]
+                ) {
+
+                    return false;
+
+                }
+
+            }
+
+        }
+
+        return true;
+    }
+
+
+    function drehen(form) {
+
+        return form[0].map(
+            function(_, index) {
+
+                return form.map(
+                    function(row) {
+
+                        return row[index];
+
+                    }
+                ).reverse();
+
+            }
+        );
+    }
+
+
+    function drehenStein() {
+
+        const neueForm =
+            drehen(
+                stein.form
+            );
+
+
+        if (
+            passt(
+                stein.x,
+                stein.y,
+                neueForm
+            )
+        ) {
+
+            stein.form =
+                neueForm;
+
+        }
+
+    }
+
+
+    function nachUnten() {
+
+        if (
+            passt(
+                stein.x,
+                stein.y + 1,
+                stein.form
+            )
+        ) {
+
+            stein.y++;
+
+        }
+        else {
+
+            festmachen();
+
+        }
+
+    }
+
+
+    function festmachen() {
+
+        stein.form.forEach(
+            function(row,y) {
+
+                row.forEach(
+                    function(value,x) {
+
+                        if (value) {
+
+                            if (
+                                stein.y + y < 0
+                            ) {
+
+                                gameOver =
+                                    true;
+
+                            }
+                            else {
+
+                                feld[
+                                    stein.y + y
+                                ][
+                                    stein.x + x
+                                ] = 1;
+
+                            }
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+        if (gameOver) {
+
+            document.getElementById(
+                "spielStatus"
+            ).textContent =
+                "Tetris Game Over! Punkte: " +
+                score;
+
+            return;
+        }
+
+
+        zeilenLöschen();
+
+
+        stein =
+            neuerTetrisStein();
+
+
+        if (
+            !passt(
+                stein.x,
+                stein.y,
+                stein.form
+            )
+        ) {
+
+            gameOver = true;
+
+            document.getElementById(
+                "spielStatus"
+            ).textContent =
+                "Tetris Game Over! Punkte: " +
+                score;
+
+        }
+
+    }
+
+
+    function zeilenLöschen() {
+
+        let geloescht = 0;
 
 
         for (
-            let teil of snake
+            let y = zeilen - 1;
+            y >= 0;
+            y--
         ) {
 
-            ctx.fillRect(
-                teil.x * groesse,
-                teil.y * groesse,
-                groesse - 1,
-                groesse - 1
+            if (
+                feld[y].every(
+                    function(value) {
+
+                        return value !== 0;
+
+                    }
+                )
+            ) {
+
+                feld.splice(
+                    y,
+                    1
+                );
+
+
+                feld.unshift(
+                    Array(
+                        spalten
+                    ).fill(0)
+                );
+
+
+                geloescht++;
+
+                y++;
+
+            }
+
+        }
+
+
+        if (
+            geloescht > 0
+        ) {
+
+            score +=
+                geloescht * 10;
+
+
+            rekordSpeichern(
+                score
             );
 
         }
 
-
-        ctx.fillStyle = "#777";
-
-
-        ctx.fillRect(
-            snakeFutter.x * groesse,
-            snakeFutter.y * groesse,
-            groesse - 1,
-            groesse - 1
-        );
-
-    }
-
-}
-
-
-function snakeRichtung(
-    richtung
-) {
-
-    if (
-        richtung === "links" &&
-        snakeRichtungAktuell !== "rechts"
-    ) {
-
-        snakeRichtungAktuell =
-            "links";
-
     }
 
 
-    if (
-        richtung === "rechts" &&
-        snakeRichtungAktuell !== "links"
-    ) {
+    function bewegen(dx) {
 
-        snakeRichtungAktuell =
-            "rechts";
+        if (gameOver) {
 
-    }
-
-
-    if (
-        richtung === "oben" &&
-        snakeRichtungAktuell !== "unten"
-    ) {
-
-        snakeRichtungAktuell =
-            "oben";
-
-    }
-
-
-    if (
-        richtung === "unten" &&
-        snakeRichtungAktuell !== "oben"
-    ) {
-
-        snakeRichtungAktuell =
-            "unten";
-
-    }
-
-}
-
-
-/* =========================================================
-   TASTATUR FÜR SNAKE
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (event.key === "ArrowUp") {
-
-            snakeRichtung("oben");
-
+            return;
         }
 
-        if (event.key === "ArrowDown") {
 
-            snakeRichtung("unten");
+        if (
+            passt(
+                stein.x + dx,
+                stein.y,
+                stein.form
+            )
+        ) {
 
-        }
-
-        if (event.key === "ArrowLeft") {
-
-            snakeRichtung("links");
-
-        }
-
-        if (event.key === "ArrowRight") {
-
-            snakeRichtung("rechts");
+            stein.x += dx;
 
         }
 
     }
-);
 
 
-/* =========================================================
-   MEMORY
-========================================================= */
+    document.addEventListener(
+        "keydown",
+        function(event) {
 
-let memoryErsteKarte = null;
+            if (!tetrisAktiv) {
 
-let memorySperre = false;
-
-
-function memoryStarten() {
-
-    const grid =
-        document.getElementById(
-            "memoryGrid"
-        );
+                return;
+            }
 
 
-    grid.innerHTML = "";
+            if (
+                event.key === "ArrowLeft"
+            ) {
+
+                bewegen(-1);
+
+            }
 
 
-    memoryErsteKarte = null;
+            if (
+                event.key === "ArrowRight"
+            ) {
 
-    memorySperre = false;
+                bewegen(1);
 
-
-    const symbole = [
-
-        "🍎",
-        "🍎",
-
-        "🚗",
-        "🚗",
-
-        "🐶",
-        "🐶",
-
-        "⭐",
-        "⭐",
-
-        "🍕",
-        "🍕",
-
-        "⚽",
-        "⚽",
-
-        "🚀",
-        "🚀",
-
-        "🎮",
-        "🎮"
-
-    ];
+            }
 
 
-    symbole.sort(
-        () =>
-            Math.random() - 0.5
-    );
+            if (
+                event.key === "ArrowDown"
+            ) {
+
+                nachUnten();
+
+            }
 
 
-    symbole.forEach(
-        function(symbol) {
+            if (
+                event.key === "ArrowUp"
+            ) {
 
-            const karte =
-                document.createElement(
-                    "button"
-                );
+                drehenStein();
 
-
-            karte.className =
-                "memory-card";
-
-
-            karte.textContent =
-                symbol;
-
-
-            karte.dataset.symbol =
-                symbol;
-
-
-            karte.onclick =
-                function() {
-
-                    memoryKarteOeffnen(
-                        karte
-                    );
-
-                };
-
-
-            grid.appendChild(
-                karte
-            );
+            }
 
         }
     );
 
-}
+
+    const steuerung =
+        document.createElement(
+            "div"
+        );
 
 
-function memoryKarteOeffnen(
-    karte
-) {
-
-    if (
-        memorySperre ||
-        karte.classList.contains("offen") ||
-        karte.classList.contains("gefunden")
-    ) {
-
-        return;
-
-    }
+    steuerung.className =
+        "spiel-steuerung steuerung";
 
 
-    karte.classList.add(
-        "offen"
+    steuerung.innerHTML = `
+
+        <button onclick="tetrisAktion('left')">
+            ⬅️
+        </button>
+
+        <button onclick="tetrisAktion('rotate')">
+            🔄
+        </button>
+
+        <button onclick="tetrisAktion('down')">
+            ⬇️
+        </button>
+
+        <button onclick="tetrisAktion('right')">
+            ➡️
+        </button>
+
+    `;
+
+
+    bereich.appendChild(
+        steuerung
     );
 
 
-    if (
-        !memoryErsteKarte
-    ) {
+    window.tetrisAktion =
+        function(aktion) {
 
-        memoryErsteKarte =
-            karte;
+            if (
+                aktion === "left"
+            ) {
 
-        return;
+                bewegen(-1);
 
-    }
-
-
-    if (
-        memoryErsteKarte.dataset.symbol ===
-        karte.dataset.symbol
-    ) {
-
-        memoryErsteKarte.classList.add(
-            "gefunden"
-        );
-
-        karte.classList.add(
-            "gefunden"
-        );
-
-        memoryErsteKarte = null;
-
-    } else {
-
-        memorySperre = true;
+            }
 
 
-        setTimeout(
+            if (
+                aktion === "right"
+            ) {
+
+                bewegen(1);
+
+            }
+
+
+            if (
+                aktion === "down"
+            ) {
+
+                nachUnten();
+
+            }
+
+
+            if (
+                aktion === "rotate"
+            ) {
+
+                drehenStein();
+
+            }
+
+        };
+
+
+    tetrisInterval =
+        setInterval(
             function() {
 
-                memoryErsteKarte.classList.remove(
-                    "offen"
-                );
+                if (!gameOver) {
 
-                karte.classList.remove(
-                    "offen"
-                );
+                    nachUnten();
 
-                memoryErsteKarte = null;
+                    zeichneFeld();
 
-                memorySperre = false;
+
+                    document.getElementById(
+                        "spielStatus"
+                    ).textContent =
+                        "Punkte: " +
+                        score +
+                        " | Rekord: " +
+                        rekordHolen();
+
+                }
 
             },
-            800
+            600
         );
 
-    }
 
+    zeichneFeld();
 }
 
 
-/* =========================================================
-   REAKTIONSSPIEL
-========================================================= */
-
-let reaktionTimeout = null;
-
-let reaktionStartZeit = 0;
-
-
-function reaktionStarten() {
-
-    const button =
-        document.getElementById(
-            "reaktionButton"
-        );
-
-
-    button.textContent =
-        "Warte...";
-
-
-    button.style.backgroundColor =
-        "#555";
-
-
-    clearTimeout(
-        reaktionTimeout
-    );
-
-
-    const wartezeit =
-        1000 +
-        Math.random() * 3000;
-
-
-    reaktionTimeout =
-        setTimeout(
-            function() {
-
-                button.textContent =
-                    "JETZT KLICKEN!";
-
-                button.style.backgroundColor =
-                    "#666";
-
-                reaktionStartZeit =
-                    Date.now();
-
-
-                button.onclick =
-                    function() {
-
-                        const zeit =
-                            Date.now() -
-                            reaktionStartZeit;
-
-
-                        button.textContent =
-                            zeit +
-                            " ms";
-
-
-                        button.onclick =
-                            reaktionStarten;
-
-                    };
-
-            },
-            wartezeit
-        );
-
-}
-
-
-/* =========================================================
-   LOGIN
-========================================================= */
+/* =====================================================
+   LOGIN ÖFFNEN
+===================================================== */
 
 function anmeldenOeffnen() {
 
     document.getElementById(
         "anmeldeFenster"
     ).style.display = "block";
-
 }
 
+
+/* =====================================================
+   LOGIN SCHLIESSEN
+===================================================== */
 
 function anmeldenSchliessen() {
 
     document.getElementById(
         "anmeldeFenster"
     ).style.display = "none";
-
 }
 
+
+/* =====================================================
+   ANMELDEN TAB
+===================================================== */
 
 function anmeldenTabOeffnen() {
 
@@ -3044,9 +3557,12 @@ function anmeldenTabOeffnen() {
     document.getElementById(
         "registrierenTab"
     ).classList.remove("aktiv");
-
 }
 
+
+/* =====================================================
+   REGISTRIEREN TAB
+===================================================== */
 
 function registrierenTabOeffnen() {
 
@@ -3068,13 +3584,12 @@ function registrierenTabOeffnen() {
     document.getElementById(
         "anmeldenTab"
     ).classList.remove("aktiv");
-
 }
 
 
-/* =========================================================
+/* =====================================================
    REGISTRIEREN
-========================================================= */
+===================================================== */
 
 async function registrieren() {
 
@@ -3114,7 +3629,6 @@ async function registrieren() {
         );
 
         return;
-
     }
 
 
@@ -3127,7 +3641,6 @@ async function registrieren() {
         );
 
         return;
-
     }
 
 
@@ -3140,7 +3653,6 @@ async function registrieren() {
         );
 
         return;
-
     }
 
 
@@ -3159,18 +3671,18 @@ async function registrieren() {
                     },
 
                     body:
-                        JSON.stringify(
-                            {
-                                username:
-                                    username,
+                        JSON.stringify({
 
-                                email:
-                                    email,
+                            username:
+                                username,
 
-                                password:
-                                    password
-                            }
-                        )
+                            email:
+                                email,
+
+                            password:
+                                password
+
+                        })
 
                 }
             );
@@ -3198,7 +3710,27 @@ async function registrieren() {
             anmeldenSchliessen();
 
 
-        } else {
+            document.getElementById(
+                "registerUsername"
+            ).value = "";
+
+
+            document.getElementById(
+                "registerEmail"
+            ).value = "";
+
+
+            document.getElementById(
+                "registerPassword"
+            ).value = "";
+
+
+            document.getElementById(
+                "registerPassword2"
+            ).value = "";
+
+        }
+        else {
 
             alert(
                 daten.message
@@ -3206,11 +3738,13 @@ async function registrieren() {
 
         }
 
-    } catch (fehler) {
+    }
+    catch (fehler) {
 
         console.error(
             fehler
         );
+
 
         alert(
             "Der Server konnte nicht erreicht werden."
@@ -3221,9 +3755,9 @@ async function registrieren() {
 }
 
 
-/* =========================================================
+/* =====================================================
    ANMELDEN
-========================================================= */
+===================================================== */
 
 async function anmelden() {
 
@@ -3249,7 +3783,6 @@ async function anmelden() {
         );
 
         return;
-
     }
 
 
@@ -3268,15 +3801,15 @@ async function anmelden() {
                     },
 
                     body:
-                        JSON.stringify(
-                            {
-                                email:
-                                    email,
+                        JSON.stringify({
 
-                                password:
-                                    password
-                            }
-                        )
+                            email:
+                                email,
+
+                            password:
+                                password
+
+                        })
 
                 }
             );
@@ -3299,14 +3832,24 @@ async function anmelden() {
             anmeldenSchliessen();
 
 
+            document.getElementById(
+                "loginEmail"
+            ).value = "";
+
+
+            document.getElementById(
+                "loginPassword"
+            ).value = "";
+
+
             alert(
                 "Willkommen zurück, " +
                 daten.username +
                 "!"
             );
 
-
-        } else {
+        }
+        else {
 
             alert(
                 daten.message
@@ -3314,11 +3857,13 @@ async function anmelden() {
 
         }
 
-    } catch (fehler) {
+    }
+    catch (fehler) {
 
         console.error(
             fehler
         );
+
 
         alert(
             "Der Server konnte nicht erreicht werden."
@@ -3329,14 +3874,18 @@ async function anmelden() {
 }
 
 
-/* =========================================================
+/* =====================================================
    BENUTZER ANZEIGEN
-========================================================= */
+===================================================== */
 
 function benutzerAnzeigen(
     username,
     email
 ) {
+
+    aktuellerBenutzer =
+        username;
+
 
     document.getElementById(
         "anmeldenButton"
@@ -3364,13 +3913,12 @@ function benutzerAnzeigen(
         "benutzerEmail"
     ).textContent =
         email;
-
 }
 
 
-/* =========================================================
+/* =====================================================
    BENUTZER MENÜ
-========================================================= */
+===================================================== */
 
 function benutzerMenueOeffnen() {
 
@@ -3384,24 +3932,26 @@ function benutzerMenueOeffnen() {
         menue.style.display === "block"
     ) {
 
-        menue.style.display =
-            "none";
+        menue.style.display = "none";
 
-    } else {
+    }
+    else {
 
-        menue.style.display =
-            "block";
+        menue.style.display = "block";
 
     }
 
 }
 
 
-/* =========================================================
+/* =====================================================
    ABMELDEN
-========================================================= */
+===================================================== */
 
 async function abmelden() {
+
+    spieleStoppen();
+
 
     try {
 
@@ -3422,22 +3972,23 @@ async function abmelden() {
             daten.success
         ) {
 
+            aktuellerBenutzer =
+                null;
+
+
             document.getElementById(
                 "benutzerButton"
-            ).style.display =
-                "none";
+            ).style.display = "none";
 
 
             document.getElementById(
                 "anmeldenButton"
-            ).style.display =
-                "block";
+            ).style.display = "block";
 
 
             document.getElementById(
                 "benutzerMenue"
-            ).style.display =
-                "none";
+            ).style.display = "none";
 
 
             alert(
@@ -3446,11 +3997,13 @@ async function abmelden() {
 
         }
 
-    } catch (fehler) {
+    }
+    catch (fehler) {
 
         console.error(
             fehler
         );
+
 
         alert(
             "Beim Abmelden ist ein Fehler aufgetreten."
@@ -3461,9 +4014,9 @@ async function abmelden() {
 }
 
 
-/* =========================================================
+/* =====================================================
    BENUTZER PRÜFEN
-========================================================= */
+===================================================== */
 
 async function benutzerPruefen() {
 
@@ -3490,7 +4043,8 @@ async function benutzerPruefen() {
 
         }
 
-    } catch (fehler) {
+    }
+    catch (fehler) {
 
         console.error(
             "Benutzerprüfung fehlgeschlagen:",
@@ -3502,9 +4056,9 @@ async function benutzerPruefen() {
 }
 
 
-/* =========================================================
+/* =====================================================
    START
-========================================================= */
+===================================================== */
 
 benutzerPruefen();
 
