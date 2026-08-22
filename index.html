@@ -25,13 +25,13 @@
 
             background-color: black;
 
-            /* Dein neues Hintergrundbild */
+            /* Dein Bild als kompletter Website-Hintergrund */
             background-image:
                 linear-gradient(
                     rgba(0, 0, 0, 0.30),
                     rgba(0, 0, 0, 0.30)
                 ),
-                url("nsah-hintergrund.png");
+                url("Screenshot2026-08-22214731(1).png");
 
             background-size: cover;
             background-position: center center;
@@ -56,7 +56,6 @@
             font-size: 80px;
             font-weight: bold;
 
-            /* Dezenter Glow */
             text-shadow:
                 0 0 4px rgba(255, 255, 255, 0.7),
                 0 0 10px rgba(255, 255, 255, 0.35),
@@ -559,9 +558,7 @@
             }
 
 
-            /* =========================
-               NSAH
-            ========================= */
+            /* NSAH */
 
             .logo {
                 position: absolute;
@@ -577,9 +574,7 @@
             }
 
 
-            /* =========================
-               UNTERTITEL
-            ========================= */
+            /* UNTERTITEL */
 
             .untertitel {
                 position: absolute;
@@ -601,9 +596,7 @@
             }
 
 
-            /* =========================
-               STRICH
-            ========================= */
+            /* STRICH */
 
             .strich {
                 left: 24%;
@@ -612,9 +605,7 @@
             }
 
 
-            /* =========================
-               ANMELDEN
-            ========================= */
+            /* ANMELDEN */
 
             .anmelden-button {
                 top: 18px;
@@ -628,9 +619,7 @@
             }
 
 
-            /* =========================
-               KARTEN BUTTON
-            ========================= */
+            /* KARTEN BUTTON */
 
             .karten-button {
                 top: 58px;
@@ -644,9 +633,7 @@
             }
 
 
-            /* =========================
-               BENUTZER
-            ========================= */
+            /* BENUTZER */
 
             .benutzer-button {
                 top: 18px;
@@ -668,9 +655,7 @@
             }
 
 
-            /* =========================
-               BENUTZER-MENÜ
-            ========================= */
+            /* BENUTZER-MENÜ */
 
             .benutzer-menue {
                 top: 65px;
@@ -684,9 +669,7 @@
             }
 
 
-            /* =========================
-               LOGIN-HINTERGRUND
-            ========================= */
+            /* LOGIN-HINTERGRUND */
 
             .fenster-hintergrund {
                 padding: 15px;
@@ -699,9 +682,7 @@
             }
 
 
-            /* =========================
-               LOGIN-FENSTER
-            ========================= */
+            /* LOGIN-FENSTER */
 
             .anmelde-fenster {
                 position: absolute;
@@ -725,18 +706,14 @@
             }
 
 
-            /* =========================
-               TITEL
-            ========================= */
+            /* TITEL */
 
             .fenster-titel {
                 font-size: 21px;
             }
 
 
-            /* =========================
-               TABS
-            ========================= */
+            /* TABS */
 
             .tab {
                 padding: 12px 5px;
@@ -745,9 +722,7 @@
             }
 
 
-            /* =========================
-               EINGABEFELDER
-            ========================= */
+            /* EINGABEFELDER */
 
             .formular input {
                 width: 100%;
@@ -758,9 +733,7 @@
             }
 
 
-            /* =========================
-               BUTTON
-            ========================= */
+            /* BUTTON */
 
             .formular-button {
                 height: 48px;
@@ -769,18 +742,14 @@
             }
 
 
-            /* =========================
-               SCHLIESSEN
-            ========================= */
+            /* SCHLIESSEN */
 
             .schliessen {
                 font-size: 26px;
             }
 
 
-            /* =========================
-               KARTE
-            ========================= */
+            /* KARTE */
 
             .karten-fenster {
                 width: 95%;
@@ -905,11 +874,6 @@
 
         <div class="anmelde-fenster">
 
-
-            <!-- =========================
-                 FENSTER KOPF
-            ========================= -->
-
             <div class="fenster-kopf">
 
                 <div class="fenster-titel">
@@ -926,9 +890,7 @@
             </div>
 
 
-            <!-- =========================
-                 TABS
-            ========================= -->
+            <!-- TABS -->
 
             <div class="tabs">
 
@@ -951,9 +913,7 @@
             </div>
 
 
-            <!-- =========================
-                 ANMELDEN FORMULAR
-            ========================= -->
+            <!-- ANMELDEN FORMULAR -->
 
             <div
                 class="formular aktiv"
@@ -998,9 +958,7 @@
             </div>
 
 
-            <!-- =========================
-                 REGISTRIEREN FORMULAR
-            ========================= -->
+            <!-- REGISTRIEREN FORMULAR -->
 
             <div
                 class="formular"
@@ -1076,11 +1034,6 @@
 
         <div class="karten-fenster">
 
-
-            <!-- =========================
-                 KARTEN KOPF
-            ========================= -->
-
             <div class="karten-kopf">
 
                 <div class="karten-titel">
@@ -1096,10 +1049,6 @@
 
             </div>
 
-
-            <!-- =========================
-                 KARTE
-            ========================= -->
 
             <div id="karte"></div>
 
@@ -1118,13 +1067,11 @@
 
     <script>
 
-
         /* =========================
            KARTEN VARIABLEN
         ========================= */
 
         let karte = null;
-
         let standortMarker = null;
 
 
@@ -1159,12 +1106,7 @@
                 );
 
 
-                /* =========================
-                   OPENSTREETMAP
-                   noWrap verhindert,
-                   dass die Welt mehrfach
-                   nebeneinander erscheint.
-                ========================= */
+                /* OPENSTREETMAP */
 
                 L.tileLayer(
                     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -1179,9 +1121,7 @@
                 ).addTo(karte);
 
 
-                /* =========================
-                   EIGENEN STANDORT
-                ========================= */
+                /* EIGENEN STANDORT */
 
                 if (navigator.geolocation) {
 
