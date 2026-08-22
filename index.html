@@ -428,7 +428,100 @@
 
             font-size: 13px;
         }
+/* =========================
+   HANDY-ANSICHT
+   Nur für kleine Bildschirme
+   ========================= */
 
+@media (max-width: 600px) {
+
+    /* NSAH */
+    .logo {
+        top: 25px;
+        font-size: 55px;
+        white-space: nowrap;
+    }
+
+
+    /* Untertitel */
+    .untertitel {
+        top: 95px;
+
+        width: 75%;
+
+        text-align: center;
+
+        font-size: 18px;
+
+        white-space: normal;
+
+        line-height: 1.4;
+    }
+
+
+    /* Linker Strich */
+    .strich {
+        left: 20%;
+
+        width: 2px;
+    }
+
+
+    /* Anmelden Button */
+    .anmelden-button,
+    .benutzer-button {
+        top: 18px;
+        left: 12px;
+
+        padding: 10px 14px;
+
+        font-size: 14px;
+    }
+
+
+    /* Benutzermenü */
+    .benutzer-menue {
+        top: 65px;
+        left: 12px;
+
+        width: 220px;
+    }
+
+
+    /* Anmeldefenster */
+    .anmelde-fenster {
+        width: calc(100% - 30px);
+
+        max-width: 400px;
+
+        padding: 22px;
+
+        border-radius: 10px;
+    }
+
+
+    /* Fenstertitel */
+    .fenster-titel {
+        font-size: 21px;
+    }
+
+
+    /* Eingabefelder */
+    .formular input {
+        height: 48px;
+
+        font-size: 16px;
+    }
+
+
+    /* Buttons */
+    .formular-button {
+        height: 48px;
+
+        font-size: 16px;
+    }
+
+}
     </style>
 
 </head>
