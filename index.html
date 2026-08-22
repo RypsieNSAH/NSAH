@@ -430,36 +430,63 @@
         }
 /* =========================
    HANDY-ANSICHT
-   Nur für kleine Bildschirme
+   PC BLEIBT UNVERÄNDERT
    ========================= */
 
 @media (max-width: 600px) {
 
-    /* NSAH */
+    body {
+        min-width: 0;
+        overflow-x: hidden;
+    }
+
+
+    /* =========================
+       NSAH
+       ========================= */
+
     .logo {
+        position: absolute;
+
         top: 25px;
+        left: 60%;
+
+        transform: translateX(-50%);
+
         font-size: 55px;
+
         white-space: nowrap;
     }
 
 
-    /* Untertitel */
+    /* =========================
+       UNTERTITEL
+       ========================= */
+
     .untertitel {
+        position: absolute;
+
         top: 95px;
+        left: 60%;
+
+        transform: translateX(-50%);
 
         width: 75%;
 
-        text-align: center;
-
         font-size: 18px;
 
-        white-space: normal;
-
         line-height: 1.4;
+
+        text-align: center;
+
+        white-space: normal;
     }
 
 
-    /* Linker Strich */
+    /* =========================
+       STRICH
+       ========================= */
+
     .strich {
         left: 20%;
 
@@ -467,8 +494,26 @@
     }
 
 
-    /* Anmelden Button */
-    .anmelden-button,
+    /* =========================
+       ANMELDEN
+       ========================= */
+
+    .anmelden-button {
+        top: 18px;
+        left: 12px;
+
+        padding: 10px 14px;
+
+        font-size: 14px;
+
+        z-index: 50;
+    }
+
+
+    /* =========================
+       BENUTZER
+       ========================= */
+
     .benutzer-button {
         top: 18px;
         left: 12px;
@@ -476,52 +521,122 @@
         padding: 10px 14px;
 
         font-size: 14px;
+
+        z-index: 50;
+
+        max-width: 150px;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
 
-    /* Benutzermenü */
+    /* =========================
+       BENUTZER-MENÜ
+       ========================= */
+
     .benutzer-menue {
         top: 65px;
         left: 12px;
 
-        width: 220px;
+        width: calc(100% - 24px);
+
+        max-width: 260px;
+
+        z-index: 200;
     }
 
 
-    /* Anmeldefenster */
-    .anmelde-fenster {
-        width: calc(100% - 30px);
+    /* =========================
+       LOGIN-HINTERGRUND
+       ========================= */
 
-        max-width: 400px;
+    .fenster-hintergrund {
+        padding: 15px;
+
+        box-sizing: border-box;
+
+        overflow-y: auto;
+    }
+
+
+    /* =========================
+       LOGIN-FENSTER
+       ========================= */
+
+    .anmelde-fenster {
+        position: relative;
+
+        top: 50%;
+        left: 50%;
+
+        width: 100%;
+
+        max-width: 380px;
 
         padding: 22px;
 
-        border-radius: 10px;
+        transform: translate(-50%, -50%);
+
+        box-sizing: border-box;
     }
 
 
-    /* Fenstertitel */
+    /* =========================
+       TITEL
+       ========================= */
+
     .fenster-titel {
         font-size: 21px;
     }
 
 
-    /* Eingabefelder */
+    /* =========================
+       TABS
+       ========================= */
+
+    .tab {
+        padding: 12px 5px;
+
+        font-size: 14px;
+    }
+
+
+    /* =========================
+       EINGABEFELDER
+       ========================= */
+
     .formular input {
+        width: 100%;
+
         height: 48px;
 
         font-size: 16px;
     }
 
 
-    /* Buttons */
+    /* =========================
+       BUTTON
+       ========================= */
+
     .formular-button {
         height: 48px;
 
         font-size: 16px;
     }
 
+
+    /* =========================
+       SCHLIESSEN
+       ========================= */
+
+    .schliessen {
+        font-size: 26px;
+    }
+
 }
+
     </style>
 
 </head>
