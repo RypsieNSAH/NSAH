@@ -7,7 +7,7 @@
 
     <title>NSAH - Nützliche Sparsame Alltags Hilfe</title>
 
-    <!-- Leaflet für die Karte -->
+    <!-- Leaflet Karte -->
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -33,8 +33,10 @@
 
         .logo {
             position: absolute;
+
             top: 30px;
             left: 50%;
+
             transform: translateX(-50%);
 
             font-size: 80px;
@@ -55,6 +57,7 @@
             transform: translateX(-50%);
 
             font-size: 26px;
+
             color: white;
 
             white-space: nowrap;
@@ -213,6 +216,7 @@
 
         .benutzer-name {
             font-size: 18px;
+
             font-weight: bold;
 
             margin-bottom: 5px;
@@ -252,6 +256,31 @@
         }
 
 
+        /* =====================================================
+           ANMELDE HINTERGRUND
+           WICHTIG:
+           LIEGT ÜBER DER GESAMTEN SEITE
+           ===================================================== */
+
+        .fenster-hintergrund {
+            display: none;
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100vw;
+            height: 100vh;
+
+            background-color: rgba(0, 0, 0, 0.85);
+
+            z-index: 9999;
+
+            box-sizing: border-box;
+        }
+
+
         /* =========================
            ANMELDE FENSTER
            ========================= */
@@ -266,6 +295,12 @@
 
             width: 400px;
 
+            max-width: calc(100vw - 30px);
+
+            max-height: calc(100vh - 30px);
+
+            overflow-y: auto;
+
             background-color: #111111;
 
             border: 2px solid #333333;
@@ -278,6 +313,8 @@
 
             box-shadow:
                 0 0 30px rgba(255, 255, 255, 0.1);
+
+            z-index: 10000;
         }
 
 
@@ -317,6 +354,8 @@
             font-size: 28px;
 
             cursor: pointer;
+
+            padding: 0;
         }
 
 
@@ -492,15 +531,8 @@
             border-radius: 12px;
 
             overflow: hidden;
-
-            box-shadow:
-                0 0 40px rgba(0, 0, 0, 0.8);
         }
 
-
-        /* =========================
-           KARTEN KOPF
-           ========================= */
 
         .karten-kopf {
             height: 55px;
@@ -538,19 +570,8 @@
             font-size: 28px;
 
             cursor: pointer;
-
-            padding: 0 8px;
         }
 
-
-        .karten-schliessen:hover {
-            color: #aaaaaa;
-        }
-
-
-        /* =========================
-           KARTEN CONTAINER
-           ========================= */
 
         #karte {
             width: 100%;
@@ -587,7 +608,8 @@
 
             cursor: pointer;
 
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            box-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.4);
         }
 
 
@@ -596,14 +618,16 @@
         }
 
 
-        /* =========================
-           HANDY-ANSICHT
-           ========================= */
+        /* =====================================================
+           HANDY
+           ===================================================== */
 
         @media (max-width: 600px) {
 
+
             body {
                 min-width: 0;
+
                 overflow-x: hidden;
             }
 
@@ -662,12 +686,13 @@
 
 
             /* =========================
-               ANMELDEN
+               ANMELDEN BUTTON
                ========================= */
 
             .anmelden-button {
                 top: 18px;
-                left: 0px;
+
+                left: 0;
 
                 padding: 8px 11px;
 
@@ -683,6 +708,7 @@
 
             .karten-button {
                 top: 58px;
+
                 left: 5px;
 
                 padding: 8px 11px;
@@ -694,11 +720,12 @@
 
 
             /* =========================
-               BENUTZER
+               BENUTZER BUTTON
                ========================= */
 
             .benutzer-button {
                 top: 18px;
+
                 left: 12px;
 
                 padding: 10px 14px;
@@ -718,11 +745,12 @@
 
 
             /* =========================
-               BENUTZER-MENÜ
+               BENUTZER MENÜ
                ========================= */
 
             .benutzer-menue {
                 top: 65px;
+
                 left: 12px;
 
                 width: calc(100% - 24px);
@@ -733,38 +761,54 @@
             }
 
 
-            /* =========================
-               LOGIN-HINTERGRUND
-               ========================= */
+            /* =================================================
+               ANMELDE FENSTER AUF HANDY
+               BLEIBT EXAKT IN DER MITTE
+               ================================================= */
 
             .fenster-hintergrund {
+                position: fixed;
+
+                top: 0;
+                left: 0;
+
+                width: 100vw;
+                height: 100vh;
+
+                display: none;
+
+                align-items: center;
+                justify-content: center;
+
                 padding: 15px;
 
                 box-sizing: border-box;
 
-                overflow-y: auto;
+                z-index: 9999;
             }
 
 
-            /* =========================
-               LOGIN-FENSTER
-               ========================= */
-
             .anmelde-fenster {
-                position: relative;
+                position: absolute;
 
-                top: 70%;
+                top: 50%;
                 left: 50%;
-
-                width: 100%;
-
-                max-width: 380px;
-
-                padding: 22px;
 
                 transform: translate(-50%, -50%);
 
+                width: calc(100vw - 30px);
+
+                max-width: 380px;
+
+                max-height: calc(100vh - 30px);
+
+                padding: 22px;
+
+                overflow-y: auto;
+
                 box-sizing: border-box;
+
+                z-index: 10000;
             }
 
 
@@ -802,7 +846,7 @@
 
 
             /* =========================
-               BUTTON
+               FORMULAR BUTTON
                ========================= */
 
             .formular-button {
@@ -822,7 +866,7 @@
 
 
             /* =========================
-               KARTEN FENSTER HANDY
+               KARTEN FENSTER
                ========================= */
 
             .karten-fenster {
@@ -899,7 +943,7 @@
 
 
     <!-- =========================
-         NEUER KARTEN BUTTON
+         KARTEN BUTTON
          ========================= -->
 
     <button
@@ -958,9 +1002,10 @@
     </div>
 
 
-    <!-- =========================
+    <!-- =====================================================
          ANMELDE FENSTER
-         ========================= -->
+         LIEGT ÜBER ALLEM
+         ===================================================== -->
 
     <div
         class="fenster-hintergrund"
@@ -1141,7 +1186,7 @@
 
 
     <!-- =========================
-         NEUES KARTEN FENSTER
+         KARTEN FENSTER
          ========================= -->
 
     <div
@@ -1172,10 +1217,6 @@
 
             <div id="karte"></div>
 
-
-            <!-- =========================
-                 EIGENEN STANDORT FINDEN
-                 ========================= -->
 
             <button
                 class="standort-button"
@@ -1213,7 +1254,7 @@
 
 
         /* =========================
-           KARTEN FENSTER ÖFFNEN
+           KARTE ÖFFNEN
            ========================= */
 
         function kartenOeffnen() {
@@ -1223,8 +1264,6 @@
             ).style.display = "block";
 
 
-            /* Karte nur einmal erstellen */
-
             if (!karte) {
 
                 karte = L.map("karte").setView(
@@ -1233,20 +1272,16 @@
                 );
 
 
-                /* OpenStreetMap */
-
                 L.tileLayer(
                     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                     {
                         maxZoom: 19,
 
                         attribution:
-                            '&copy; OpenStreetMap-Mitwirkende'
+                            "&copy; OpenStreetMap-Mitwirkende"
                     }
                 ).addTo(karte);
 
-
-                /* Karte richtig darstellen */
 
                 setTimeout(function () {
 
@@ -1254,8 +1289,6 @@
 
                 }, 200);
 
-
-                /* Standort automatisch suchen */
 
                 eigenenStandortFinden();
 
@@ -1273,7 +1306,7 @@
 
 
         /* =========================
-           KARTEN FENSTER SCHLIESSEN
+           KARTE SCHLIESSEN
            ========================= */
 
         function kartenSchliessen() {
@@ -1313,15 +1346,11 @@
                         position.coords.longitude;
 
 
-                    /* Karte zum Standort bewegen */
-
                     karte.setView(
                         [latitude, longitude],
                         13
                     );
 
-
-                    /* Alten Marker entfernen */
 
                     if (standortMarker) {
 
@@ -1332,8 +1361,6 @@
                     }
 
 
-                    /* Neuen Standort-Marker erstellen */
-
                     standortMarker =
                         L.marker([
                             latitude,
@@ -1341,9 +1368,11 @@
                         ]).addTo(karte);
 
 
-                    standortMarker.bindPopup(
-                        "📍 Dein aktueller Standort"
-                    ).openPopup();
+                    standortMarker
+                        .bindPopup(
+                            "📍 Dein aktueller Standort"
+                        )
+                        .openPopup();
 
                 },
 
