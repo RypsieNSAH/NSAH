@@ -13,40 +13,149 @@ const PORT = 3000;
    DATENBANK
 ===================================================== */
 
-const db = new Database(
-    path.join(__dirname, "nsah.db")
-);
+const db = new Database("nsah.db");
 
 
-/*
-   WAL-Modus macht SQLite stabiler,
-   besonders wenn gleichzeitig gelesen
-   und geschrieben wird.
-*/
-
-db.pragma("journal_mode = WAL");
-
-
-/*
-   Benutzer-Tabelle erstellen,
-   falls sie noch nicht existiert.
-*/
+/* =====================================================
+   BENUTZER
+===================================================== */
 
 db.exec(`
     CREATE TABLE IF NOT EXISTS users (
-
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-
         username TEXT NOT NULL,
-
         email TEXT NOT NULL UNIQUE,
-
         password TEXT NOT NULL,
-
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-
+        friend_code TEXT UNIQUE
     )
 `);
+
+
+/*
+   Falls deine alte users-Tabelle noch keine
+   friend_code-Spalte hatte, wird sie hier ergänzt.
+*/
+
+try {
+
+    db.prepare(
+        "ALTER TABLE users ADD COLUMN friend_code TEXT UNIQUE"
+    ).run();
+
+} catch (error) {
+
+    /*
+       Wenn die Spalte bereits existiert,
+       ist alles in Ordnung.
+    */
+
+}
+
+
+/* =====================================================
+   FREUNDSCHAFTEN
+===================================================== */
+
+db.exec(`
+    CREATE TABLE IF NOT EXISTS friendships (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+        user_id INTEGER NOT NULL,
+
+        friend_id INTEGER NOT NULL,
+
+        status TEXT NOT NULL DEFAULT 'pending',
+
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+        UNIQUE(user_id, friend_id),
+
+        FOREIGN KEY(user_id)
+            REFERENCES users(id)
+            ON DELETE CASCADE,
+
+        FOREIGN KEY(friend_id)
+            REFERENCES users(id)
+            ON DELETE CASCADE
+    )
+`);
+
+
+/* =====================================================
+   FEHLENDE FREUNDESCODES ERSTELLEN
+===================================================== */
+
+function freundesCodeErstellen() {
+
+    const zeichen =
+        "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+    let code = "NSAH-";
+
+    for (let i = 0; i < 6; i++) {
+
+        code +=
+            zeichen[
+                Math.floor(
+                    Math.random() * zeichen.length
+                )
+            ];
+    }
+
+    return code;
+}
+
+
+function eindeutigenFreundesCodeErstellen() {
+
+    let code;
+    let vorhanden = true;
+
+    while (vorhanden) {
+
+        code =
+            freundesCodeErstellen();
+
+        const user =
+            db.prepare(
+                "SELECT id FROM users WHERE friend_code = ?"
+            ).get(code);
+
+        vorhanden = !!user;
+    }
+
+    return code;
+}
+
+
+/*
+   Alte Benutzer bekommen automatisch
+   einen Freundescode.
+*/
+
+const benutzerOhneCode =
+    db.prepare(`
+        SELECT id
+        FROM users
+        WHERE friend_code IS NULL
+           OR friend_code = ''
+    `).all();
+
+
+for (const user of benutzerOhneCode) {
+
+    const code =
+        eindeutigenFreundesCodeErstellen();
+
+    db.prepare(`
+        UPDATE users
+        SET friend_code = ?
+        WHERE id = ?
+    `).run(
+        code,
+        user.id
+    );
+}
 
 
 /* =====================================================
@@ -56,7 +165,6 @@ db.exec(`
 app.use(
     express.json()
 );
-
 
 app.use(
     express.urlencoded({
@@ -73,7 +181,6 @@ app.use(
     session({
 
         secret:
-            process.env.SESSION_SECRET ||
             "NSAH-Geheimer-Schluessel-2026",
 
         resave: false,
@@ -84,25 +191,12 @@ app.use(
 
             httpOnly: true,
 
-            /*
-               7 Tage eingeloggt bleiben
-            */
-
             maxAge:
                 1000 *
                 60 *
                 60 *
                 24 *
-                7,
-
-            /*
-               Lokal funktioniert "lax"
-               zuverlässig.
-            */
-
-            sameSite: "lax",
-
-            secure: false
+                7
         }
 
     })
@@ -110,7 +204,7 @@ app.use(
 
 
 /* =====================================================
-   WEBSITE AUSLIEFERN
+   WEBSITE
 ===================================================== */
 
 app.use(
@@ -140,40 +234,12 @@ app.post(
 
         try {
 
-            let {
+            const {
                 username,
                 email,
                 password
             } = req.body;
 
-
-            /* =============================
-               EINGABEN BEREINIGEN
-            ============================= */
-
-            username =
-                String(
-                    username || ""
-                ).trim();
-
-
-            email =
-                String(
-                    email || ""
-                )
-                .trim()
-                .toLowerCase();
-
-
-            password =
-                String(
-                    password || ""
-                );
-
-
-            /* =============================
-               FELDER PRÜFEN
-            ============================= */
 
             if (
                 !username ||
@@ -189,33 +255,8 @@ app.post(
                         "Bitte alle Felder ausfüllen."
 
                 });
-
             }
 
-
-            /* =============================
-               BENUTZERNAME PRÜFEN
-            ============================= */
-
-            if (
-                username.length < 3
-            ) {
-
-                return res.json({
-
-                    success: false,
-
-                    message:
-                        "Der Benutzername muss mindestens 3 Zeichen haben."
-
-                });
-
-            }
-
-
-            /* =============================
-               PASSWORT PRÜFEN
-            ============================= */
 
             if (
                 password.length < 6
@@ -229,67 +270,27 @@ app.post(
                         "Das Passwort muss mindestens 6 Zeichen haben."
 
                 });
-
             }
 
-
-            /* =============================
-               E-MAIL PRÜFEN
-            ============================= */
-
-            if (
-                !email.includes("@") ||
-                !email.includes(".")
-            ) {
-
-                return res.json({
-
-                    success: false,
-
-                    message:
-                        "Bitte gib eine gültige E-Mail-Adresse ein."
-
-                });
-
-            }
-
-
-            /* =============================
-               EXISTIERENDEN BENUTZER SUCHEN
-            ============================= */
 
             const vorhandenerBenutzer =
-                db.prepare(`
-                    SELECT
-                        id,
-                        username,
-                        email
-                    FROM users
-                    WHERE email = ?
-                `).get(
-                    email
-                );
+                db.prepare(
+                    "SELECT id FROM users WHERE email = ?"
+                ).get(email);
 
 
-            if (
-                vorhandenerBenutzer
-            ) {
+            if (vorhandenerBenutzer) {
 
                 return res.json({
 
                     success: false,
 
                     message:
-                        "Diese E-Mail-Adresse ist bereits registriert. Bitte melde dich an."
+                        "Diese E-Mail-Adresse ist bereits registriert."
 
                 });
-
             }
 
-
-            /* =============================
-               PASSWORT HASHEN
-            ============================= */
 
             const passwortHash =
                 await bcrypt.hash(
@@ -298,9 +299,9 @@ app.post(
                 );
 
 
-            /* =============================
-               BENUTZER SPEICHERN
-            ============================= */
+            const friendCode =
+                eindeutigenFreundesCodeErstellen();
+
 
             const ergebnis =
                 db.prepare(`
@@ -308,84 +309,41 @@ app.post(
                     (
                         username,
                         email,
-                        password
+                        password,
+                        friend_code
                     )
-                    VALUES
-                    (
-                        ?,
-                        ?,
-                        ?
-                    )
+                    VALUES (?, ?, ?, ?)
                 `).run(
+
                     username,
+
                     email,
-                    passwortHash
+
+                    passwortHash,
+
+                    friendCode
+
                 );
 
-
-            /*
-               WICHTIG:
-               Die ID wird dauerhaft in SQLite gespeichert.
-            */
-
-            const userId =
-                Number(
-                    ergebnis.lastInsertRowid
-                );
-
-
-            /* =============================
-               SESSION ERSTELLEN
-            ============================= */
 
             req.session.userId =
-                userId;
+                ergebnis.lastInsertRowid;
 
 
-            /*
-               Session explizit speichern.
-               Dadurch wird verhindert,
-               dass der Login-Zustand verloren geht.
-            */
+            res.json({
 
-            req.session.save(
-                (sessionError) => {
+                success: true,
 
-                    if (
-                        sessionError
-                    ) {
+                username:
+                    username,
 
-                        console.error(
-                            "Session-Speicherfehler:",
-                            sessionError
-                        );
+                email:
+                    email,
 
-                        return res.status(500).json({
+                friendCode:
+                    friendCode
 
-                            success: false,
-
-                            message:
-                                "Konto wurde gespeichert, aber der Login konnte nicht erstellt werden."
-
-                        });
-
-                    }
-
-
-                    return res.json({
-
-                        success: true,
-
-                        username:
-                            username,
-
-                        email:
-                            email
-
-                    });
-
-                }
-            );
+            });
 
 
         } catch (error) {
@@ -396,29 +354,7 @@ app.post(
             );
 
 
-            /*
-               Falls SQLite wegen
-               UNIQUE einen Fehler meldet.
-            */
-
-            if (
-                error.code ===
-                "SQLITE_CONSTRAINT_UNIQUE"
-            ) {
-
-                return res.json({
-
-                    success: false,
-
-                    message:
-                        "Diese E-Mail-Adresse ist bereits registriert."
-
-                });
-
-            }
-
-
-            return res.status(500).json({
+            res.json({
 
                 success: false,
 
@@ -443,63 +379,16 @@ app.post(
 
         try {
 
-            let {
+            const {
                 email,
                 password
             } = req.body;
 
 
-            email =
-                String(
-                    email || ""
-                )
-                .trim()
-                .toLowerCase();
-
-
-            password =
-                String(
-                    password || ""
-                );
-
-
-            /* =============================
-               EINGABEN PRÜFEN
-            ============================= */
-
-            if (
-                !email ||
-                !password
-            ) {
-
-                return res.json({
-
-                    success: false,
-
-                    message:
-                        "Bitte E-Mail und Passwort eingeben."
-
-                });
-
-            }
-
-
-            /* =============================
-               BENUTZER SUCHEN
-            ============================= */
-
             const user =
-                db.prepare(`
-                    SELECT
-                        id,
-                        username,
-                        email,
-                        password
-                    FROM users
-                    WHERE email = ?
-                `).get(
-                    email
-                );
+                db.prepare(
+                    "SELECT * FROM users WHERE email = ?"
+                ).get(email);
 
 
             if (!user) {
@@ -512,13 +401,8 @@ app.post(
                         "E-Mail oder Passwort ist falsch."
 
                 });
-
             }
 
-
-            /* =============================
-               PASSWORT PRÜFEN
-            ============================= */
 
             const passwortRichtig =
                 await bcrypt.compare(
@@ -527,9 +411,7 @@ app.post(
                 );
 
 
-            if (
-                !passwortRichtig
-            ) {
+            if (!passwortRichtig) {
 
                 return res.json({
 
@@ -539,60 +421,55 @@ app.post(
                         "E-Mail oder Passwort ist falsch."
 
                 });
-
             }
 
 
-            /* =============================
-               SESSION SETZEN
-            ============================= */
+            /*
+               Sicherheitshalber auch bei alten
+               Benutzern einen Code erzeugen.
+            */
+
+            if (
+                !user.friend_code
+            ) {
+
+                const neuerCode =
+                    eindeutigenFreundesCodeErstellen();
+
+
+                db.prepare(`
+                    UPDATE users
+                    SET friend_code = ?
+                    WHERE id = ?
+                `).run(
+                    neuerCode,
+                    user.id
+                );
+
+
+                user.friend_code =
+                    neuerCode;
+            }
+
 
             req.session.userId =
                 user.id;
 
 
-            /*
-               Session ausdrücklich speichern.
-            */
+            res.json({
 
-            req.session.save(
-                (sessionError) => {
+                success: true,
 
-                    if (
-                        sessionError
-                    ) {
+                username:
+                    user.username,
 
-                        console.error(
-                            "Session-Speicherfehler:",
-                            sessionError
-                        );
+                email:
+                    user.email,
 
-                        return res.status(500).json({
+                friendCode:
+                    user.friend_code
 
-                            success: false,
-
-                            message:
-                                "Login konnte nicht gespeichert werden."
-
-                        });
-
-                    }
-
-
-                    return res.json({
-
-                        success: true,
-
-                        username:
-                            user.username,
-
-                        email:
-                            user.email
-
-                    });
-
-                }
-            );
+            });
 
 
         } catch (error) {
@@ -603,7 +480,7 @@ app.post(
             );
 
 
-            return res.status(500).json({
+            res.json({
 
                 success: false,
 
@@ -619,104 +496,593 @@ app.post(
 
 
 /* =====================================================
-   AKTUELL ANGEMELDETEN BENUTZER ABFRAGEN
+   AKTUELLER BENUTZER
 ===================================================== */
 
 app.get(
     "/api/me",
     (req, res) => {
 
-        try {
-
-            /*
-               Keine Session vorhanden.
-            */
-
-            if (
-                !req.session ||
-                !req.session.userId
-            ) {
-
-                return res.json({
-
-                    loggedIn: false
-
-                });
-
-            }
-
-
-            /* =============================
-               BENUTZER AUS DATENBANK LADEN
-            ============================= */
-
-            const user =
-                db.prepare(`
-                    SELECT
-                        id,
-                        username,
-                        email
-                    FROM users
-                    WHERE id = ?
-                `).get(
-                    req.session.userId
-                );
-
-
-            /*
-               Benutzer existiert nicht mehr.
-            */
-
-            if (!user) {
-
-                req.session.destroy(
-                    () => {}
-                );
-
-
-                return res.json({
-
-                    loggedIn: false
-
-                });
-
-            }
-
-
-            /* =============================
-               BENUTZER ZURÜCKGEBEN
-            ============================= */
+        if (
+            !req.session.userId
+        ) {
 
             return res.json({
 
-                loggedIn: true,
-
-                username:
-                    user.username,
-
-                email:
-                    user.email
-
-            });
-
-        } catch (error) {
-
-            console.error(
-                "Fehler bei /api/me:",
-                error
-            );
-
-
-            return res.status(500).json({
-
-                loggedIn: false,
-
-                message:
-                    "Benutzer konnte nicht geladen werden."
+                loggedIn: false
 
             });
 
         }
+
+
+        const user =
+            db.prepare(`
+                SELECT
+                    id,
+                    username,
+                    email,
+                    friend_code
+                FROM users
+                WHERE id = ?
+            `).get(
+                req.session.userId
+            );
+
+
+        if (!user) {
+
+            return res.json({
+
+                loggedIn: false
+
+            });
+
+        }
+
+
+        res.json({
+
+            loggedIn: true,
+
+            username:
+                user.username,
+
+            email:
+                user.email,
+
+            friendCode:
+                user.friend_code
+
+        });
+
+    }
+);
+
+
+/* =====================================================
+   FREUNDESDATEN
+===================================================== */
+
+app.get(
+    "/api/friends",
+    (req, res) => {
+
+        if (
+            !req.session.userId
+        ) {
+
+            return res.status(401).json({
+
+                success: false,
+
+                message:
+                    "Du musst angemeldet sein."
+
+            });
+
+        }
+
+
+        const userId =
+            req.session.userId;
+
+
+        const user =
+            db.prepare(`
+                SELECT
+                    username,
+                    friend_code
+                FROM users
+                WHERE id = ?
+            `).get(userId);
+
+
+        /*
+           Bestätigte Freunde
+        */
+
+        const freunde =
+            db.prepare(`
+                SELECT
+                    u.id,
+                    u.username,
+                    u.email
+                FROM friendships f
+                JOIN users u
+                    ON (
+                        CASE
+                            WHEN f.user_id = ?
+                            THEN u.id = f.friend_id
+                            ELSE u.id = f.user_id
+                        END
+                    )
+                WHERE
+                    (
+                        f.user_id = ?
+                        OR f.friend_id = ?
+                    )
+                    AND f.status = 'accepted'
+            `).all(
+                userId,
+                userId,
+                userId
+            );
+
+
+        /*
+           Eingehende Anfragen
+        */
+
+        const anfragen =
+            db.prepare(`
+                SELECT
+                    f.id,
+                    u.username,
+                    u.email
+                FROM friendships f
+                JOIN users u
+                    ON u.id = f.user_id
+                WHERE
+                    f.friend_id = ?
+                    AND f.status = 'pending'
+            `).all(userId);
+
+
+        res.json({
+
+            success: true,
+
+            friendCode:
+                user.friend_code,
+
+            friends:
+                freunde,
+
+            requests:
+                anfragen
+
+        });
+
+    }
+);
+
+
+/* =====================================================
+   FREUND HINZUFÜGEN
+===================================================== */
+
+app.post(
+    "/api/friends/add",
+    (req, res) => {
+
+        if (
+            !req.session.userId
+        ) {
+
+            return res.status(401).json({
+
+                success: false,
+
+                message:
+                    "Du musst angemeldet sein."
+
+            });
+
+        }
+
+
+        const userId =
+            req.session.userId;
+
+
+        let {
+            friendCode
+        } = req.body;
+
+
+        if (
+            !friendCode
+        ) {
+
+            return res.json({
+
+                success: false,
+
+                message:
+                    "Bitte einen Freundescode eingeben."
+
+            });
+
+        }
+
+
+        friendCode =
+            friendCode
+                .trim()
+                .toUpperCase();
+
+
+        const friend =
+            db.prepare(`
+                SELECT
+                    id,
+                    username
+                FROM users
+                WHERE friend_code = ?
+            `).get(friendCode);
+
+
+        if (!friend) {
+
+            return res.json({
+
+                success: false,
+
+                message:
+                    "Dieser Freundescode wurde nicht gefunden."
+
+            });
+
+        }
+
+
+        if (
+            friend.id === userId
+        ) {
+
+            return res.json({
+
+                success: false,
+
+                message:
+                    "Du kannst dich nicht selbst hinzufügen."
+
+            });
+
+        }
+
+
+        /*
+           Prüfen, ob bereits eine Verbindung
+           in irgendeine Richtung existiert.
+        */
+
+        const bestehende =
+            db.prepare(`
+                SELECT *
+                FROM friendships
+                WHERE
+                    (
+                        user_id = ?
+                        AND friend_id = ?
+                    )
+                    OR
+                    (
+                        user_id = ?
+                        AND friend_id = ?
+                    )
+            `).get(
+
+                userId,
+                friend.id,
+
+                friend.id,
+                userId
+
+            );
+
+
+        if (bestehende) {
+
+            if (
+                bestehende.status ===
+                "accepted"
+            ) {
+
+                return res.json({
+
+                    success: false,
+
+                    message:
+                        "Ihr seid bereits befreundet."
+
+                });
+
+            }
+
+
+            if (
+                bestehende.status ===
+                "pending"
+            ) {
+
+                return res.json({
+
+                    success: false,
+
+                    message:
+                        "Eine Freundschaftsanfrage existiert bereits."
+
+                });
+
+            }
+
+        }
+
+
+        db.prepare(`
+            INSERT INTO friendships
+            (
+                user_id,
+                friend_id,
+                status
+            )
+            VALUES (?, ?, 'pending')
+        `).run(
+
+            userId,
+
+            friend.id
+
+        );
+
+
+        res.json({
+
+            success: true,
+
+            message:
+                "Freundschaftsanfrage gesendet."
+
+        });
+
+    }
+);
+
+
+/* =====================================================
+   FREUNDSCHAFTSANFRAGE ANNEHMEN
+===================================================== */
+
+app.post(
+    "/api/friends/accept",
+    (req, res) => {
+
+        if (
+            !req.session.userId
+        ) {
+
+            return res.status(401).json({
+
+                success: false,
+
+                message:
+                    "Du musst angemeldet sein."
+
+            });
+
+        }
+
+
+        const userId =
+            req.session.userId;
+
+
+        const {
+            requestId
+        } = req.body;
+
+
+        if (!requestId) {
+
+            return res.json({
+
+                success: false,
+
+                message:
+                    "Ungültige Anfrage."
+
+            });
+
+        }
+
+
+        const anfrage =
+            db.prepare(`
+                SELECT *
+                FROM friendships
+                WHERE
+                    id = ?
+                    AND friend_id = ?
+                    AND status = 'pending'
+            `).get(
+
+                requestId,
+
+                userId
+
+            );
+
+
+        if (!anfrage) {
+
+            return res.json({
+
+                success: false,
+
+                message:
+                    "Freundschaftsanfrage nicht gefunden."
+
+            });
+
+        }
+
+
+        db.prepare(`
+            UPDATE friendships
+            SET status = 'accepted'
+            WHERE id = ?
+        `).run(
+            requestId
+        );
+
+
+        res.json({
+
+            success: true,
+
+            message:
+                "Ihr seid jetzt befreundet."
+
+        });
+
+    }
+);
+
+
+/* =====================================================
+   FREUNDSCHAFTSANFRAGE ABLEHNEN
+===================================================== */
+
+app.post(
+    "/api/friends/decline",
+    (req, res) => {
+
+        if (
+            !req.session.userId
+        ) {
+
+            return res.status(401).json({
+
+                success: false,
+
+                message:
+                    "Du musst angemeldet sein."
+
+            });
+
+        }
+
+
+        const userId =
+            req.session.userId;
+
+
+        const {
+            requestId
+        } = req.body;
+
+
+        db.prepare(`
+            DELETE FROM friendships
+            WHERE
+                id = ?
+                AND friend_id = ?
+                AND status = 'pending'
+        `).run(
+
+            requestId,
+
+            userId
+
+        );
+
+
+        res.json({
+
+            success: true
+
+        });
+
+    }
+);
+
+
+/* =====================================================
+   FREUND ENTFERNEN
+===================================================== */
+
+app.post(
+    "/api/friends/remove",
+    (req, res) => {
+
+        if (
+            !req.session.userId
+        ) {
+
+            return res.status(401).json({
+
+                success: false,
+
+                message:
+                    "Du musst angemeldet sein."
+
+            });
+
+        }
+
+
+        const userId =
+            req.session.userId;
+
+
+        const {
+            friendId
+        } = req.body;
+
+
+        db.prepare(`
+            DELETE FROM friendships
+            WHERE
+                (
+                    user_id = ?
+                    AND friend_id = ?
+                )
+                OR
+                (
+                    user_id = ?
+                    AND friend_id = ?
+                )
+        `).run(
+
+            userId,
+            friendId,
+
+            friendId,
+            userId
+
+        );
+
+
+        res.json({
+
+            success: true,
+
+            message:
+                "Freund entfernt."
+
+        });
 
     }
 );
@@ -735,13 +1101,7 @@ app.post(
 
                 if (error) {
 
-                    console.error(
-                        "Logout-Fehler:",
-                        error
-                    );
-
-
-                    return res.status(500).json({
+                    return res.json({
 
                         success: false,
 
@@ -753,16 +1113,7 @@ app.post(
                 }
 
 
-                /*
-                   Session-Cookie löschen.
-                */
-
-                res.clearCookie(
-                    "connect.sid"
-                );
-
-
-                return res.json({
+                res.json({
 
                     success: true
 
@@ -784,43 +1135,18 @@ app.listen(
     () => {
 
         console.log("");
-
-        console.log(
-            "=============================="
-        );
-
-        console.log(
-            "          NSAH SERVER"
-        );
-
-        console.log(
-            "=============================="
-        );
-
+        console.log("==============================");
+        console.log("          NSAH SERVER");
+        console.log("==============================");
         console.log("");
-
         console.log(
-            "NSAH läuft auf:"
+            "NSAH läuft auf http://localhost:"
+            + PORT
         );
-
-        console.log(
-            "http://localhost:" +
-            PORT
-        );
-
         console.log("");
-
         console.log(
-            "Datenbank:"
+            "Freundesystem: AKTIV"
         );
-
-        console.log(
-            path.join(
-                __dirname,
-                "nsah.db"
-            )
-        );
-
         console.log("");
 
     }
