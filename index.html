@@ -16,7 +16,7 @@
 
     <style>
 
-   /* =========================
+/* =========================
    HINTERGRUND
 ========================= */
 
@@ -25,40 +25,73 @@ body {
 
     background-color: black;
 
-    background-image:
-        linear-gradient(
-            rgba(0, 0, 0, 0.30),
-            rgba(0, 0, 0, 0.30)
-        ),
-        url("Nsah%20bilder/Screenshot2026-08-22214731(1).png");
-
-    /*
-    ==========================================
-    BILD EINSTELLUNGEN
-    ==========================================
-
-    X = horizontal
-    Y = vertikal
-
-    Beispiel:
-    50% 50% = Mitte
-    0% 0%   = oben links
-    100% 0% = oben rechts
-    0% 100% = unten links
-    100% 100% = unten rechts
-    */
-
-    background-size: 40% auto;
-
-    background-position: 50% 50%;
-
-    background-repeat: no-repeat;
-
-    background-attachment: fixed;
-
     color: white;
 
     font-family: Arial, sans-serif;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================
+   HINTERGRUNDBILD
+========================= */
+
+.hintergrund-bild {
+
+    position: fixed;
+
+    /* =========================
+       POSITION DES BILDES
+       =========================
+
+       X = horizontal
+       Y = vertikal
+
+       Du kannst diese beiden Werte
+       später einfach verändern.
+    */
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+
+    /* =========================
+       GRÖSSE
+       ========================= */
+
+    width: 40vw;
+    height: 40vh;
+
+
+    /* =========================
+       BILD
+       ========================= */
+
+    background-image:
+        url("Nsah%20bilder/Screenshot2026-08-22214731(1).png");
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-repeat: no-repeat;
+
+
+    /* =========================
+       ABGERUNDETE ECKEN
+       ========================= */
+
+    border-radius: 25px;
+
+
+    /* =========================
+       EBENE
+       ========================= */
+
+    z-index: -1;
 }
 
 
