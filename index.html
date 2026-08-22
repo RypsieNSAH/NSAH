@@ -40,7 +40,6 @@
             font-size: 80px;
             font-weight: bold;
 
-            /* dezenter Glow */
             text-shadow:
                 0 0 4px rgba(255,255,255,0.7),
                 0 0 10px rgba(255,255,255,0.35),
@@ -82,6 +81,34 @@
             width: 2px;
 
             background-color: #333333;
+        }
+
+
+        /* =========================
+           STARTSEITEN-BILD
+           ========================= */
+
+        .startbild {
+            position: absolute;
+
+            top: 230px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width: 650px;
+            max-width: 70%;
+
+            height: auto;
+
+            border-radius: 12px;
+
+            border: 1px solid #333333;
+
+            box-shadow:
+                0 0 25px rgba(255,255,255,0.08);
+
+            object-fit: contain;
         }
 
 
@@ -131,7 +158,7 @@
             top: 25px;
             left: 25px;
 
-            padding: 12px 20px;
+            padding: 7px 14px 7px 7px;
 
             background-color: #222222;
 
@@ -147,11 +174,34 @@
             cursor: pointer;
 
             z-index: 50;
+
+            display: none;
+
+            align-items: center;
+            gap: 8px;
         }
 
 
         .benutzer-button:hover {
             background-color: #333333;
+        }
+
+
+        /* =========================
+           PROFILBILD
+           ========================= */
+
+        .profilbild {
+            width: 32px;
+            height: 32px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            border: 1px solid #555555;
+
+            flex-shrink: 0;
         }
 
 
@@ -183,11 +233,29 @@
         }
 
 
+        .profilbild-gross {
+            display: block;
+
+            width: 80px;
+            height: 80px;
+
+            margin: 0 auto 15px auto;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            border: 2px solid #444444;
+        }
+
+
         .benutzer-name {
             font-size: 18px;
             font-weight: bold;
 
             margin-bottom: 5px;
+
+            text-align: center;
         }
 
 
@@ -199,6 +267,8 @@
             margin-bottom: 15px;
 
             word-break: break-all;
+
+            text-align: center;
         }
 
 
@@ -595,6 +665,18 @@
             }
 
 
+            /* STARTBILD */
+
+            .startbild {
+                top: 210px;
+
+                width: 85%;
+                max-width: 85%;
+
+                border-radius: 8px;
+            }
+
+
             /* STRICH */
 
             .strich {
@@ -638,7 +720,7 @@
                 top: 18px;
                 left: 12px;
 
-                padding: 10px 14px;
+                padding: 5px 10px 5px 5px;
 
                 font-size: 14px;
 
@@ -651,6 +733,12 @@
                 text-overflow: ellipsis;
 
                 white-space: nowrap;
+            }
+
+
+            .profilbild {
+                width: 28px;
+                height: 28px;
             }
 
 
@@ -784,6 +872,17 @@
 
 
     <!-- =========================
+         SPRITPREISE-BILD
+         ========================= -->
+
+    <img
+        class="startbild"
+        src="file:///C:/Users/Marlo/OneDrive/Bilder/42068048-spritpreise-in-sachsen-OlBG.jpg"
+        alt="Spritpreise"
+    >
+
+
+    <!-- =========================
          DUNKELGRAUER STRICH
          ========================= -->
 
@@ -826,7 +925,15 @@
         id="benutzerButton"
         onclick="benutzerMenueOeffnen()">
 
-        👤 <span id="benutzerNameOben">Benutzer</span>
+        <img
+            class="profilbild"
+            src="file:///C:/Users/Marlo/Downloads/Screenshot2026-08-221720511.png"
+            alt="Profilbild"
+        >
+
+        <span id="benutzerNameOben">
+            Benutzer
+        </span>
 
     </button>
 
@@ -838,6 +945,15 @@
     <div
         class="benutzer-menue"
         id="benutzerMenue">
+
+
+        <!-- PROFILBILD -->
+
+        <img
+            class="profilbild-gross"
+            src="file:///C:/Users/Marlo/Downloads/Screenshot2026-08-221720511.png"
+            alt="Profilbild"
+        >
 
 
         <div
@@ -1141,10 +1257,6 @@
 
                 /* =========================
                    OPENSTREETMAP
-
-                   noWrap verhindert,
-                   dass die Welt mehrfach
-                   nebeneinander erscheint.
                    ========================= */
 
                 L.tileLayer(
@@ -1626,7 +1738,7 @@
 
             document.getElementById(
                 "benutzerButton"
-            ).style.display = "block";
+            ).style.display = "flex";
 
 
             document.getElementById(
