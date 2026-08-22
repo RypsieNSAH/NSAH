@@ -4,16 +4,28 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NSAH - Nützliche Sparsame Alltags Hilfe</title>
-
-<link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
 >
 
+<title>
+    NSAH - Nützliche Sparsame Alltags Hilfe
+</title>
+
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+>
+
+
 <style>
+
+/* =====================================================
+   GRUNDSEITE
+===================================================== */
 
 * {
     box-sizing: border-box;
@@ -21,15 +33,21 @@ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 
 html,
 body {
+
     margin: 0;
     padding: 0;
+
     width: 100%;
     min-height: 100%;
+
     background: black;
     color: white;
+
     font-family: Arial, sans-serif;
+
     overflow-x: hidden;
 }
+
 
 /* =====================================================
    HINTERGRUNDBILD
@@ -42,7 +60,8 @@ body {
     left: 50%;
     top: 50%;
 
-    transform: translate(-50%, -50%);
+    transform:
+        translate(-50%, -50%);
 
     width: 40vw;
     height: 40vh;
@@ -51,7 +70,9 @@ body {
         url("Nsah%20bilder/Screenshot2026-08-22214731(1).png");
 
     background-size: cover;
+
     background-position: center;
+
     background-repeat: no-repeat;
 
     border-radius: 25px;
@@ -61,8 +82,9 @@ body {
     pointer-events: none;
 }
 
+
 /* =====================================================
-   INHALT
+   Z-INDEX
 ===================================================== */
 
 .logo,
@@ -71,10 +93,13 @@ body {
 .anmelden-button,
 .karten-button,
 .spiele-button,
+.freunde-button,
 .benutzer-button,
 .benutzer-menue {
+
     z-index: 10;
 }
+
 
 /* =====================================================
    LOGO
@@ -87,9 +112,11 @@ body {
     top: 30px;
     left: 50%;
 
-    transform: translateX(-50%);
+    transform:
+        translateX(-50%);
 
     font-size: 80px;
+
     font-weight: bold;
 
     text-shadow:
@@ -99,6 +126,7 @@ body {
 
     white-space: nowrap;
 }
+
 
 /* =====================================================
    UNTERTITEL
@@ -111,7 +139,8 @@ body {
     top: 110px;
     left: 50%;
 
-    transform: translateX(-50%);
+    transform:
+        translateX(-50%);
 
     font-size: 26px;
 
@@ -119,6 +148,7 @@ body {
 
     white-space: nowrap;
 }
+
 
 /* =====================================================
    LINIE
@@ -137,6 +167,7 @@ body {
     background-color: #333333;
 }
 
+
 /* =====================================================
    BUTTON BASIS
 ===================================================== */
@@ -144,6 +175,7 @@ body {
 .anmelden-button,
 .karten-button,
 .spiele-button,
+.freunde-button,
 .benutzer-button {
 
     padding: 12px 20px;
@@ -157,17 +189,22 @@ body {
     border-radius: 7px;
 
     font-size: 16px;
+
     font-weight: bold;
 
     cursor: pointer;
 }
 
+
 .anmelden-button:hover,
 .karten-button:hover,
 .spiele-button:hover,
+.freunde-button:hover,
 .benutzer-button:hover {
+
     background-color: #333333;
 }
+
 
 /* =====================================================
    ANMELDEN
@@ -181,6 +218,7 @@ body {
     left: 25px;
 }
 
+
 /* =====================================================
    KARTE
 ===================================================== */
@@ -193,6 +231,7 @@ body {
     left: 25px;
 }
 
+
 /* =====================================================
    SPIELE
 ===================================================== */
@@ -204,6 +243,20 @@ body {
     top: 135px;
     left: 25px;
 }
+
+
+/* =====================================================
+   FREUNDE
+===================================================== */
+
+.freunde-button {
+
+    position: fixed;
+
+    top: 190px;
+    left: 25px;
+}
+
 
 /* =====================================================
    BENUTZER
@@ -221,9 +274,12 @@ body {
     max-width: 180px;
 
     overflow: hidden;
+
     text-overflow: ellipsis;
+
     white-space: nowrap;
 }
+
 
 /* =====================================================
    BENUTZER MENÜ
@@ -251,13 +307,16 @@ body {
     z-index: 2000;
 }
 
+
 .benutzer-name {
 
     font-size: 18px;
+
     font-weight: bold;
 
     margin-bottom: 5px;
 }
+
 
 .benutzer-email {
 
@@ -270,9 +329,11 @@ body {
     word-break: break-all;
 }
 
+
 .abmelden-button {
 
     width: 100%;
+
     height: 40px;
 
     background-color: #222222;
@@ -285,6 +346,7 @@ body {
 
     cursor: pointer;
 }
+
 
 /* =====================================================
    MODAL
@@ -302,10 +364,12 @@ body {
     width: 100%;
     height: 100%;
 
-    background-color: rgba(0,0,0,0.85);
+    background-color:
+        rgba(0,0,0,0.85);
 
     z-index: 9999;
 }
+
 
 /* =====================================================
    LOGIN
@@ -318,7 +382,8 @@ body {
     top: 50%;
     left: 50%;
 
-    transform: translate(-50%,-50%);
+    transform:
+        translate(-50%,-50%);
 
     width: 400px;
 
@@ -331,21 +396,27 @@ body {
     padding: 30px;
 }
 
+
 .fenster-kopf {
 
     display: flex;
 
-    justify-content: space-between;
+    justify-content:
+        space-between;
+
     align-items: center;
 
     margin-bottom: 25px;
 }
 
+
 .fenster-titel {
 
     font-size: 25px;
+
     font-weight: bold;
 }
+
 
 .schliessen {
 
@@ -360,6 +431,7 @@ body {
     cursor: pointer;
 }
 
+
 /* =====================================================
    TABS
 ===================================================== */
@@ -370,6 +442,7 @@ body {
 
     margin-bottom: 20px;
 }
+
 
 .tab {
 
@@ -388,6 +461,7 @@ body {
     font-size: 15px;
 }
 
+
 .tab.aktiv {
 
     background-color: #333333;
@@ -395,17 +469,22 @@ body {
     color: white;
 }
 
+
 /* =====================================================
    FORMULARE
 ===================================================== */
 
 .formular {
+
     display: none;
 }
 
+
 .formular.aktiv {
+
     display: block;
 }
+
 
 .formular label {
 
@@ -416,9 +495,11 @@ body {
     color: #cccccc;
 }
 
+
 .formular input {
 
     width: 100%;
+
     height: 45px;
 
     margin-bottom: 18px;
@@ -438,9 +519,11 @@ body {
     font-size: 15px;
 }
 
+
 .formular-button {
 
     width: 100%;
+
     height: 45px;
 
     background-color: #333333;
@@ -458,6 +541,7 @@ body {
     font-weight: bold;
 }
 
+
 .hinweis {
 
     margin-top: 15px;
@@ -468,6 +552,7 @@ body {
 
     font-size: 13px;
 }
+
 
 /* =====================================================
    KARTE
@@ -480,7 +565,8 @@ body {
     top: 50%;
     left: 50%;
 
-    transform: translate(-50%,-50%);
+    transform:
+        translate(-50%,-50%);
 
     width: 80%;
     height: 80%;
@@ -494,21 +580,26 @@ body {
     overflow: hidden;
 }
 
+
 .karten-kopf {
 
     height: 55px;
 
     display: flex;
 
-    justify-content: space-between;
+    justify-content:
+        space-between;
+
     align-items: center;
 
     padding: 0 15px;
 
     background-color: #151515;
 
-    border-bottom: 1px solid #333333;
+    border-bottom:
+        1px solid #333333;
 }
+
 
 .karten-titel {
 
@@ -516,6 +607,7 @@ body {
 
     font-weight: bold;
 }
+
 
 .karten-schliessen {
 
@@ -530,15 +622,18 @@ body {
     cursor: pointer;
 }
 
+
 #karte {
 
     width: 100%;
 
-    height: calc(100% - 55px);
+    height:
+        calc(100% - 55px);
 }
 
+
 /* =====================================================
-   SPIELE
+   SPIELE FENSTER
 ===================================================== */
 
 .spiele-fenster {
@@ -548,11 +643,13 @@ body {
     top: 50%;
     left: 50%;
 
-    transform: translate(-50%,-50%);
+    transform:
+        translate(-50%,-50%);
 
     width: 500px;
 
-    max-width: calc(100vw - 30px);
+    max-width:
+        calc(100vw - 30px);
 
     background-color: #111111;
 
@@ -563,15 +660,19 @@ body {
     padding: 25px;
 }
 
+
 .spiele-kopf {
 
     display: flex;
 
-    justify-content: space-between;
+    justify-content:
+        space-between;
+
     align-items: center;
 
     margin-bottom: 20px;
 }
+
 
 .spiele-titel {
 
@@ -579,6 +680,7 @@ body {
 
     font-weight: bold;
 }
+
 
 .spiele-schliessen {
 
@@ -593,14 +695,21 @@ body {
     cursor: pointer;
 }
 
+
+/* =====================================================
+   SPIELE AUSWAHL
+===================================================== */
+
 .spiele-auswahl {
 
     display: grid;
 
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns:
+        repeat(2,1fr);
 
     gap: 12px;
 }
+
 
 .spiel-auswahl-button {
 
@@ -621,9 +730,12 @@ body {
     font-weight: bold;
 }
 
+
 .spiel-auswahl-button:hover {
+
     background-color: #2c2c2c;
 }
+
 
 /* =====================================================
    SPIEL FENSTER
@@ -636,13 +748,16 @@ body {
     top: 50%;
     left: 50%;
 
-    transform: translate(-50%,-50%);
+    transform:
+        translate(-50%,-50%);
 
     width: 520px;
 
-    max-width: calc(100vw - 20px);
+    max-width:
+        calc(100vw - 20px);
 
-    max-height: 95vh;
+    max-height:
+        95vh;
 
     overflow: auto;
 
@@ -657,15 +772,19 @@ body {
     text-align: center;
 }
 
+
 .spiel-kopf {
 
     display: flex;
 
-    justify-content: space-between;
+    justify-content:
+        space-between;
+
     align-items: center;
 
     margin-bottom: 10px;
 }
+
 
 .spiel-name {
 
@@ -673,6 +792,7 @@ body {
 
     font-weight: bold;
 }
+
 
 .spiel-schliessen {
 
@@ -687,6 +807,7 @@ body {
     cursor: pointer;
 }
 
+
 .rekord {
 
     color: #bbbbbb;
@@ -696,8 +817,9 @@ body {
     font-size: 15px;
 }
 
+
 /* =====================================================
-   CANVAS
+   GAME CANVAS
 ===================================================== */
 
 .game-canvas {
@@ -717,8 +839,9 @@ body {
     touch-action: none;
 }
 
+
 /* =====================================================
-   START BUTTON
+   SPIEL BUTTON
 ===================================================== */
 
 .game-start {
@@ -740,19 +863,23 @@ body {
     cursor: pointer;
 }
 
+
 .game-start:hover {
+
     background-color: #3a3a3a;
 }
 
+
 /* =====================================================
-   SNAKE CONTROLS
+   SNAKE
 ===================================================== */
 
 .snake-controls {
 
     display: grid;
 
-    grid-template-columns: repeat(3,55px);
+    grid-template-columns:
+        repeat(3,55px);
 
     justify-content: center;
 
@@ -761,9 +888,11 @@ body {
     margin-top: 12px;
 }
 
+
 .snake-controls button {
 
     width: 55px;
+
     height: 45px;
 
     background-color: #222222;
@@ -775,16 +904,17 @@ body {
     border-radius: 7px;
 
     font-size: 20px;
-
-    cursor: pointer;
 }
 
+
 .snake-empty {
+
     visibility: hidden;
 }
 
+
 /* =====================================================
-   TETRIS CONTROLS
+   TETRIS
 ===================================================== */
 
 .tetris-controls {
@@ -798,9 +928,11 @@ body {
     margin-top: 12px;
 }
 
+
 .tetris-controls button {
 
     width: 60px;
+
     height: 45px;
 
     background-color: #222222;
@@ -812,9 +944,303 @@ body {
     border-radius: 7px;
 
     font-size: 20px;
+}
+
+
+/* =====================================================
+   FREUNDE
+===================================================== */
+
+.freunde-fenster {
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    width: 500px;
+
+    max-width:
+        calc(100vw - 30px);
+
+    max-height:
+        calc(100vh - 30px);
+
+    overflow-y: auto;
+
+    background-color: #111111;
+
+    border: 2px solid #333333;
+
+    border-radius: 14px;
+
+    padding: 25px;
+}
+
+
+.freunde-kopf {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+
+.freunde-titel {
+
+    font-size: 25px;
+
+    font-weight: bold;
+}
+
+
+.freunde-schliessen {
+
+    background: none;
+
+    border: none;
+
+    color: white;
+
+    font-size: 28px;
 
     cursor: pointer;
 }
+
+
+.freundescode-box {
+
+    background-color: #191919;
+
+    border: 1px solid #3a3a3a;
+
+    border-radius: 10px;
+
+    padding: 18px;
+
+    margin-bottom: 15px;
+
+    text-align: center;
+}
+
+
+.freundescode-titel {
+
+    color: #bbbbbb;
+
+    font-size: 14px;
+
+    margin-bottom: 8px;
+}
+
+
+.mein-freundescode {
+
+    font-size: 26px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 10px;
+}
+
+
+.freundescode-info {
+
+    color: #777777;
+
+    font-size: 13px;
+
+    line-height: 1.4;
+}
+
+
+.freund-hinzufuegen {
+
+    background-color: #191919;
+
+    border: 1px solid #333333;
+
+    border-radius: 10px;
+
+    padding: 15px;
+
+    margin-bottom: 20px;
+}
+
+
+.freund-input-zeile {
+
+    display: flex;
+
+    gap: 8px;
+}
+
+
+.freund-input-zeile input {
+
+    flex: 1;
+
+    min-width: 0;
+
+    height: 42px;
+
+    padding: 0 10px;
+
+    background-color: #222222;
+
+    color: white;
+
+    border: 1px solid #444444;
+
+    border-radius: 6px;
+
+    outline: none;
+}
+
+
+.freund-input-zeile button {
+
+    height: 42px;
+
+    padding: 0 14px;
+
+    background-color: #292929;
+
+    color: white;
+
+    border: 1px solid #555555;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+}
+
+
+.freund-input-zeile button:hover {
+
+    background-color: #383838;
+}
+
+
+.freunde-bereich {
+
+    margin-top: 18px;
+}
+
+
+.freunde-bereich h3 {
+
+    margin-bottom: 10px;
+
+    font-size: 17px;
+}
+
+
+.freund-eintrag {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content:
+        space-between;
+
+    gap: 10px;
+
+    background-color: #1b1b1b;
+
+    border: 1px solid #333333;
+
+    border-radius: 8px;
+
+    padding: 12px;
+
+    margin-bottom: 8px;
+}
+
+
+.freund-name {
+
+    font-weight: bold;
+}
+
+
+.freund-email {
+
+    color: #777777;
+
+    font-size: 12px;
+
+    margin-top: 3px;
+}
+
+
+.freund-aktionen {
+
+    display: flex;
+
+    gap: 5px;
+}
+
+
+.freund-akzeptieren,
+.freund-ablehnen,
+.freund-entfernen {
+
+    border: 1px solid #444444;
+
+    border-radius: 6px;
+
+    background-color: #252525;
+
+    color: white;
+
+    padding: 7px 10px;
+
+    cursor: pointer;
+}
+
+
+.freund-akzeptieren:hover,
+.freund-ablehnen:hover,
+.freund-entfernen:hover {
+
+    background-color: #353535;
+}
+
+
+.freunde-hinweis {
+
+    color: #888888;
+
+    text-align: center;
+
+    padding: 15px;
+}
+
+
+/* =====================================================
+   HIDDEN
+===================================================== */
+
+.hidden {
+
+    display:
+        none !important;
+}
+
 
 /* =====================================================
    MOBILE
@@ -822,17 +1248,15 @@ body {
 
 @media (max-width:600px) {
 
-    body {
-        overflow-x: hidden;
-    }
 
-    /*
-       BILD GENAU 25PX WEITER NACH RECHTS
-    */
+    /* =============================
+       BILD 40PX NACH RECHTS
+    ============================= */
 
     .hintergrund-bild {
 
-        left: calc(50% + 50px);
+        left:
+            calc(50% + 40px);
 
         width: 65vw;
 
@@ -841,18 +1265,29 @@ body {
         border-radius: 18px;
     }
 
+
+    /* =============================
+       LOGO
+    ============================= */
+
     .logo {
 
         top: 25px;
 
         left: 63%;
 
-        transform: translateX(-50%);
+        transform:
+            translateX(-50%);
 
         font-size: 52px;
 
         white-space: nowrap;
     }
+
+
+    /* =============================
+       UNTERTITEL
+    ============================= */
 
     .untertitel {
 
@@ -860,7 +1295,8 @@ body {
 
         left: 63%;
 
-        transform: translateX(-50%);
+        transform:
+            translateX(-50%);
 
         width: 75%;
 
@@ -873,9 +1309,20 @@ body {
         white-space: normal;
     }
 
+
+    /* =============================
+       LINIE
+    ============================= */
+
     .strich {
+
         left: 24%;
     }
+
+
+    /* =============================
+       LOGIN
+    ============================= */
 
     .anmelden-button {
 
@@ -888,6 +1335,11 @@ body {
         font-size: 13px;
     }
 
+
+    /* =============================
+       KARTE
+    ============================= */
+
     .karten-button {
 
         top: 58px;
@@ -898,6 +1350,11 @@ body {
 
         font-size: 13px;
     }
+
+
+    /* =============================
+       SPIELE
+    ============================= */
 
     .spiele-button {
 
@@ -910,6 +1367,27 @@ body {
         font-size: 13px;
     }
 
+
+    /* =============================
+       FREUNDE
+    ============================= */
+
+    .freunde-button {
+
+        top: 138px;
+
+        left: 5px;
+
+        padding: 8px 11px;
+
+        font-size: 13px;
+    }
+
+
+    /* =============================
+       BENUTZER
+    ============================= */
+
     .benutzer-button {
 
         top: 18px;
@@ -921,16 +1399,28 @@ body {
         font-size: 13px;
     }
 
+
+    /* =============================
+       LOGIN FENSTER
+    ============================= */
+
     .anmelde-fenster {
 
-        width: calc(100vw - 30px);
+        width:
+            calc(100vw - 30px);
 
-        max-height: calc(100vh - 30px);
+        max-height:
+            calc(100vh - 30px);
 
         overflow-y: auto;
 
         padding: 20px;
     }
+
+
+    /* =============================
+       KARTE
+    ============================= */
 
     .karten-fenster {
 
@@ -939,34 +1429,53 @@ body {
         height: 85%;
     }
 
+
+    /* =============================
+       SPIELE
+    ============================= */
+
     .spiele-fenster {
 
-        width: calc(100vw - 20px);
+        width:
+            calc(100vw - 20px);
 
         padding: 15px;
     }
+
 
     .spiele-auswahl {
 
         grid-template-columns: 1fr;
     }
 
+
     .spiel-auswahl-button {
+
         min-height: 75px;
     }
 
+
+    /* =============================
+       SPIEL
+    ============================= */
+
     .spiel-fenster {
 
-        width: calc(100vw - 12px);
+        width:
+            calc(100vw - 12px);
 
-        max-height: calc(100vh - 12px);
+        max-height:
+            calc(100vh - 12px);
 
         padding: 12px;
     }
 
+
     .spiel-name {
+
         font-size: 20px;
     }
+
 
     .game-canvas {
 
@@ -974,31 +1483,93 @@ body {
 
         height: auto;
     }
-}
 
-.hidden {
-    display: none !important;
+
+    /* =============================
+       FREUNDE
+    ============================= */
+
+    .freunde-fenster {
+
+        width:
+            calc(100vw - 20px);
+
+        max-height:
+            calc(100vh - 20px);
+
+        padding: 15px;
+    }
+
+
+    .freund-input-zeile {
+
+        flex-direction: column;
+    }
+
+
+    .freund-input-zeile button {
+
+        width: 100%;
+    }
+
+
+    .freund-eintrag {
+
+        align-items:
+            flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .freund-aktionen {
+
+        width: 100%;
+    }
+
+
+    .freund-aktionen button {
+
+        flex: 1;
+    }
+
 }
 
 </style>
 
 </head>
 
+
 <body>
 
+
+<!-- =====================================================
+     HINTERGRUNDBILD
+===================================================== -->
+
 <div class="hintergrund-bild"></div>
+
+
+<!-- =====================================================
+     LOGO
+===================================================== -->
 
 <div class="logo">
     NSAH
 </div>
 
+
 <div class="untertitel">
     Nützliche Sparsame Alltags Hilfe
 </div>
 
+
 <div class="strich"></div>
 
-<!-- BUTTONS -->
+
+<!-- =====================================================
+     BUTTONS
+===================================================== -->
 
 <button
     class="anmelden-button"
@@ -1008,12 +1579,14 @@ body {
     Anmelden
 </button>
 
+
 <button
     class="karten-button"
     onclick="kartenOeffnen()"
 >
     🗺️ Karte
 </button>
+
 
 <button
     class="spiele-button"
@@ -1022,15 +1595,30 @@ body {
     🎮 Spiele
 </button>
 
+
+<button
+    class="freunde-button"
+    onclick="freundeOeffnen()"
+>
+    👥 Freunde
+</button>
+
+
 <button
     class="benutzer-button"
     id="benutzerButton"
     onclick="benutzerMenueOeffnen()"
 >
-    👤 <span id="benutzerNameOben">Benutzer</span>
+    👤
+    <span id="benutzerNameOben">
+        Benutzer
+    </span>
 </button>
 
-<!-- BENUTZER MENÜ -->
+
+<!-- =====================================================
+     BENUTZER MENÜ
+===================================================== -->
 
 <div
     class="benutzer-menue"
@@ -1042,10 +1630,12 @@ body {
         id="benutzerName"
     ></div>
 
+
     <div
         class="benutzer-email"
         id="benutzerEmail"
     ></div>
+
 
     <button
         class="abmelden-button"
@@ -1056,7 +1646,10 @@ body {
 
 </div>
 
-<!-- LOGIN -->
+
+<!-- =====================================================
+     LOGIN
+===================================================== -->
 
 <div
     class="modal-hintergrund"
@@ -1071,6 +1664,7 @@ body {
                 NSAH Konto
             </div>
 
+
             <button
                 class="schliessen"
                 onclick="anmeldenSchliessen()"
@@ -1079,6 +1673,7 @@ body {
             </button>
 
         </div>
+
 
         <div class="tabs">
 
@@ -1090,6 +1685,7 @@ body {
                 Anmelden
             </button>
 
+
             <button
                 class="tab"
                 id="registrierenTab"
@@ -1100,12 +1696,18 @@ body {
 
         </div>
 
+
+        <!-- LOGIN -->
+
         <div
             class="formular aktiv"
             id="anmeldenForm"
         >
 
-            <label>E-Mail</label>
+            <label>
+                E-Mail
+            </label>
+
 
             <input
                 type="email"
@@ -1113,13 +1715,18 @@ body {
                 placeholder="Deine E-Mail"
             >
 
-            <label>Passwort</label>
+
+            <label>
+                Passwort
+            </label>
+
 
             <input
                 type="password"
                 id="loginPassword"
                 placeholder="Dein Passwort"
             >
+
 
             <button
                 class="formular-button"
@@ -1128,19 +1735,30 @@ body {
                 Anmelden
             </button>
 
+
             <div class="hinweis">
+
                 Noch kein Konto?
-                Klicke oben auf „Registrieren“.
+
+                Klicke oben auf
+                „Registrieren“.
+
             </div>
 
         </div>
+
+
+        <!-- REGISTRIERUNG -->
 
         <div
             class="formular"
             id="registrierenForm"
         >
 
-            <label>Benutzername</label>
+            <label>
+                Benutzername
+            </label>
+
 
             <input
                 type="text"
@@ -1148,7 +1766,11 @@ body {
                 placeholder="Dein Benutzername"
             >
 
-            <label>E-Mail</label>
+
+            <label>
+                E-Mail
+            </label>
+
 
             <input
                 type="email"
@@ -1156,7 +1778,11 @@ body {
                 placeholder="Deine E-Mail"
             >
 
-            <label>Passwort</label>
+
+            <label>
+                Passwort
+            </label>
+
 
             <input
                 type="password"
@@ -1164,13 +1790,18 @@ body {
                 placeholder="Dein Passwort"
             >
 
-            <label>Passwort wiederholen</label>
+
+            <label>
+                Passwort wiederholen
+            </label>
+
 
             <input
                 type="password"
                 id="registerPassword2"
                 placeholder="Passwort wiederholen"
             >
+
 
             <button
                 class="formular-button"
@@ -1185,7 +1816,10 @@ body {
 
 </div>
 
-<!-- KARTE -->
+
+<!-- =====================================================
+     KARTE
+===================================================== -->
 
 <div
     class="modal-hintergrund"
@@ -1200,6 +1834,7 @@ body {
                 🗺️ NSAH Karte
             </div>
 
+
             <button
                 class="karten-schliessen"
                 onclick="kartenSchliessen()"
@@ -1209,13 +1844,17 @@ body {
 
         </div>
 
+
         <div id="karte"></div>
 
     </div>
 
 </div>
 
-<!-- SPIELE -->
+
+<!-- =====================================================
+     SPIELE
+===================================================== -->
 
 <div
     class="modal-hintergrund"
@@ -1230,6 +1869,7 @@ body {
                 🎮 Spiele
             </div>
 
+
             <button
                 class="spiele-schliessen"
                 onclick="spieleSchliessen()"
@@ -1239,29 +1879,35 @@ body {
 
         </div>
 
+
         <div class="spiele-auswahl">
 
             <button
                 class="spiel-auswahl-button"
                 onclick="spielOeffnen('flappy')"
             >
-                🐦<br>
+                🐦
+                <br>
                 Flappy Bird
             </button>
+
 
             <button
                 class="spiel-auswahl-button"
                 onclick="spielOeffnen('snake')"
             >
-                🐍<br>
+                🐍
+                <br>
                 Snake
             </button>
+
 
             <button
                 class="spiel-auswahl-button"
                 onclick="spielOeffnen('tetris')"
             >
-                🧱<br>
+                🧱
+                <br>
                 Tetris
             </button>
 
@@ -1271,7 +1917,171 @@ body {
 
 </div>
 
-<!-- FLAPPY BIRD -->
+
+<!-- =====================================================
+     FREUNDE
+===================================================== -->
+
+<div
+    class="modal-hintergrund"
+    id="freundeFenster"
+>
+
+    <div class="freunde-fenster">
+
+        <div class="freunde-kopf">
+
+            <div class="freunde-titel">
+                👥 Freunde
+            </div>
+
+
+            <button
+                class="freunde-schliessen"
+                onclick="freundeSchliessen()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- NICHT ANGEMELDET -->
+
+        <div
+            id="freundeNichtAngemeldet"
+            class="freunde-hinweis"
+        >
+
+            Du musst angemeldet sein,
+            um Freunde zu verwenden.
+
+        </div>
+
+
+        <!-- FREUNDE INHALT -->
+
+        <div
+            id="freundeInhalt"
+            class="hidden"
+        >
+
+
+            <!-- FREUNDESCODE -->
+
+            <div class="freundescode-box">
+
+                <div class="freundescode-titel">
+
+                    Dein Freundescode
+
+                </div>
+
+
+                <div
+                    id="meinFreundescode"
+                    class="mein-freundescode"
+                >
+
+                    Wird geladen...
+
+                </div>
+
+
+                <div class="freundescode-info">
+
+                    Gib diesen Code an andere Personen
+                    weiter, damit sie dich hinzufügen können.
+
+                </div>
+
+            </div>
+
+
+            <!-- FREUND HINZUFÜGEN -->
+
+            <div class="freund-hinzufuegen">
+
+                <div class="freundescode-titel">
+
+                    Freund hinzufügen
+
+                </div>
+
+
+                <div class="freund-input-zeile">
+
+                    <input
+                        type="text"
+                        id="freundescodeInput"
+                        placeholder="z.B. NSAH-7K4P2X"
+                        maxlength="11"
+                    >
+
+
+                    <button
+                        onclick="freundHinzufuegen()"
+                    >
+                        Hinzufügen
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ANFRAGEN -->
+
+            <div
+                id="freundschaftsanfragenBereich"
+                class="freunde-bereich"
+            >
+
+                <h3>
+                    📩 Freundschaftsanfragen
+                </h3>
+
+
+                <div
+                    id="freundschaftsanfragen"
+                >
+
+                    Keine neuen Anfragen.
+
+                </div>
+
+            </div>
+
+
+            <!-- FREUNDE -->
+
+            <div class="freunde-bereich">
+
+                <h3>
+                    👥 Meine Freunde
+                </h3>
+
+
+                <div
+                    id="freundeliste"
+                >
+
+                    Du hast noch keine Freunde.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     FLAPPY BIRD
+===================================================== -->
 
 <div
     class="modal-hintergrund"
@@ -1286,6 +2096,7 @@ body {
                 🐦 Flappy Bird
             </div>
 
+
             <button
                 class="spiel-schliessen"
                 onclick="spielSchliessen('flappy')"
@@ -1295,10 +2106,16 @@ body {
 
         </div>
 
+
         <div class="rekord">
+
             Rekord:
-            <span id="flappyRekord">0</span>
+            <span id="flappyRekord">
+                0
+            </span>
+
         </div>
+
 
         <canvas
             id="flappyCanvas"
@@ -1306,6 +2123,7 @@ body {
             width="400"
             height="500"
         ></canvas>
+
 
         <button
             class="game-start"
@@ -1318,7 +2136,10 @@ body {
 
 </div>
 
-<!-- SNAKE -->
+
+<!-- =====================================================
+     SNAKE
+===================================================== -->
 
 <div
     class="modal-hintergrund"
@@ -1333,6 +2154,7 @@ body {
                 🐍 Snake
             </div>
 
+
             <button
                 class="spiel-schliessen"
                 onclick="spielSchliessen('snake')"
@@ -1342,10 +2164,16 @@ body {
 
         </div>
 
+
         <div class="rekord">
+
             Rekord:
-            <span id="snakeRekord">0</span>
+            <span id="snakeRekord">
+                0
+            </span>
+
         </div>
+
 
         <canvas
             id="snakeCanvas"
@@ -1354,29 +2182,46 @@ body {
             height="400"
         ></canvas>
 
+
         <div class="snake-controls">
 
-            <button class="snake-empty"></button>
+            <button class="snake-empty">
+            </button>
 
-            <button onclick="snakeRichtung('up')">
+
+            <button
+                onclick="snakeRichtung('up')"
+            >
                 ⬆️
             </button>
 
-            <button class="snake-empty"></button>
 
-            <button onclick="snakeRichtung('left')">
+            <button class="snake-empty">
+            </button>
+
+
+            <button
+                onclick="snakeRichtung('left')"
+            >
                 ⬅️
             </button>
 
-            <button onclick="snakeRichtung('down')">
+
+            <button
+                onclick="snakeRichtung('down')"
+            >
                 ⬇️
             </button>
 
-            <button onclick="snakeRichtung('right')">
+
+            <button
+                onclick="snakeRichtung('right')"
+            >
                 ➡️
             </button>
 
         </div>
+
 
         <button
             class="game-start"
@@ -1389,7 +2234,10 @@ body {
 
 </div>
 
-<!-- TETRIS -->
+
+<!-- =====================================================
+     TETRIS
+===================================================== -->
 
 <div
     class="modal-hintergrund"
@@ -1404,6 +2252,7 @@ body {
                 🧱 Tetris
             </div>
 
+
             <button
                 class="spiel-schliessen"
                 onclick="spielSchliessen('tetris')"
@@ -1413,10 +2262,16 @@ body {
 
         </div>
 
+
         <div class="rekord">
+
             Rekord:
-            <span id="tetrisRekord">0</span>
+            <span id="tetrisRekord">
+                0
+            </span>
+
         </div>
+
 
         <canvas
             id="tetrisCanvas"
@@ -1425,25 +2280,31 @@ body {
             height="480"
         ></canvas>
 
+
         <div class="tetris-controls">
 
-            <button onclick="tetrisMove(-1)">
+            <button
+                onclick="tetrisMove(-1)"
+            >
                 ⬅️
             </button>
 
-            <button onclick="tetrisDrop()">
+
+            <button
+                onclick="tetrisDrop()"
+            >
                 ⬇️
             </button>
 
-            <button onclick="tetrisRotate()">
-                🔄
-            </button>
 
-            <button onclick="tetrisMove(1)">
+            <button
+                onclick="tetrisMove(1)"
+            >
                 ➡️
             </button>
 
         </div>
+
 
         <button
             class="game-start"
@@ -1456,9 +2317,15 @@ body {
 
 </div>
 
+
+<!-- =====================================================
+     LEAFLET
+===================================================== -->
+
 <script
-src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
 ></script>
+
 
 <script>
 
@@ -1468,6 +2335,7 @@ src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
 
 let aktuellerBenutzer = null;
 
+
 /* =====================================================
    REKORDE
 ===================================================== */
@@ -1476,8 +2344,14 @@ function rekordLesen(spiel) {
 
     const key =
         aktuellerBenutzer
-        ? "nsah_" + aktuellerBenutzer + "_" + spiel
-        : "nsah_guest_" + spiel;
+        ? "nsah_" +
+          aktuellerBenutzer +
+          "_" +
+          spiel
+
+        : "nsah_guest_" +
+          spiel;
+
 
     return Number(
         localStorage.getItem(key) || 0
@@ -1485,11 +2359,15 @@ function rekordLesen(spiel) {
 }
 
 
-function rekordSpeichern(spiel, wert) {
+function rekordSpeichern(
+    spiel,
+    wert
+) {
 
     if (!aktuellerBenutzer) {
         return;
     }
+
 
     const key =
         "nsah_" +
@@ -1497,8 +2375,10 @@ function rekordSpeichern(spiel, wert) {
         "_" +
         spiel;
 
+
     const alt =
         rekordLesen(spiel);
+
 
     if (wert > alt) {
 
@@ -1507,6 +2387,7 @@ function rekordSpeichern(spiel, wert) {
             wert
         );
 
+
         updateRekordAnzeige(
             spiel
         );
@@ -1514,12 +2395,16 @@ function rekordSpeichern(spiel, wert) {
 }
 
 
-function updateRekordAnzeige(spiel) {
+function updateRekordAnzeige(
+    spiel
+) {
 
     const element =
         document.getElementById(
-            spiel + "Rekord"
+            spiel +
+            "Rekord"
         );
+
 
     if (element) {
 
@@ -1528,11 +2413,13 @@ function updateRekordAnzeige(spiel) {
     }
 }
 
+
 /* =====================================================
    KARTE
 ===================================================== */
 
 let karte = null;
+
 let standortMarker = null;
 
 
@@ -1540,7 +2427,9 @@ function kartenOeffnen() {
 
     document.getElementById(
         "kartenFenster"
-    ).style.display = "block";
+    ).style.display =
+        "block";
+
 
     if (!karte) {
 
@@ -1548,33 +2437,43 @@ function kartenOeffnen() {
             L.map(
                 "karte",
                 {
-                    worldCopyJump: false,
+
+                    worldCopyJump:
+                        false,
 
                     maxBounds: [
                         [-90,-180],
                         [90,180]
                     ],
 
-                    maxBoundsViscosity: 1.0
+                    maxBoundsViscosity:
+                        1.0
+
                 }
             ).setView(
                 [20,0],
                 2
             );
 
+
         L.tileLayer(
             "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             {
+
                 maxZoom: 19,
 
                 noWrap: true,
 
                 attribution:
                     "&copy; OpenStreetMap-Mitwirkende"
+
             }
         ).addTo(karte);
 
-        if (navigator.geolocation) {
+
+        if (
+            navigator.geolocation
+        ) {
 
             navigator.geolocation.getCurrentPosition(
 
@@ -1586,22 +2485,29 @@ function kartenOeffnen() {
                     const lon =
                         position.coords.longitude;
 
+
                     karte.setView(
                         [lat,lon],
                         13
                     );
 
-                    if (standortMarker) {
+
+                    if (
+                        standortMarker
+                    ) {
 
                         karte.removeLayer(
                             standortMarker
                         );
+
                     }
+
 
                     standortMarker =
                         L.marker(
                             [lat,lon]
                         ).addTo(karte);
+
 
                     standortMarker
                         .bindPopup(
@@ -1618,15 +2524,19 @@ function kartenOeffnen() {
                     );
 
                 }
+
             );
         }
     }
+
 
     setTimeout(
         function() {
 
             if (karte) {
+
                 karte.invalidateSize();
+
             }
 
         },
@@ -1639,18 +2549,21 @@ function kartenSchliessen() {
 
     document.getElementById(
         "kartenFenster"
-    ).style.display = "none";
+    ).style.display =
+        "none";
 }
 
+
 /* =====================================================
-   SPIELE MENÜ
+   SPIELE
 ===================================================== */
 
 function spieleOeffnen() {
 
     document.getElementById(
         "spieleFenster"
-    ).style.display = "block";
+    ).style.display =
+        "block";
 }
 
 
@@ -1658,17 +2571,24 @@ function spieleSchliessen() {
 
     document.getElementById(
         "spieleFenster"
-    ).style.display = "none";
+    ).style.display =
+        "none";
 }
 
 
-function spielOeffnen(spiel) {
+function spielOeffnen(
+    spiel
+) {
 
     spieleSchliessen();
 
+
     document.getElementById(
-        spiel + "Fenster"
-    ).style.display = "block";
+        spiel +
+        "Fenster"
+    ).style.display =
+        "block";
+
 
     updateRekordAnzeige(
         spiel
@@ -1676,24 +2596,44 @@ function spielOeffnen(spiel) {
 }
 
 
-function spielSchliessen(spiel) {
+function spielSchliessen(
+    spiel
+) {
 
     document.getElementById(
-        spiel + "Fenster"
-    ).style.display = "none";
+        spiel +
+        "Fenster"
+    ).style.display =
+        "none";
 
-    if (spiel === "flappy") {
+
+    if (
+        spiel === "flappy"
+    ) {
+
         flappyStop();
+
     }
 
-    if (spiel === "snake") {
+
+    if (
+        spiel === "snake"
+    ) {
+
         snakeStop();
+
     }
 
-    if (spiel === "tetris") {
+
+    if (
+        spiel === "tetris"
+    ) {
+
         tetrisStop();
+
     }
 }
+
 
 /* =====================================================
    FLAPPY BIRD
@@ -1704,43 +2644,62 @@ const flappyCanvas =
         "flappyCanvas"
     );
 
+
 const flappyCtx =
-    flappyCanvas.getContext("2d");
+    flappyCanvas.getContext(
+        "2d"
+    );
 
 
 let flappyBird;
+
 let flappyPipes;
+
 let flappyScore;
-let flappyRunning = false;
-let flappyAnimation = null;
+
+let flappyRunning =
+    false;
+
+let flappyAnimation =
+    null;
 
 
 function flappyStart() {
 
     flappyStop();
 
+
     flappyBird = {
 
         x: 80,
+
         y: 230,
 
         width: 25,
+
         height: 25,
 
         velocity: 0
+
     };
+
 
     flappyPipes = [];
 
+
     flappyScore = 0;
 
-    flappyRunning = true;
+
+    flappyRunning =
+        true;
+
 
     flappyPipes.push(
-        flappyNeuePipe(430)
+        flappyNeuePipe(
+            430
+        )
     );
 
-    flappyZeichnen();
 
     flappyAnimation =
         requestAnimationFrame(
@@ -1753,9 +2712,12 @@ function flappyNeuePipe(x) {
 
     const gap = 150;
 
+
     const top =
         70 +
-        Math.random() * 230;
+        Math.random() *
+        230;
+
 
     return {
 
@@ -1769,6 +2731,7 @@ function flappyNeuePipe(x) {
             top + gap,
 
         passed: false
+
     };
 }
 
@@ -1779,10 +2742,14 @@ function flappyLoop() {
         return;
     }
 
-    flappyBird.velocity += 0.45;
+
+    flappyBird.velocity +=
+        0.45;
+
 
     flappyBird.y +=
         flappyBird.velocity;
+
 
     for (
         let i = 0;
@@ -1793,24 +2760,33 @@ function flappyLoop() {
         const pipe =
             flappyPipes[i];
 
+
         pipe.x -= 2.5;
+
 
         if (
             !pipe.passed &&
-            pipe.x + pipe.width <
+            pipe.x +
+            pipe.width <
             flappyBird.x
         ) {
 
-            pipe.passed = true;
+            pipe.passed =
+                true;
+
 
             flappyScore++;
+
 
             rekordSpeichern(
                 "flappy",
                 flappyScore
             );
+
         }
+
     }
+
 
     if (
         flappyPipes.length === 0 ||
@@ -1820,15 +2796,22 @@ function flappyLoop() {
     ) {
 
         flappyPipes.push(
-            flappyNeuePipe(430)
+            flappyNeuePipe(
+                430
+            )
         );
+
     }
+
 
     flappyPipes =
         flappyPipes.filter(
             pipe =>
-                pipe.x + pipe.width > 0
+                pipe.x +
+                pipe.width >
+                0
         );
+
 
     if (
         flappyBird.y < 0 ||
@@ -1842,19 +2825,24 @@ function flappyLoop() {
         return;
     }
 
+
     for (
         const pipe of flappyPipes
     ) {
 
         if (
             flappyBird.x <
-                pipe.x + pipe.width &&
+                pipe.x +
+                pipe.width &&
+
             flappyBird.x +
                 flappyBird.width >
                 pipe.x &&
+
             (
                 flappyBird.y <
                     pipe.top ||
+
                 flappyBird.y +
                     flappyBird.height >
                     pipe.bottom
@@ -1867,7 +2855,9 @@ function flappyLoop() {
         }
     }
 
+
     flappyZeichnen();
+
 
     flappyAnimation =
         requestAnimationFrame(
@@ -1885,8 +2875,10 @@ function flappyZeichnen() {
         flappyCanvas.height
     );
 
+
     flappyCtx.fillStyle =
         "#111111";
+
 
     flappyCtx.fillRect(
         0,
@@ -1895,12 +2887,10 @@ function flappyZeichnen() {
         flappyCanvas.height
     );
 
-    if (!flappyBird) {
-        return;
-    }
 
     flappyCtx.fillStyle =
         "white";
+
 
     flappyCtx.fillRect(
         flappyBird.x,
@@ -1909,11 +2899,13 @@ function flappyZeichnen() {
         flappyBird.height
     );
 
+
     flappyCtx.fillStyle =
         "#555555";
 
+
     for (
-        const pipe of flappyPipes || []
+        const pipe of flappyPipes
     ) {
 
         flappyCtx.fillRect(
@@ -1923,6 +2915,7 @@ function flappyZeichnen() {
             pipe.top
         );
 
+
         flappyCtx.fillRect(
             pipe.x,
             pipe.bottom,
@@ -1930,16 +2923,20 @@ function flappyZeichnen() {
             flappyCanvas.height -
             pipe.bottom
         );
+
     }
+
 
     flappyCtx.fillStyle =
         "white";
 
+
     flappyCtx.font =
         "bold 28px Arial";
 
+
     flappyCtx.fillText(
-        flappyScore || 0,
+        flappyScore,
         20,
         40
     );
@@ -1949,9 +2946,12 @@ function flappyZeichnen() {
 function flappyFlap() {
 
     if (!flappyRunning) {
+
         flappyStart();
+
         return;
     }
+
 
     flappyBird.velocity =
         -7;
@@ -1960,7 +2960,9 @@ function flappyFlap() {
 
 function flappyGameOver() {
 
-    flappyRunning = false;
+    flappyRunning =
+        false;
+
 
     if (flappyAnimation) {
 
@@ -1968,19 +2970,23 @@ function flappyGameOver() {
             flappyAnimation
         );
 
-        flappyAnimation = null;
     }
 
+
     flappyZeichnen();
+
 
     flappyCtx.fillStyle =
         "white";
 
+
     flappyCtx.font =
         "bold 30px Arial";
 
+
     flappyCtx.textAlign =
         "center";
+
 
     flappyCtx.fillText(
         "Game Over",
@@ -1988,14 +2994,17 @@ function flappyGameOver() {
         flappyCanvas.height / 2
     );
 
+
     flappyCtx.font =
         "18px Arial";
+
 
     flappyCtx.fillText(
         "Drücke Spielen für eine neue Runde",
         flappyCanvas.width / 2,
         flappyCanvas.height / 2 + 35
     );
+
 
     flappyCtx.textAlign =
         "left";
@@ -2004,7 +3013,9 @@ function flappyGameOver() {
 
 function flappyStop() {
 
-    flappyRunning = false;
+    flappyRunning =
+        false;
+
 
     if (flappyAnimation) {
 
@@ -2012,7 +3023,8 @@ function flappyStop() {
             flappyAnimation
         );
 
-        flappyAnimation = null;
+        flappyAnimation =
+            null;
     }
 }
 
@@ -2024,10 +3036,13 @@ document.addEventListener(
         if (
             document.getElementById(
                 "flappyFenster"
-            ).style.display !== "block"
+            ).style.display !==
+            "block"
         ) {
+
             return;
         }
+
 
         if (
             event.code === "Space" ||
@@ -2038,19 +3053,20 @@ document.addEventListener(
 
             flappyFlap();
         }
+
     }
 );
 
 
 flappyCanvas.addEventListener(
     "pointerdown",
-    function(event) {
-
-        event.preventDefault();
+    function() {
 
         flappyFlap();
+
     }
 );
+
 
 /* =====================================================
    SNAKE
@@ -2061,38 +3077,42 @@ const snakeCanvas =
         "snakeCanvas"
     );
 
+
 const snakeCtx =
-    snakeCanvas.getContext("2d");
+    snakeCanvas.getContext(
+        "2d"
+    );
+
 
 const snakeGrid = 20;
+
 
 const snakeCell =
     snakeCanvas.width /
     snakeGrid;
 
-let snake = [];
-let snakeFood = null;
 
-let snakeDirection =
-    {
-        x: 1,
-        y: 0
-    };
+let snake;
 
-let snakeNextDirection =
-    {
-        x: 1,
-        y: 0
-    };
+let snakeFood;
+
+let snakeDirection;
+
+let snakeNextDirection;
 
 let snakeScore = 0;
-let snakeRunning = false;
-let snakeTimer = null;
+
+let snakeRunning =
+    false;
+
+let snakeTimer =
+    null;
 
 
 function snakeStart() {
 
     snakeStop();
+
 
     snake = [
 
@@ -2113,25 +3133,35 @@ function snakeStart() {
 
     ];
 
-    snakeDirection =
-        {
-            x: 1,
-            y: 0
-        };
 
-    snakeNextDirection =
-        {
-            x: 1,
-            y: 0
-        };
+    snakeDirection = {
+
+        x: 1,
+        y: 0
+
+    };
+
+
+    snakeNextDirection = {
+
+        x: 1,
+        y: 0
+
+    };
+
 
     snakeScore = 0;
 
-    snakeRunning = true;
+
+    snakeRunning =
+        true;
+
 
     snakeNeueNahrung();
 
+
     snakeZeichnen();
+
 
     snakeTimer =
         setInterval(
@@ -2158,13 +3188,16 @@ function snakeNeueNahrung() {
                     Math.random() *
                     snakeGrid
                 )
+
         };
 
     } while (
         snake.some(
             teil =>
-                teil.x === snakeFood.x &&
-                teil.y === snakeFood.y
+                teil.x ===
+                    snakeFood.x &&
+                teil.y ===
+                    snakeFood.y
         )
     );
 }
@@ -2176,8 +3209,10 @@ function snakeLoop() {
         return;
     }
 
+
     snakeDirection =
         snakeNextDirection;
+
 
     const kopf = {
 
@@ -2188,7 +3223,9 @@ function snakeLoop() {
         y:
             snake[0].y +
             snakeDirection.y
+
     };
+
 
     if (
         kopf.x < 0 ||
@@ -2202,37 +3239,25 @@ function snakeLoop() {
         return;
     }
 
-    /*
-       Der letzte Teil wird nicht als
-       Kollision gewertet, wenn die Schlange
-       ihn im selben Zug verlässt.
-    */
 
-    const trifftKoerper =
-        snake
-            .slice(
-                0,
-                snake[0].x === snakeFood?.x &&
-                snake[0].y === snakeFood?.y
-                    ? snake.length
-                    : snake.length - 1
-            )
-            .some(
-                teil =>
-                    teil.x === kopf.x &&
-                    teil.y === kopf.y
-            );
-
-    if (trifftKoerper) {
+    if (
+        snake.some(
+            teil =>
+                teil.x === kopf.x &&
+                teil.y === kopf.y
+        )
+    ) {
 
         snakeGameOver();
 
         return;
     }
 
+
     snake.unshift(
         kopf
     );
+
 
     if (
         kopf.x === snakeFood.x &&
@@ -2241,17 +3266,21 @@ function snakeLoop() {
 
         snakeScore++;
 
+
         rekordSpeichern(
             "snake",
             snakeScore
         );
+
 
         snakeNeueNahrung();
 
     } else {
 
         snake.pop();
+
     }
+
 
     snakeZeichnen();
 }
@@ -2266,8 +3295,10 @@ function snakeZeichnen() {
         snakeCanvas.height
     );
 
+
     snakeCtx.fillStyle =
         "#050505";
+
 
     snakeCtx.fillRect(
         0,
@@ -2276,41 +3307,56 @@ function snakeZeichnen() {
         snakeCanvas.height
     );
 
-    if (snakeFood) {
-
-        snakeCtx.fillStyle =
-            "white";
-
-        snakeCtx.fillRect(
-            snakeFood.x * snakeCell + 3,
-            snakeFood.y * snakeCell + 3,
-            snakeCell - 6,
-            snakeCell - 6
-        );
-    }
-
-    snake.forEach(
-        function(teil,index) {
-
-            snakeCtx.fillStyle =
-                index === 0
-                    ? "#ffffff"
-                    : "#888888";
-
-            snakeCtx.fillRect(
-                teil.x * snakeCell + 2,
-                teil.y * snakeCell + 2,
-                snakeCell - 4,
-                snakeCell - 4
-            );
-        }
-    );
 
     snakeCtx.fillStyle =
         "white";
 
+
+    snakeCtx.fillRect(
+        snakeFood.x *
+            snakeCell + 3,
+
+        snakeFood.y *
+            snakeCell + 3,
+
+        snakeCell - 6,
+
+        snakeCell - 6
+    );
+
+
+    snakeCtx.fillStyle =
+        "#888888";
+
+
+    snake.forEach(
+        function(teil) {
+
+            snakeCtx.fillRect(
+
+                teil.x *
+                    snakeCell + 2,
+
+                teil.y *
+                    snakeCell + 2,
+
+                snakeCell - 4,
+
+                snakeCell - 4
+
+            );
+
+        }
+    );
+
+
+    snakeCtx.fillStyle =
+        "white";
+
+
     snakeCtx.font =
         "bold 20px Arial";
+
 
     snakeCtx.fillText(
         snakeScore,
@@ -2320,87 +3366,92 @@ function snakeZeichnen() {
 }
 
 
-function snakeRichtung(richtung) {
+function snakeRichtung(
+    richtung
+) {
 
-    if (!snakeRunning) {
+    if (
+        !snakeRunning
+    ) {
+
         return;
     }
 
+
     const richtungen = {
 
-        up:
-            {
-                x: 0,
-                y: -1
-            },
+        up: {
+            x: 0,
+            y: -1
+        },
 
-        down:
-            {
-                x: 0,
-                y: 1
-            },
+        down: {
+            x: 0,
+            y: 1
+        },
 
-        left:
-            {
-                x: -1,
-                y: 0
-            },
+        left: {
+            x: -1,
+            y: 0
+        },
 
-        right:
-            {
-                x: 1,
-                y: 0
-            }
+        right: {
+            x: 1,
+            y: 0
+        }
+
     };
 
+
     const neu =
-        richtungen[richtung];
+        richtungen[
+            richtung
+        ];
+
 
     if (!neu) {
         return;
     }
 
+
     if (
-        neu.x === -snakeDirection.x &&
-        neu.y === -snakeDirection.y
+        neu.x ===
+            -snakeDirection.x &&
+        neu.y ===
+            -snakeDirection.y
     ) {
+
         return;
     }
 
-    /*
-       Mehrere Richtungswechsel innerhalb
-       eines Frames werden verhindert.
-    */
 
-    if (
-        neu.x === -snakeNextDirection.x &&
-        neu.y === -snakeNextDirection.y
-    ) {
-        return;
-    }
-
-    snakeNextDirection = neu;
+    snakeNextDirection =
+        neu;
 }
 
 
 function snakeGameOver() {
 
-    snakeRunning = false;
+    snakeRunning =
+        false;
+
 
     clearInterval(
         snakeTimer
     );
 
-    snakeTimer = null;
 
     snakeCtx.fillStyle =
         "white";
 
+
     snakeCtx.font =
         "bold 30px Arial";
 
+
     snakeCtx.textAlign =
         "center";
+
 
     snakeCtx.fillText(
         "Game Over",
@@ -2408,14 +3459,17 @@ function snakeGameOver() {
         snakeCanvas.height / 2
     );
 
+
     snakeCtx.font =
         "18px Arial";
+
 
     snakeCtx.fillText(
         "Drücke Spielen für eine neue Runde",
         snakeCanvas.width / 2,
         snakeCanvas.height / 2 + 35
     );
+
 
     snakeCtx.textAlign =
         "left";
@@ -2424,13 +3478,17 @@ function snakeGameOver() {
 
 function snakeStop() {
 
-    snakeRunning = false;
+    snakeRunning =
+        false;
+
 
     clearInterval(
         snakeTimer
     );
 
-    snakeTimer = null;
+
+    snakeTimer =
+        null;
 }
 
 
@@ -2441,16 +3499,22 @@ document.addEventListener(
         if (
             document.getElementById(
                 "snakeFenster"
-            ).style.display !== "block"
+            ).style.display !==
+            "block"
         ) {
+
             return;
         }
+
 
         const keys = {
 
             ArrowUp: "up",
+
             ArrowDown: "down",
+
             ArrowLeft: "left",
+
             ArrowRight: "right",
 
             w: "up",
@@ -2462,18 +3526,25 @@ document.addEventListener(
             S: "down",
             A: "left",
             D: "right"
+
         };
 
-        if (keys[event.key]) {
+
+        if (
+            keys[event.key]
+        ) {
 
             event.preventDefault();
+
 
             snakeRichtung(
                 keys[event.key]
             );
         }
+
     }
 );
+
 
 /* =====================================================
    TETRIS
@@ -2484,23 +3555,32 @@ const tetrisCanvas =
         "tetrisCanvas"
     );
 
+
 const tetrisCtx =
-    tetrisCanvas.getContext("2d");
+    tetrisCanvas.getContext(
+        "2d"
+    );
+
 
 const TETRIS_COLS = 10;
+
 const TETRIS_ROWS = 20;
+
 const TETRIS_SIZE = 24;
 
-let tetrisBoard = [];
-let tetrisPiece = null;
+
+let tetrisBoard;
+
+let tetrisPiece;
+
 let tetrisScore = 0;
-let tetrisRunning = false;
-let tetrisTimer = null;
 
+let tetrisRunning =
+    false;
 
-/* =====================================================
-   TETRIS FIGUREN
-===================================================== */
+let tetrisTimer =
+    null;
+
 
 const TETRIS_SHAPES = [
 
@@ -2541,13 +3621,10 @@ const TETRIS_SHAPES = [
 ];
 
 
-/* =====================================================
-   TETRIS START
-===================================================== */
-
 function tetrisStart() {
 
     tetrisStop();
+
 
     tetrisBoard =
         Array.from(
@@ -2561,22 +3638,19 @@ function tetrisStart() {
                 ).fill(0)
         );
 
+
     tetrisScore = 0;
 
-    tetrisRunning = true;
+
+    tetrisRunning =
+        true;
+
 
     tetrisNeueFigur();
 
-    if (!tetrisRunning) {
-        return;
-    }
 
     tetrisZeichnen();
 
-    /*
-       Gleichmäßiger Fall.
-       Kein ruckartiges Hochspringen.
-    */
 
     tetrisTimer =
         setInterval(
@@ -2586,10 +3660,6 @@ function tetrisStart() {
 }
 
 
-/* =====================================================
-   NEUE TETRIS FIGUR
-===================================================== */
-
 function tetrisNeueFigur() {
 
     const index =
@@ -2598,11 +3668,15 @@ function tetrisNeueFigur() {
             TETRIS_SHAPES.length
         );
 
+
     const shape =
-        TETRIS_SHAPES[index].map(
+        TETRIS_SHAPES[
+            index
+        ].map(
             row =>
                 row.slice()
         );
+
 
     tetrisPiece = {
 
@@ -2617,14 +3691,9 @@ function tetrisNeueFigur() {
             ),
 
         y: 0
+
     };
 
-    /*
-       WICHTIG:
-       Wenn der neue Stein bereits oben
-       nicht platziert werden kann,
-       ist das Spiel sofort vorbei.
-    */
 
     if (
         tetrisKollision(
@@ -2635,17 +3704,9 @@ function tetrisNeueFigur() {
     ) {
 
         tetrisGameOver();
-
-        return false;
     }
-
-    return true;
 }
 
-
-/* =====================================================
-   TETRIS KOLLISION
-===================================================== */
 
 function tetrisKollision(
     x,
@@ -2665,15 +3726,21 @@ function tetrisKollision(
             col++
         ) {
 
-            if (!shape[row][col]) {
+            if (
+                !shape[row][col]
+            ) {
+
                 continue;
             }
+
 
             const bx =
                 x + col;
 
+
             const by =
                 y + row;
+
 
             if (
                 bx < 0 ||
@@ -2684,6 +3751,7 @@ function tetrisKollision(
                 return true;
             }
 
+
             if (
                 by >= 0 &&
                 tetrisBoard[by][bx]
@@ -2691,22 +3759,21 @@ function tetrisKollision(
 
                 return true;
             }
+
         }
     }
+
 
     return false;
 }
 
-
-/* =====================================================
-   TETRIS TICK
-===================================================== */
 
 function tetrisTick() {
 
     if (!tetrisRunning) {
         return;
     }
+
 
     if (
         !tetrisKollision(
@@ -2724,38 +3791,28 @@ function tetrisTick() {
 
         tetrisLinien();
 
-        /*
-           Wenn oben kein Platz mehr ist,
-           beendet tetrisNeueFigur() das Spiel.
-        */
+        tetrisNeueFigur();
 
-        if (
-            tetrisRunning
-        ) {
-
-            tetrisNeueFigur();
-        }
     }
 
-    if (tetrisRunning) {
-        tetrisZeichnen();
-    }
+
+    tetrisZeichnen();
 }
 
 
-/* =====================================================
-   TETRIS LINKS / RECHTS
-===================================================== */
-
-function tetrisMove(richtung) {
+function tetrisMove(
+    richtung
+) {
 
     if (!tetrisRunning) {
         return;
     }
 
+
     const neuesX =
         tetrisPiece.x +
         richtung;
+
 
     if (
         !tetrisKollision(
@@ -2768,20 +3825,18 @@ function tetrisMove(richtung) {
         tetrisPiece.x =
             neuesX;
 
+
         tetrisZeichnen();
     }
 }
 
-
-/* =====================================================
-   TETRIS SCHNELL FALLEN
-===================================================== */
 
 function tetrisDrop() {
 
     if (!tetrisRunning) {
         return;
     }
+
 
     if (
         !tetrisKollision(
@@ -2799,68 +3854,67 @@ function tetrisDrop() {
 
         tetrisLinien();
 
-        if (tetrisRunning) {
-            tetrisNeueFigur();
-        }
+        tetrisNeueFigur();
+
     }
 
-    if (tetrisRunning) {
-        tetrisZeichnen();
-    }
+
+    tetrisZeichnen();
 }
 
 
-/* =====================================================
-   TETRIS DREHEN
-===================================================== */
-
-function tetrisRotateMatrix(matrix) {
-
-    const neueMatrix = [];
-
-    for (
-        let x = 0;
-        x < matrix[0].length;
-        x++
-    ) {
-
-        const zeile = [];
-
-        for (
-            let y = matrix.length - 1;
-            y >= 0;
-            y--
-        ) {
-
-            zeile.push(
-                matrix[y][x]
-            );
-        }
-
-        neueMatrix.push(
-            zeile
-        );
-    }
-
-    return neueMatrix;
-}
-
-
-function tetrisRotate() {
+function tetrisDrehen() {
 
     if (!tetrisRunning) {
         return;
     }
 
+
+    const alteForm =
+        tetrisPiece.shape;
+
+
+    const hoehe =
+        alteForm.length;
+
+
+    const breite =
+        alteForm[0].length;
+
+
     const neueForm =
-        tetrisRotateMatrix(
-            tetrisPiece.shape
+        Array.from(
+            {
+                length:
+                    breite
+            },
+            () =>
+                Array(
+                    hoehe
+                ).fill(0)
         );
 
-    /*
-       Erst prüfen, ob die gedrehte Figur
-       an dieser Position hineinpasst.
-    */
+
+    for (
+        let y = 0;
+        y < hoehe;
+        y++
+    ) {
+
+        for (
+            let x = 0;
+            x < breite;
+            x++
+        ) {
+
+            neueForm[x][
+                hoehe - 1 - y
+            ] =
+                alteForm[y][x];
+
+        }
+    }
+
 
     if (
         !tetrisKollision(
@@ -2875,58 +3929,17 @@ function tetrisRotate() {
 
         tetrisZeichnen();
 
-        return;
     }
 
-    /*
-       Kleines "Wall Kick":
-       Wenn der Stein direkt an einer Wand
-       steht, versuchen wir ihn 1 Feld
-       nach links oder rechts zu verschieben.
-    */
-
-    const versuche = [
-        -1,
-        1,
-        -2,
-        2
-    ];
-
-    for (
-        const offset of versuche
-    ) {
-
-        if (
-            !tetrisKollision(
-                tetrisPiece.x + offset,
-                tetrisPiece.y,
-                neueForm
-            )
-        ) {
-
-            tetrisPiece.x +=
-                offset;
-
-            tetrisPiece.shape =
-                neueForm;
-
-            tetrisZeichnen();
-
-            return;
-        }
-    }
 }
 
-
-/* =====================================================
-   TETRIS FESTSETZEN
-===================================================== */
 
 function tetrisFestsetzen() {
 
     for (
         let row = 0;
-        row < tetrisPiece.shape.length;
+        row <
+        tetrisPiece.shape.length;
         row++
     ) {
 
@@ -2945,9 +3958,11 @@ function tetrisFestsetzen() {
                     tetrisPiece.y +
                     row;
 
+
                 const x =
                     tetrisPiece.x +
                     col;
+
 
                 if (
                     y >= 0 &&
@@ -2956,34 +3971,39 @@ function tetrisFestsetzen() {
                     x < TETRIS_COLS
                 ) {
 
-                    tetrisBoard[y][x] = 1;
+                    tetrisBoard[y][x] =
+                        1;
+
                 }
+
             }
+
         }
+
     }
 }
 
-
-/* =====================================================
-   TETRIS LINIEN
-===================================================== */
 
 function tetrisLinien() {
 
     let geloescht = 0;
 
+
     for (
         let row =
             TETRIS_ROWS - 1;
+
         row >= 0;
+
         row--
     ) {
 
         if (
-            tetrisBoard[row].every(
-                feld =>
-                    feld === 1
-            )
+            tetrisBoard[row]
+                .every(
+                    feld =>
+                        feld === 1
+                )
         ) {
 
             tetrisBoard.splice(
@@ -2991,11 +4011,13 @@ function tetrisLinien() {
                 1
             );
 
+
             tetrisBoard.unshift(
                 Array(
                     TETRIS_COLS
                 ).fill(0)
             );
+
 
             geloescht++;
 
@@ -3003,23 +4025,14 @@ function tetrisLinien() {
         }
     }
 
-    if (geloescht > 0) {
 
-        /*
-           Punkte für gelöschte Linien.
-        */
-
-        const punkte = {
-
-            1: 10,
-            2: 25,
-            3: 45,
-            4: 70
-        };
+    if (
+        geloescht > 0
+    ) {
 
         tetrisScore +=
-            punkte[geloescht] ||
-            geloescht * 20;
+            geloescht * 10;
+
 
         rekordSpeichern(
             "tetris",
@@ -3028,10 +4041,6 @@ function tetrisLinien() {
     }
 }
 
-
-/* =====================================================
-   TETRIS ZEICHNEN
-===================================================== */
 
 function tetrisZeichnen() {
 
@@ -3042,8 +4051,10 @@ function tetrisZeichnen() {
         tetrisCanvas.height
     );
 
+
     tetrisCtx.fillStyle =
         "#050505";
+
 
     tetrisCtx.fillRect(
         0,
@@ -3052,9 +4063,6 @@ function tetrisZeichnen() {
         tetrisCanvas.height
     );
 
-    /*
-       Fest gesetzte Steine
-    */
 
     for (
         let row = 0;
@@ -3072,19 +4080,21 @@ function tetrisZeichnen() {
                 tetrisBoard[row][col]
             ) {
 
-                tetrisBlock(
+                tetrisTetrisBlock(
                     col,
                     row
                 );
+
             }
+
         }
+
     }
 
-    /*
-       Aktueller Stein
-    */
 
-    if (tetrisPiece) {
+    if (
+        tetrisPiece
+    ) {
 
         for (
             let row = 0;
@@ -3104,26 +4114,28 @@ function tetrisZeichnen() {
                     tetrisPiece.shape[row][col]
                 ) {
 
-                    tetrisBlock(
+                    tetrisTetrisBlock(
                         tetrisPiece.x +
                         col,
 
                         tetrisPiece.y +
                         row
                     );
+
                 }
+
             }
+
         }
     }
 
-    /*
-       Spielfeldlinien
-    */
 
     tetrisCtx.strokeStyle =
         "#181818";
 
+
     tetrisCtx.lineWidth = 1;
+
 
     for (
         let x = 0;
@@ -3133,10 +4145,12 @@ function tetrisZeichnen() {
 
         tetrisCtx.beginPath();
 
+
         tetrisCtx.moveTo(
             x * TETRIS_SIZE,
             0
         );
+
 
         tetrisCtx.lineTo(
             x * TETRIS_SIZE,
@@ -3144,8 +4158,10 @@ function tetrisZeichnen() {
             TETRIS_SIZE
         );
 
+
         tetrisCtx.stroke();
     }
+
 
     for (
         let y = 0;
@@ -3155,25 +4171,32 @@ function tetrisZeichnen() {
 
         tetrisCtx.beginPath();
 
+
         tetrisCtx.moveTo(
             0,
             y * TETRIS_SIZE
         );
 
+
         tetrisCtx.lineTo(
             TETRIS_COLS *
             TETRIS_SIZE,
+
             y * TETRIS_SIZE
         );
+
 
         tetrisCtx.stroke();
     }
 
+
     tetrisCtx.fillStyle =
         "white";
 
+
     tetrisCtx.font =
         "bold 18px Arial";
+
 
     tetrisCtx.fillText(
         tetrisScore,
@@ -3183,17 +4206,14 @@ function tetrisZeichnen() {
 }
 
 
-/* =====================================================
-   TETRIS BLOCK
-===================================================== */
-
-function tetrisBlock(
+function tetrisTetrisBlock(
     x,
     y
 ) {
 
     tetrisCtx.fillStyle =
         "#888888";
+
 
     tetrisCtx.fillRect(
         x * TETRIS_SIZE + 2,
@@ -3204,48 +4224,35 @@ function tetrisBlock(
 }
 
 
-/* =====================================================
-   TETRIS GAME OVER
-===================================================== */
-
 function tetrisGameOver() {
 
-    if (!tetrisRunning) {
-        return;
-    }
+    tetrisRunning =
+        false;
 
-    tetrisRunning = false;
 
     clearInterval(
         tetrisTimer
     );
 
-    tetrisTimer = null;
 
-    /*
-       Letzten Spielstand zeichnen.
-    */
+    tetrisTimer =
+        null;
+
 
     tetrisZeichnen();
 
-    tetrisCtx.fillStyle =
-        "rgba(0,0,0,0.75)";
-
-    tetrisCtx.fillRect(
-        0,
-        0,
-        tetrisCanvas.width,
-        tetrisCanvas.height
-    );
 
     tetrisCtx.fillStyle =
         "white";
 
+
     tetrisCtx.font =
-        "bold 30px Arial";
+        "bold 28px Arial";
+
 
     tetrisCtx.textAlign =
         "center";
+
 
     tetrisCtx.fillText(
         "Game Over",
@@ -3253,39 +4260,36 @@ function tetrisGameOver() {
         tetrisCanvas.height / 2
     );
 
+
     tetrisCtx.font =
         "15px Arial";
 
-    tetrisCtx.fillText(
-        "Kein Platz mehr!",
-        tetrisCanvas.width / 2,
-        tetrisCanvas.height / 2 + 30
-    );
 
     tetrisCtx.fillText(
         "Drücke Spielen für eine neue Runde",
         tetrisCanvas.width / 2,
-        tetrisCanvas.height / 2 + 55
+        tetrisCanvas.height / 2 + 30
     );
+
 
     tetrisCtx.textAlign =
         "left";
 }
 
 
-/* =====================================================
-   TETRIS STOP
-===================================================== */
-
 function tetrisStop() {
 
-    tetrisRunning = false;
+    tetrisRunning =
+        false;
+
 
     clearInterval(
         tetrisTimer
     );
 
-    tetrisTimer = null;
+
+    tetrisTimer =
+        null;
 }
 
 
@@ -3300,89 +4304,64 @@ document.addEventListener(
         if (
             document.getElementById(
                 "tetrisFenster"
-            ).style.display !== "block"
+            ).style.display !==
+            "block"
         ) {
+
             return;
         }
 
-        /*
-           LINKS
-        */
 
         if (
-            event.key === "ArrowLeft"
+            event.key ===
+            "ArrowLeft"
         ) {
 
             event.preventDefault();
 
             tetrisMove(-1);
 
-            return;
         }
 
-        /*
-           RECHTS
-        */
 
         if (
-            event.key === "ArrowRight"
+            event.key ===
+            "ArrowRight"
         ) {
 
             event.preventDefault();
 
             tetrisMove(1);
 
-            return;
         }
 
-        /*
-           UNTEN = schneller fallen
-        */
 
         if (
-            event.key === "ArrowDown"
+            event.key ===
+            "ArrowDown"
         ) {
 
             event.preventDefault();
 
             tetrisDrop();
 
-            return;
         }
 
-        /*
-           OBEN = DREHEN
-           NICHT nach oben bewegen!
-        */
 
         if (
-            event.key === "ArrowUp"
+            event.key ===
+            "ArrowUp"
         ) {
 
             event.preventDefault();
 
-            tetrisRotate();
+            tetrisDrehen();
 
-            return;
         }
 
-        /*
-           W = ebenfalls drehen
-        */
-
-        if (
-            event.key === "w" ||
-            event.key === "W"
-        ) {
-
-            event.preventDefault();
-
-            tetrisRotate();
-
-            return;
-        }
     }
 );
+
 
 /* =====================================================
    LOGIN
@@ -3392,7 +4371,8 @@ function anmeldenOeffnen() {
 
     document.getElementById(
         "anmeldeFenster"
-    ).style.display = "block";
+    ).style.display =
+        "block";
 }
 
 
@@ -3400,7 +4380,8 @@ function anmeldenSchliessen() {
 
     document.getElementById(
         "anmeldeFenster"
-    ).style.display = "none";
+    ).style.display =
+        "none";
 }
 
 
@@ -3410,13 +4391,16 @@ function anmeldenTabOeffnen() {
         "anmeldenForm"
     ).classList.add("aktiv");
 
+
     document.getElementById(
         "registrierenForm"
     ).classList.remove("aktiv");
 
+
     document.getElementById(
         "anmeldenTab"
     ).classList.add("aktiv");
+
 
     document.getElementById(
         "registrierenTab"
@@ -3430,18 +4414,22 @@ function registrierenTabOeffnen() {
         "registrierenForm"
     ).classList.add("aktiv");
 
+
     document.getElementById(
         "anmeldenForm"
     ).classList.remove("aktiv");
+
 
     document.getElementById(
         "registrierenTab"
     ).classList.add("aktiv");
 
+
     document.getElementById(
         "anmeldenTab"
     ).classList.remove("aktiv");
 }
+
 
 /* =====================================================
    REGISTRIEREN
@@ -3454,20 +4442,24 @@ async function registrieren() {
             "registerUsername"
         ).value.trim();
 
+
     const email =
         document.getElementById(
             "registerEmail"
         ).value.trim();
+
 
     const password =
         document.getElementById(
             "registerPassword"
         ).value;
 
+
     const password2 =
         document.getElementById(
             "registerPassword2"
         ).value;
+
 
     if (
         !username ||
@@ -3483,6 +4475,7 @@ async function registrieren() {
         return;
     }
 
+
     if (
         password !== password2
     ) {
@@ -3493,6 +4486,7 @@ async function registrieren() {
 
         return;
     }
+
 
     if (
         password.length < 6
@@ -3505,41 +4499,58 @@ async function registrieren() {
         return;
     }
 
+
     try {
 
         const antwort =
             await fetch(
                 "/api/register",
                 {
+
                     method: "POST",
 
                     headers: {
+
                         "Content-Type":
                             "application/json"
+
                     },
 
                     body:
-                        JSON.stringify(
-                            {
+                        JSON.stringify({
+
+                            username:
                                 username,
+
+                            email:
                                 email,
+
+                            password:
                                 password
-                            }
-                        )
+
+                        })
+
                 }
             );
+
 
         const daten =
             await antwort.json();
 
-        if (daten.success) {
+
+        if (
+            daten.success
+        ) {
 
             benutzerAnzeigen(
                 daten.username,
-                daten.email
+                daten.email,
+                daten.friendCode
             );
 
+
             anmeldenSchliessen();
+
 
             alert(
                 "Konto erfolgreich erstellt!"
@@ -3548,8 +4559,7 @@ async function registrieren() {
         } else {
 
             alert(
-                daten.message ||
-                "Registrierung fehlgeschlagen."
+                daten.message
             );
         }
 
@@ -3559,11 +4569,13 @@ async function registrieren() {
             fehler
         );
 
+
         alert(
             "Der Server konnte nicht erreicht werden."
         );
     }
 }
+
 
 /* =====================================================
    ANMELDEN
@@ -3576,10 +4588,12 @@ async function anmelden() {
             "loginEmail"
         ).value.trim();
 
+
     const password =
         document.getElementById(
             "loginPassword"
         ).value;
+
 
     if (
         !email ||
@@ -3593,52 +4607,68 @@ async function anmelden() {
         return;
     }
 
+
     try {
 
         const antwort =
             await fetch(
                 "/api/login",
                 {
+
                     method: "POST",
 
                     headers: {
+
                         "Content-Type":
                             "application/json"
+
                     },
 
                     body:
-                        JSON.stringify(
-                            {
+                        JSON.stringify({
+
+                            email:
                                 email,
+
+                            password:
                                 password
-                            }
-                        )
+
+                        })
+
                 }
             );
+
 
         const daten =
             await antwort.json();
 
-        if (daten.success) {
+
+        if (
+            daten.success
+        ) {
 
             benutzerAnzeigen(
                 daten.username,
-                daten.email
+                daten.email,
+                daten.friendCode
             );
+
 
             anmeldenSchliessen();
 
+
             alert(
-                "Willkommen zurück, " +
-                daten.username +
+                "Willkommen zurück, "
+                +
+                daten.username
+                +
                 "!"
             );
 
         } else {
 
             alert(
-                daten.message ||
-                "Anmeldung fehlgeschlagen."
+                daten.message
             );
         }
 
@@ -3648,11 +4678,13 @@ async function anmelden() {
             fehler
         );
 
+
         alert(
             "Der Server konnte nicht erreicht werden."
         );
     }
 }
+
 
 /* =====================================================
    BENUTZER ANZEIGEN
@@ -3660,49 +4692,70 @@ async function anmelden() {
 
 function benutzerAnzeigen(
     username,
-    email
+    email,
+    friendCode = null
 ) {
 
     aktuellerBenutzer =
         username;
+
 
     document.getElementById(
         "anmeldenButton"
     ).style.display =
         "none";
 
+
     document.getElementById(
         "benutzerButton"
     ).style.display =
         "block";
+
 
     document.getElementById(
         "benutzerNameOben"
     ).textContent =
         username;
 
+
     document.getElementById(
         "benutzerName"
     ).textContent =
         username;
+
 
     document.getElementById(
         "benutzerEmail"
     ).textContent =
         email;
 
+
     updateRekordAnzeige(
         "flappy"
     );
+
 
     updateRekordAnzeige(
         "snake"
     );
 
+
     updateRekordAnzeige(
         "tetris"
     );
+
+
+    if (
+        friendCode
+    ) {
+
+        document.getElementById(
+            "meinFreundescode"
+        ).textContent =
+            friendCode;
+    }
 }
+
 
 /* =====================================================
    BENUTZER MENÜ
@@ -3714,6 +4767,7 @@ function benutzerMenueOeffnen() {
         document.getElementById(
             "benutzerMenue"
         );
+
 
     if (
         menue.style.display ===
@@ -3729,6 +4783,7 @@ function benutzerMenueOeffnen() {
             "block";
     }
 }
+
 
 /* =====================================================
    ABMELDEN
@@ -3746,32 +4801,41 @@ async function abmelden() {
                 }
             );
 
+
         const daten =
             await antwort.json();
 
-        if (daten.success) {
+
+        if (
+            daten.success
+        ) {
 
             aktuellerBenutzer =
                 null;
+
 
             document.getElementById(
                 "benutzerButton"
             ).style.display =
                 "none";
 
+
             document.getElementById(
                 "anmeldenButton"
             ).style.display =
                 "block";
+
 
             document.getElementById(
                 "benutzerMenue"
             ).style.display =
                 "none";
 
+
             alert(
                 "Du wurdest abgemeldet."
             );
+
         }
 
     } catch (fehler) {
@@ -3780,14 +4844,16 @@ async function abmelden() {
             fehler
         );
 
+
         alert(
             "Beim Abmelden ist ein Fehler aufgetreten."
         );
     }
 }
 
+
 /* =====================================================
-   LOGIN BEIM START PRÜFEN
+   BENUTZER BEIM START PRÜFEN
 ===================================================== */
 
 async function benutzerPruefen() {
@@ -3799,8 +4865,10 @@ async function benutzerPruefen() {
                 "/api/me"
             );
 
+
         const daten =
             await antwort.json();
+
 
         if (
             daten.loggedIn
@@ -3808,8 +4876,10 @@ async function benutzerPruefen() {
 
             benutzerAnzeigen(
                 daten.username,
-                daten.email
+                daten.email,
+                daten.friendCode
             );
+
         }
 
     } catch (fehler) {
@@ -3820,6 +4890,617 @@ async function benutzerPruefen() {
     }
 }
 
+
+/* =====================================================
+   FREUNDE
+===================================================== */
+
+function freundeOeffnen() {
+
+    document.getElementById(
+        "freundeFenster"
+    ).style.display =
+        "block";
+
+
+    if (
+        !aktuellerBenutzer
+    ) {
+
+        document.getElementById(
+            "freundeNichtAngemeldet"
+        ).classList.remove(
+            "hidden"
+        );
+
+
+        document.getElementById(
+            "freundeInhalt"
+        ).classList.add(
+            "hidden"
+        );
+
+
+        return;
+    }
+
+
+    document.getElementById(
+        "freundeNichtAngemeldet"
+    ).classList.add(
+        "hidden"
+    );
+
+
+    document.getElementById(
+        "freundeInhalt"
+    ).classList.remove(
+        "hidden"
+    );
+
+
+    freundeLaden();
+}
+
+
+function freundeSchliessen() {
+
+    document.getElementById(
+        "freundeFenster"
+    ).style.display =
+        "none";
+}
+
+
+/* =====================================================
+   FREUNDE LADEN
+===================================================== */
+
+async function freundeLaden() {
+
+    try {
+
+        const antwort =
+            await fetch(
+                "/api/friends"
+            );
+
+
+        const daten =
+            await antwort.json();
+
+
+        if (
+            !daten.success
+        ) {
+
+            alert(
+                daten.message ||
+                "Freunde konnten nicht geladen werden."
+            );
+
+            return;
+        }
+
+
+        document.getElementById(
+            "meinFreundescode"
+        ).textContent =
+            daten.friendCode;
+
+
+        const liste =
+            document.getElementById(
+                "freundeliste"
+            );
+
+
+        liste.innerHTML = "";
+
+
+        if (
+            !daten.friends ||
+            daten.friends.length === 0
+        ) {
+
+            liste.innerHTML =
+                `
+                <div class="freunde-hinweis">
+                    Du hast noch keine Freunde.
+                </div>
+                `;
+
+        } else {
+
+            daten.friends.forEach(
+                function(freund) {
+
+                    const element =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    element.className =
+                        "freund-eintrag";
+
+
+                    element.innerHTML = `
+
+                        <div>
+
+                            <div class="freund-name">
+
+                                👤
+                                ${escapeHTML(
+                                    freund.username
+                                )}
+
+                            </div>
+
+                            <div class="freund-email">
+
+                                ${escapeHTML(
+                                    freund.email
+                                )}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="freund-aktionen">
+
+                            <button
+                                class="freund-entfernen"
+                                onclick="freundEntfernen(${freund.id})"
+                            >
+                                Entfernen
+                            </button>
+
+                        </div>
+
+                    `;
+
+
+                    liste.appendChild(
+                        element
+                    );
+
+                }
+            );
+        }
+
+
+        const anfragen =
+            document.getElementById(
+                "freundschaftsanfragen"
+            );
+
+
+        anfragen.innerHTML = "";
+
+
+        if (
+            !daten.requests ||
+            daten.requests.length === 0
+        ) {
+
+            anfragen.innerHTML =
+                `
+                <div class="freunde-hinweis">
+                    Keine neuen Anfragen.
+                </div>
+                `;
+
+        } else {
+
+            daten.requests.forEach(
+                function(anfrage) {
+
+                    const element =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    element.className =
+                        "freund-eintrag";
+
+
+                    element.innerHTML = `
+
+                        <div>
+
+                            <div class="freund-name">
+
+                                👤
+                                ${escapeHTML(
+                                    anfrage.username
+                                )}
+
+                            </div>
+
+
+                            <div class="freund-email">
+
+                                möchte dich als Freund hinzufügen
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="freund-aktionen">
+
+                            <button
+                                class="freund-akzeptieren"
+                                onclick="freundAnnehmen(${anfrage.id})"
+                            >
+                                ✓
+                            </button>
+
+
+                            <button
+                                class="freund-ablehnen"
+                                onclick="freundAblehnen(${anfrage.id})"
+                            >
+                                ✕
+                            </button>
+
+                        </div>
+
+                    `;
+
+
+                    anfragen.appendChild(
+                        element
+                    );
+
+                }
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        alert(
+            "Der Server konnte nicht erreicht werden."
+        );
+    }
+}
+
+
+/* =====================================================
+   FREUND HINZUFÜGEN
+===================================================== */
+
+async function freundHinzufuegen() {
+
+    if (
+        !aktuellerBenutzer
+    ) {
+
+        alert(
+            "Bitte melde dich zuerst an."
+        );
+
+        return;
+    }
+
+
+    const input =
+        document.getElementById(
+            "freundescodeInput"
+        );
+
+
+    const friendCode =
+        input.value
+            .trim()
+            .toUpperCase();
+
+
+    if (!friendCode) {
+
+        alert(
+            "Bitte einen Freundescode eingeben."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const antwort =
+            await fetch(
+                "/api/friends/add",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            friendCode:
+                                friendCode
+
+                        })
+
+                }
+            );
+
+
+        const daten =
+            await antwort.json();
+
+
+        if (
+            daten.success
+        ) {
+
+            alert(
+                "✅ Freundschaftsanfrage gesendet!"
+            );
+
+
+            input.value =
+                "";
+
+
+            freundeLaden();
+
+        } else {
+
+            alert(
+                daten.message
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        alert(
+            "Der Server konnte nicht erreicht werden."
+        );
+    }
+}
+
+
+/* =====================================================
+   FREUNDSCHAFT ANNEHMEN
+===================================================== */
+
+async function freundAnnehmen(
+    requestId
+) {
+
+    try {
+
+        const antwort =
+            await fetch(
+                "/api/friends/accept",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            requestId:
+                                requestId
+
+                        })
+
+                }
+            );
+
+
+        const daten =
+            await antwort.json();
+
+
+        if (
+            daten.success
+        ) {
+
+            freundeLaden();
+
+        } else {
+
+            alert(
+                daten.message
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+    }
+}
+
+
+/* =====================================================
+   FREUNDSCHAFT ABLEHNEN
+===================================================== */
+
+async function freundAblehnen(
+    requestId
+) {
+
+    try {
+
+        const antwort =
+            await fetch(
+                "/api/friends/decline",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            requestId:
+                                requestId
+
+                        })
+
+                }
+            );
+
+
+        const daten =
+            await antwort.json();
+
+
+        if (
+            daten.success
+        ) {
+
+            freundeLaden();
+
+        } else {
+
+            alert(
+                daten.message
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+    }
+}
+
+
+/* =====================================================
+   FREUND ENTFERNEN
+===================================================== */
+
+async function freundEntfernen(
+    friendId
+) {
+
+    if (
+        !confirm(
+            "Möchtest du diese Person wirklich aus deiner Freundesliste entfernen?"
+        )
+    ) {
+
+        return;
+    }
+
+
+    try {
+
+        const antwort =
+            await fetch(
+                "/api/friends/remove",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            friendId:
+                                friendId
+
+                        })
+
+                }
+            );
+
+
+        const daten =
+            await antwort.json();
+
+
+        if (
+            daten.success
+        ) {
+
+            freundeLaden();
+
+        } else {
+
+            alert(
+                daten.message
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+    }
+}
+
+
+/* =====================================================
+   SICHERER TEXT
+===================================================== */
+
+function escapeHTML(
+    text
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text || "";
+
+
+    return div.innerHTML;
+}
+
+
 /* =====================================================
    START
 ===================================================== */
@@ -3829,5 +5510,5 @@ benutzerPruefen();
 </script>
 
 </body>
+
 </html>
-  
