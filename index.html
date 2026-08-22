@@ -677,7 +677,82 @@
     }
 
 }
+/* =========================
+   KARTENFENSTER
+   ========================= */
 
+.karten-hintergrund {
+    display: none;
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: rgba(0, 0, 0, 0.8);
+
+    z-index: 100;
+}
+
+.karten-fenster {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 80%;
+    height: 80%;
+
+    background-color: #111111;
+
+    border: 2px solid #333333;
+    border-radius: 12px;
+
+    overflow: hidden;
+}
+
+.karten-kopf {
+    height: 55px;
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 15px;
+
+    box-sizing: border-box;
+
+    background-color: #151515;
+
+    border-bottom: 1px solid #333333;
+}
+
+.karten-titel {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.karten-schliessen {
+    background: none;
+    border: none;
+
+    color: white;
+
+    font-size: 28px;
+
+    cursor: pointer;
+}
+
+#karte {
+    width: 100%;
+    height: calc(100% - 55px);
+}
     </style>
 
 </head>
