@@ -4,29 +4,19 @@
 <head>
 
 <meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>NSAH - Nützliche Sparsame Alltags Hilfe</title>
 
-
-<!-- =====================================================
-     LEAFLET
-===================================================== -->
-
 <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 >
-
 
 <style>
 
 /* =====================================================
-   GRUNDLAGEN
+   GRUNDSEITE
 ===================================================== */
 
 * {
@@ -35,15 +25,12 @@
 
 html,
 body {
-
     margin: 0;
     padding: 0;
-
     width: 100%;
     min-height: 100%;
 
-    background-color: black;
-
+    background: black;
     color: white;
 
     font-family: Arial, sans-serif;
@@ -72,9 +59,7 @@ body {
         url("Nsah%20bilder/Screenshot2026-08-22214731(1).png");
 
     background-size: cover;
-
     background-position: center;
-
     background-repeat: no-repeat;
 
     border-radius: 25px;
@@ -82,6 +67,22 @@ body {
     z-index: 0;
 
     pointer-events: none;
+}
+
+
+/* =====================================================
+   INHALT
+===================================================== */
+
+.logo,
+.untertitel,
+.strich,
+.anmelden-button,
+.karten-button,
+.spiele-button,
+.benutzer-button,
+.benutzer-menue {
+    z-index: 10;
 }
 
 
@@ -99,17 +100,14 @@ body {
     transform: translateX(-50%);
 
     font-size: 80px;
-
     font-weight: bold;
-
-    white-space: nowrap;
-
-    z-index: 2;
 
     text-shadow:
         0 0 4px rgba(255,255,255,0.7),
         0 0 10px rgba(255,255,255,0.35),
         0 0 18px rgba(255,255,255,0.15);
+
+    white-space: nowrap;
 }
 
 
@@ -131,13 +129,11 @@ body {
     color: white;
 
     white-space: nowrap;
-
-    z-index: 2;
 }
 
 
 /* =====================================================
-   STRICH
+   LINIE
 ===================================================== */
 
 .strich {
@@ -145,26 +141,25 @@ body {
     position: fixed;
 
     left: 10%;
-
     top: 0;
     bottom: 0;
 
     width: 2px;
 
     background-color: #333333;
-
-    z-index: 5;
 }
 
 
 /* =====================================================
-   BUTTONEN
+   BUTTON BASIS
 ===================================================== */
 
 .anmelden-button,
-.benutzer-button,
 .karten-button,
-.spiele-button {
+.spiele-button,
+.benutzer-button {
+
+    padding: 12px 20px;
 
     background-color: #222222;
 
@@ -175,28 +170,17 @@ body {
     border-radius: 7px;
 
     font-size: 16px;
-
     font-weight: bold;
 
     cursor: pointer;
-
-    transition: 0.2s;
 }
 
 .anmelden-button:hover,
-.benutzer-button:hover,
 .karten-button:hover,
-.spiele-button:hover {
+.spiele-button:hover,
+.benutzer-button:hover {
 
     background-color: #333333;
-}
-
-.anmelden-button:active,
-.benutzer-button:active,
-.karten-button:active,
-.spiele-button:active {
-
-    transform: scale(0.97);
 }
 
 
@@ -210,10 +194,32 @@ body {
 
     top: 25px;
     left: 25px;
+}
 
-    padding: 12px 20px;
 
-    z-index: 100;
+/* =====================================================
+   KARTEN BUTTON
+===================================================== */
+
+.karten-button {
+
+    position: fixed;
+
+    top: 80px;
+    left: 25px;
+}
+
+
+/* =====================================================
+   SPIELE BUTTON
+===================================================== */
+
+.spiele-button {
+
+    position: fixed;
+
+    top: 135px;
+    left: 25px;
 }
 
 
@@ -230,51 +236,11 @@ body {
     top: 25px;
     left: 25px;
 
-    padding: 12px 20px;
-
-    z-index: 100;
-
-    max-width: 220px;
-
-    white-space: nowrap;
+    max-width: 180px;
 
     overflow: hidden;
-
     text-overflow: ellipsis;
-}
-
-
-/* =====================================================
-   KARTEN BUTTON
-===================================================== */
-
-.karten-button {
-
-    position: fixed;
-
-    top: 80px;
-    left: 25px;
-
-    padding: 12px 20px;
-
-    z-index: 100;
-}
-
-
-/* =====================================================
-   SPIELE BUTTON
-===================================================== */
-
-.spiele-button {
-
-    position: fixed;
-
-    top: 135px;
-    left: 25px;
-
-    padding: 12px 20px;
-
-    z-index: 100;
+    white-space: nowrap;
 }
 
 
@@ -301,13 +267,12 @@ body {
 
     padding: 15px;
 
-    z-index: 500;
+    z-index: 2000;
 }
 
 .benutzer-name {
 
     font-size: 18px;
-
     font-weight: bold;
 
     margin-bottom: 5px;
@@ -327,7 +292,6 @@ body {
 .abmelden-button {
 
     width: 100%;
-
     height: 40px;
 
     background-color: #222222;
@@ -341,19 +305,12 @@ body {
     cursor: pointer;
 }
 
-.abmelden-button:hover {
-
-    background-color: #333333;
-}
-
 
 /* =====================================================
-   FENSTER HINTERGRÜNDE
+   ALLGEMEINER MODAL HINTERGRUND
 ===================================================== */
 
-.fenster-hintergrund,
-.karten-hintergrund,
-.spiele-hintergrund {
+.modal-hintergrund {
 
     display: none;
 
@@ -367,7 +324,7 @@ body {
 
     background-color: rgba(0,0,0,0.85);
 
-    z-index: 9000;
+    z-index: 9999;
 }
 
 
@@ -382,11 +339,9 @@ body {
     top: 50%;
     left: 50%;
 
-    transform: translate(-50%, -50%);
+    transform: translate(-50%,-50%);
 
     width: 400px;
-
-    max-width: calc(100vw - 30px);
 
     background-color: #111111;
 
@@ -395,22 +350,13 @@ body {
     border-radius: 12px;
 
     padding: 30px;
-
-    box-shadow:
-        0 0 30px rgba(255,255,255,0.1);
 }
-
-
-/* =====================================================
-   FENSTER KOPF
-===================================================== */
 
 .fenster-kopf {
 
     display: flex;
 
     justify-content: space-between;
-
     align-items: center;
 
     margin-bottom: 25px;
@@ -419,7 +365,6 @@ body {
 .fenster-titel {
 
     font-size: 25px;
-
     font-weight: bold;
 }
 
@@ -474,16 +419,14 @@ body {
 
 
 /* =====================================================
-   FORMULAR
+   FORMULARE
 ===================================================== */
 
 .formular {
-
     display: none;
 }
 
 .formular.aktiv {
-
     display: block;
 }
 
@@ -499,7 +442,6 @@ body {
 .formular input {
 
     width: 100%;
-
     height: 45px;
 
     margin-bottom: 18px;
@@ -519,20 +461,9 @@ body {
     font-size: 15px;
 }
 
-.formular input:focus {
-
-    border-color: #777777;
-}
-
-
-/* =====================================================
-   FORMULAR BUTTON
-===================================================== */
-
 .formular-button {
 
     width: 100%;
-
     height: 45px;
 
     background-color: #333333;
@@ -550,16 +481,6 @@ body {
     font-weight: bold;
 }
 
-.formular-button:hover {
-
-    background-color: #444444;
-}
-
-
-/* =====================================================
-   HINWEIS
-===================================================== */
-
 .hinweis {
 
     margin-top: 15px;
@@ -573,7 +494,7 @@ body {
 
 
 /* =====================================================
-   KARTEN FENSTER
+   KARTENFENSTER
 ===================================================== */
 
 .karten-fenster {
@@ -583,7 +504,7 @@ body {
     top: 50%;
     left: 50%;
 
-    transform: translate(-50%, -50%);
+    transform: translate(-50%,-50%);
 
     width: 80%;
     height: 80%;
@@ -604,7 +525,6 @@ body {
     display: flex;
 
     justify-content: space-between;
-
     align-items: center;
 
     padding: 0 15px;
@@ -653,21 +573,17 @@ body {
     top: 50%;
     left: 50%;
 
-    transform: translate(-50%, -50%);
+    transform: translate(-50%,-50%);
 
-    width: 560px;
+    width: 500px;
 
     max-width: calc(100vw - 30px);
-
-    max-height: 92vh;
-
-    overflow-y: auto;
 
     background-color: #111111;
 
     border: 2px solid #333333;
 
-    border-radius: 12px;
+    border-radius: 14px;
 
     padding: 25px;
 }
@@ -677,7 +593,6 @@ body {
     display: flex;
 
     justify-content: space-between;
-
     align-items: center;
 
     margin-bottom: 20px;
@@ -705,204 +620,209 @@ body {
 
 
 /* =====================================================
-   SPIELE LISTE
+   SPIELE AUSWAHL
 ===================================================== */
 
-.spiele-liste {
+.spiele-auswahl {
 
     display: grid;
 
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2,1fr);
 
     gap: 12px;
 }
 
-.spiel-button {
+.spiel-auswahl-button {
 
-    min-height: 80px;
+    min-height: 100px;
 
-    background-color: #222222;
+    background-color: #1d1d1d;
 
     color: white;
 
     border: 1px solid #444444;
 
-    border-radius: 8px;
+    border-radius: 10px;
 
     cursor: pointer;
 
-    font-size: 17px;
+    font-size: 18px;
 
     font-weight: bold;
-
-    transition: 0.2s;
 }
 
-.spiel-button:hover {
+.spiel-auswahl-button:hover {
 
-    background-color: #333333;
-
-    transform: scale(1.02);
+    background-color: #2c2c2c;
 }
 
 
 /* =====================================================
-   SPIELBEREICH
+   SPIEL FENSTER
 ===================================================== */
 
-#spielBereich {
+.spiel-fenster {
 
-    display: none;
+    position: absolute;
 
-    margin-top: 20px;
+    top: 50%;
+    left: 50%;
 
-    padding: 18px;
+    transform: translate(-50%,-50%);
 
-    background-color: #080808;
+    width: 520px;
 
-    border: 1px solid #333333;
+    max-width: calc(100vw - 20px);
 
-    border-radius: 8px;
+    max-height: 95vh;
+
+    overflow: auto;
+
+    background-color: #111111;
+
+    border: 2px solid #333333;
+
+    border-radius: 14px;
+
+    padding: 20px;
 
     text-align: center;
 }
 
-#spielName {
+.spiel-kopf {
 
-    margin-top: 0;
+    display: flex;
 
-    margin-bottom: 8px;
-}
-
-
-/* =====================================================
-   REKORD
-===================================================== */
-
-.rekord-anzeige {
-
-    margin-bottom: 15px;
-
-    padding: 10px;
-
-    background-color: #181818;
-
-    border: 1px solid #333333;
-
-    border-radius: 7px;
-
-    color: #dddddd;
-
-    font-size: 15px;
-}
-
-.rekord-wert {
-
-    font-weight: bold;
-
-    color: white;
-}
-
-
-/* =====================================================
-   SPIEL STATUS
-===================================================== */
-
-.spiel-status {
-
-    margin-top: 10px;
+    justify-content: space-between;
+    align-items: center;
 
     margin-bottom: 10px;
+}
 
-    color: #cccccc;
+.spiel-name {
+
+    font-size: 24px;
+
+    font-weight: bold;
+}
+
+.spiel-schliessen {
+
+    background: none;
+
+    border: none;
+
+    color: white;
+
+    font-size: 28px;
+
+    cursor: pointer;
+}
+
+.rekord {
+
+    color: #bbbbbb;
+
+    margin-bottom: 12px;
 
     font-size: 15px;
 }
 
 
 /* =====================================================
-   FLAPPY BIRD
+   GAME CANVAS
 ===================================================== */
 
-#flappyCanvas {
+.game-canvas {
 
     display: block;
 
-    width: 100%;
+    margin: 0 auto;
 
-    max-width: 400px;
-
-    height: auto;
-
-    margin: 15px auto;
-
-    background-color: #222222;
+    background-color: #050505;
 
     border: 1px solid #444444;
 
     border-radius: 8px;
-
-    touch-action: manipulation;
-}
-
-
-/* =====================================================
-   SNAKE
-===================================================== */
-
-#snakeCanvas {
-
-    display: block;
-
-    width: 100%;
-
-    max-width: 400px;
-
-    height: auto;
-
-    margin: 15px auto;
-
-    background-color: #111111;
-
-    border: 1px solid #444444;
-
-    border-radius: 8px;
-
-    touch-action: none;
-}
-
-
-/* =====================================================
-   TETRIS
-===================================================== */
-
-#tetrisCanvas {
-
-    display: block;
-
-    width: 240px;
 
     max-width: 100%;
 
-    height: auto;
-
-    margin: 15px auto;
-
-    background-color: #111111;
-
-    border: 1px solid #444444;
-
-    border-radius: 8px;
-
     touch-action: none;
 }
 
 
 /* =====================================================
-   SPIEL STEUERUNG
+   SPIEL BUTTON
 ===================================================== */
 
-.steuerung {
+.game-start {
+
+    margin-top: 15px;
+
+    padding: 12px 25px;
+
+    background-color: #292929;
+
+    color: white;
+
+    border: 1px solid #555555;
+
+    border-radius: 7px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.game-start:hover {
+
+    background-color: #3a3a3a;
+}
+
+
+/* =====================================================
+   SNAKE TOUCH BUTTONS
+===================================================== */
+
+.snake-controls {
+
+    display: grid;
+
+    grid-template-columns: repeat(3,55px);
+
+    justify-content: center;
+
+    gap: 6px;
+
+    margin-top: 12px;
+}
+
+.snake-controls button {
+
+    width: 55px;
+    height: 45px;
+
+    background-color: #222222;
+
+    color: white;
+
+    border: 1px solid #444444;
+
+    border-radius: 7px;
+
+    font-size: 20px;
+}
+
+.snake-empty {
+    visibility: hidden;
+}
+
+
+/* =====================================================
+   TETRIS TOUCH BUTTONS
+===================================================== */
+
+.tetris-controls {
 
     display: flex;
 
@@ -910,18 +830,13 @@ body {
 
     gap: 8px;
 
-    flex-wrap: wrap;
-
-    margin-top: 10px;
+    margin-top: 12px;
 }
 
-.steuerung button {
+.tetris-controls button {
 
-    min-width: 55px;
-
-    min-height: 45px;
-
-    padding: 8px 14px;
+    width: 60px;
+    height: 45px;
 
     background-color: #222222;
 
@@ -929,58 +844,42 @@ body {
 
     border: 1px solid #444444;
 
-    border-radius: 6px;
+    border-radius: 7px;
 
-    cursor: pointer;
-
-    font-size: 18px;
-
-    touch-action: manipulation;
-}
-
-.steuerung button:hover {
-
-    background-color: #333333;
+    font-size: 20px;
 }
 
 
 /* =====================================================
-   HANDY
+   MOBILE
 ===================================================== */
 
-@media (max-width: 600px) {
+@media (max-width:600px) {
 
-
-    /* =================================================
-       BILD
-
-       Genau 15 Pixel weiter nach rechts.
-       Ausgangspunkt: 75%
-       ================================================= */
-
-    .hintergrund-bild {
-
-        left: calc(75% + 15px);
-
-        top: 50%;
-
-        width: 60vw;
-
-        height: 35vh;
-
-        transform: translate(-50%, -50%);
-
-        background-size: cover;
-
-        background-position: center;
-
-        border-radius: 20px;
+    body {
+        overflow-x: hidden;
     }
 
 
-    /* =================================================
+    /* =============================
+       BILD 15PX NACH RECHTS
+    ============================= */
+
+    .hintergrund-bild {
+
+        left: calc(50% + 15px);
+
+        width: 65vw;
+
+        height: 35vh;
+
+        border-radius: 18px;
+    }
+
+
+    /* =============================
        LOGO
-    ================================================= */
+    ============================= */
 
     .logo {
 
@@ -996,9 +895,9 @@ body {
     }
 
 
-    /* =================================================
+    /* =============================
        UNTERTITEL
-    ================================================= */
+    ============================= */
 
     .untertitel {
 
@@ -1020,27 +919,25 @@ body {
     }
 
 
-    /* =================================================
-       STRICH
-    ================================================= */
+    /* =============================
+       LINIE
+    ============================= */
 
     .strich {
 
         left: 24%;
-
-        width: 2px;
     }
 
 
-    /* =================================================
-       ANMELDEN
-    ================================================= */
+    /* =============================
+       LOGIN
+    ============================= */
 
     .anmelden-button {
 
         top: 18px;
 
-        left: 0;
+        left: 5px;
 
         padding: 8px 11px;
 
@@ -1048,9 +945,9 @@ body {
     }
 
 
-    /* =================================================
+    /* =============================
        KARTE
-    ================================================= */
+    ============================= */
 
     .karten-button {
 
@@ -1064,9 +961,9 @@ body {
     }
 
 
-    /* =================================================
+    /* =============================
        SPIELE
-    ================================================= */
+    ============================= */
 
     .spiele-button {
 
@@ -1080,9 +977,9 @@ body {
     }
 
 
-    /* =================================================
+    /* =============================
        BENUTZER
-    ================================================= */
+    ============================= */
 
     .benutzer-button {
 
@@ -1093,86 +990,28 @@ body {
         padding: 9px 12px;
 
         font-size: 13px;
-
-        max-width: 150px;
     }
 
 
-    /* =================================================
-       BENUTZER MENÜ
-    ================================================= */
-
-    .benutzer-menue {
-
-        top: 65px;
-
-        left: 12px;
-
-        width: calc(100% - 24px);
-
-        max-width: 260px;
-    }
-
-
-    /* =================================================
-       LOGIN
-    ================================================= */
-
-    .fenster-hintergrund {
-
-        padding: 15px;
-
-        overflow-y: auto;
-    }
-
+    /* =============================
+       LOGIN FENSTER
+    ============================= */
 
     .anmelde-fenster {
 
         width: calc(100vw - 30px);
 
-        max-width: 380px;
-
-        padding: 22px;
-
         max-height: calc(100vh - 30px);
 
         overflow-y: auto;
+
+        padding: 20px;
     }
 
 
-    .fenster-titel {
-
-        font-size: 21px;
-    }
-
-
-    .tab {
-
-        padding: 12px 5px;
-
-        font-size: 14px;
-    }
-
-
-    .formular input {
-
-        height: 48px;
-
-        font-size: 16px;
-    }
-
-
-    .formular-button {
-
-        height: 48px;
-
-        font-size: 16px;
-    }
-
-
-    /* =================================================
+    /* =============================
        KARTE
-    ================================================= */
+    ============================= */
 
     .karten-fenster {
 
@@ -1182,83 +1021,62 @@ body {
     }
 
 
-    /* =================================================
+    /* =============================
        SPIELE
-    ================================================= */
+    ============================= */
 
     .spiele-fenster {
 
-        width: calc(100vw - 24px);
+        width: calc(100vw - 20px);
 
-        max-width: 450px;
-
-        max-height: 92vh;
-
-        padding: 18px;
+        padding: 15px;
     }
 
-
-    .spiele-titel {
-
-        font-size: 21px;
-    }
-
-
-    .spiele-liste {
+    .spiele-auswahl {
 
         grid-template-columns: 1fr;
+    }
 
-        gap: 10px;
+    .spiel-auswahl-button {
+
+        min-height: 75px;
     }
 
 
-    .spiel-button {
+    /* =============================
+       SPIEL
+    ============================= */
 
-        min-height: 60px;
+    .spiel-fenster {
 
-        font-size: 16px;
-    }
+        width: calc(100vw - 12px);
 
-
-    #spielBereich {
+        max-height: calc(100vh - 12px);
 
         padding: 12px;
     }
 
+    .spiel-name {
 
-    #tetrisCanvas {
+        font-size: 20px;
+    }
 
-        width: 220px;
+    .game-canvas {
+
+        max-width: 100%;
+
+        height: auto;
     }
 
 }
 
 
 /* =====================================================
-   SEHR KLEINE HANDYS
+   SPIEL AUSBLENDEN
 ===================================================== */
 
-@media (max-width: 380px) {
-
-    .logo {
-
-        font-size: 45px;
-
-        left: 65%;
-    }
-
-    .untertitel {
-
-        left: 65%;
-
-        font-size: 16px;
-    }
-
-    .spiele-fenster {
-
-        padding: 12px;
-    }
-
+.hidden {
+    display: none !important;
 }
 
 </style>
@@ -1285,24 +1103,16 @@ body {
 </div>
 
 
-<!-- =====================================================
-     UNTERTITEL
-===================================================== -->
-
 <div class="untertitel">
     Nützliche Sparsame Alltags Hilfe
 </div>
 
 
-<!-- =====================================================
-     STRICH
-===================================================== -->
-
 <div class="strich"></div>
 
 
 <!-- =====================================================
-     ANMELDEN BUTTON
+     BUTTONS
 ===================================================== -->
 
 <button
@@ -1314,10 +1124,6 @@ body {
 </button>
 
 
-<!-- =====================================================
-     KARTEN BUTTON
-===================================================== -->
-
 <button
     class="karten-button"
     onclick="kartenOeffnen()"
@@ -1325,10 +1131,6 @@ body {
     🗺️ Karte
 </button>
 
-
-<!-- =====================================================
-     SPIELE BUTTON
-===================================================== -->
 
 <button
     class="spiele-button"
@@ -1338,22 +1140,12 @@ body {
 </button>
 
 
-<!-- =====================================================
-     BENUTZER BUTTON
-===================================================== -->
-
 <button
     class="benutzer-button"
     id="benutzerButton"
     onclick="benutzerMenueOeffnen()"
 >
-
-    👤
-
-    <span id="benutzerNameOben">
-        Benutzer
-    </span>
-
+    👤 <span id="benutzerNameOben">Benutzer</span>
 </button>
 
 
@@ -1371,12 +1163,10 @@ body {
         id="benutzerName"
     ></div>
 
-
     <div
         class="benutzer-email"
         id="benutzerEmail"
     ></div>
-
 
     <button
         class="abmelden-button"
@@ -1389,23 +1179,21 @@ body {
 
 
 <!-- =====================================================
-     LOGIN FENSTER
+     LOGIN
 ===================================================== -->
 
 <div
-    class="fenster-hintergrund"
+    class="modal-hintergrund"
     id="anmeldeFenster"
 >
 
     <div class="anmelde-fenster">
-
 
         <div class="fenster-kopf">
 
             <div class="fenster-titel">
                 NSAH Konto
             </div>
-
 
             <button
                 class="schliessen"
@@ -1427,7 +1215,6 @@ body {
                 Anmelden
             </button>
 
-
             <button
                 class="tab"
                 id="registrierenTab"
@@ -1439,18 +1226,14 @@ body {
         </div>
 
 
-        <!-- =================================================
-             ANMELDEN
-        ================================================== -->
+        <!-- LOGIN -->
 
         <div
             class="formular aktiv"
             id="anmeldenForm"
         >
 
-            <label>
-                E-Mail
-            </label>
+            <label>E-Mail</label>
 
             <input
                 type="email"
@@ -1459,9 +1242,7 @@ body {
             >
 
 
-            <label>
-                Passwort
-            </label>
+            <label>Passwort</label>
 
             <input
                 type="password"
@@ -1479,28 +1260,21 @@ body {
 
 
             <div class="hinweis">
-
                 Noch kein Konto?
-
                 Klicke oben auf „Registrieren“.
-
             </div>
 
         </div>
 
 
-        <!-- =================================================
-             REGISTRIEREN
-        ================================================== -->
+        <!-- REGISTRIERUNG -->
 
         <div
             class="formular"
             id="registrierenForm"
         >
 
-            <label>
-                Benutzername
-            </label>
+            <label>Benutzername</label>
 
             <input
                 type="text"
@@ -1509,9 +1283,7 @@ body {
             >
 
 
-            <label>
-                E-Mail
-            </label>
+            <label>E-Mail</label>
 
             <input
                 type="email"
@@ -1520,9 +1292,7 @@ body {
             >
 
 
-            <label>
-                Passwort
-            </label>
+            <label>Passwort</label>
 
             <input
                 type="password"
@@ -1531,9 +1301,7 @@ body {
             >
 
 
-            <label>
-                Passwort wiederholen
-            </label>
+            <label>Passwort wiederholen</label>
 
             <input
                 type="password"
@@ -1557,23 +1325,21 @@ body {
 
 
 <!-- =====================================================
-     KARTEN FENSTER
+     KARTE
 ===================================================== -->
 
 <div
-    class="karten-hintergrund"
+    class="modal-hintergrund"
     id="kartenFenster"
 >
 
     <div class="karten-fenster">
-
 
         <div class="karten-kopf">
 
             <div class="karten-titel">
                 🗺️ NSAH Karte
             </div>
-
 
             <button
                 class="karten-schliessen"
@@ -1584,7 +1350,6 @@ body {
 
         </div>
 
-
         <div id="karte"></div>
 
     </div>
@@ -1593,23 +1358,21 @@ body {
 
 
 <!-- =====================================================
-     SPIELE FENSTER
+     SPIELE AUSWAHL
 ===================================================== -->
 
 <div
-    class="spiele-hintergrund"
+    class="modal-hintergrund"
     id="spieleFenster"
 >
 
     <div class="spiele-fenster">
-
 
         <div class="spiele-kopf">
 
             <div class="spiele-titel">
                 🎮 Spiele
             </div>
-
 
             <button
                 class="spiele-schliessen"
@@ -1621,82 +1384,239 @@ body {
         </div>
 
 
-        <!-- =================================================
-             NUR 3 SPIELE
-        ================================================== -->
+        <div class="spiele-auswahl">
 
-        <div class="spiele-liste">
+            <button
+                class="spiel-auswahl-button"
+                onclick="spielOeffnen('flappy')"
+            >
+                🐦<br>
+                Flappy Bird
+            </button>
 
 
             <button
-                class="spiel-button"
-                onclick="spielStarten('Flappy Bird')"
+                class="spiel-auswahl-button"
+                onclick="spielOeffnen('snake')"
             >
+                🐍<br>
+                Snake
+            </button>
+
+
+            <button
+                class="spiel-auswahl-button"
+                onclick="spielOeffnen('tetris')"
+            >
+                🧱<br>
+                Tetris
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     FLAPPY BIRD
+===================================================== -->
+
+<div
+    class="modal-hintergrund"
+    id="flappyFenster"
+>
+
+    <div class="spiel-fenster">
+
+        <div class="spiel-kopf">
+
+            <div class="spiel-name">
                 🐦 Flappy Bird
-            </button>
-
-
-            <button
-                class="spiel-button"
-                onclick="spielStarten('Snake')"
-            >
-                🐍 Snake
-            </button>
-
+            </div>
 
             <button
-                class="spiel-button"
-                onclick="spielStarten('Tetris')"
+                class="spiel-schliessen"
+                onclick="spielSchliessen('flappy')"
             >
-                🧱 Tetris
+                ×
             </button>
 
         </div>
 
 
-        <!-- =================================================
-             SPIELBEREICH
-        ================================================== -->
+        <div class="rekord">
+            Rekord:
+            <span id="flappyRekord">0</span>
+        </div>
 
-        <div
-            id="spielBereich"
+
+        <canvas
+            id="flappyCanvas"
+            class="game-canvas"
+            width="400"
+            height="500"
+        ></canvas>
+
+
+        <button
+            class="game-start"
+            onclick="flappyStart()"
         >
+            ▶ Spielen
+        </button>
 
-            <h2 id="spielName">
-                Spiel
-            </h2>
+    </div>
+
+</div>
 
 
-            <div
-                class="rekord-anzeige"
-                id="rekordAnzeige"
-            >
-                🏆 Rekord:
-                <span
-                    class="rekord-wert"
-                    id="rekordWert"
-                >
-                    0
-                </span>
+<!-- =====================================================
+     SNAKE
+===================================================== -->
+
+<div
+    class="modal-hintergrund"
+    id="snakeFenster"
+>
+
+    <div class="spiel-fenster">
+
+        <div class="spiel-kopf">
+
+            <div class="spiel-name">
+                🐍 Snake
             </div>
-
-
-            <div
-                class="spiel-status"
-                id="spielStatus"
-            >
-                Spiel wird geladen...
-            </div>
-
 
             <button
-                class="formular-button"
-                onclick="spielSchliessen()"
+                class="spiel-schliessen"
+                onclick="spielSchliessen('snake')"
             >
-                Spiel schließen
+                ×
             </button>
 
         </div>
+
+
+        <div class="rekord">
+            Rekord:
+            <span id="snakeRekord">0</span>
+        </div>
+
+
+        <canvas
+            id="snakeCanvas"
+            class="game-canvas"
+            width="400"
+            height="400"
+        ></canvas>
+
+
+        <div class="snake-controls">
+
+            <button class="snake-empty"></button>
+
+            <button onclick="snakeRichtung('up')">
+                ⬆️
+            </button>
+
+            <button class="snake-empty"></button>
+
+
+            <button onclick="snakeRichtung('left')">
+                ⬅️
+            </button>
+
+            <button onclick="snakeRichtung('down')">
+                ⬇️
+            </button>
+
+            <button onclick="snakeRichtung('right')">
+                ➡️
+            </button>
+
+        </div>
+
+
+        <button
+            class="game-start"
+            onclick="snakeStart()"
+        >
+            ▶ Spielen
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TETRIS
+===================================================== -->
+
+<div
+    class="modal-hintergrund"
+    id="tetrisFenster"
+>
+
+    <div class="spiel-fenster">
+
+        <div class="spiel-kopf">
+
+            <div class="spiel-name">
+                🧱 Tetris
+            </div>
+
+            <button
+                class="spiel-schliessen"
+                onclick="spielSchliessen('tetris')"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="rekord">
+
+            Rekord:
+            <span id="tetrisRekord">0</span>
+
+        </div>
+
+
+        <canvas
+            id="tetrisCanvas"
+            class="game-canvas"
+            width="240"
+            height="480"
+        ></canvas>
+
+
+        <div class="tetris-controls">
+
+            <button onclick="tetrisMove(-1)">
+                ⬅️
+            </button>
+
+            <button onclick="tetrisDrop()">
+                ⬇️
+            </button>
+
+            <button onclick="tetrisMove(1)">
+                ➡️
+            </button>
+
+        </div>
+
+
+        <button
+            class="game-start"
+            onclick="tetrisStart()"
+        >
+            ▶ Spielen
+        </button>
 
     </div>
 
@@ -1708,19 +1628,78 @@ body {
 ===================================================== -->
 
 <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
 ></script>
 
 
 <script>
 
 /* =====================================================
-   BENUTZER / REKORD VARIABLEN
+   BENUTZER
 ===================================================== */
 
 let aktuellerBenutzer = null;
 
-let aktuellesSpiel = null;
+
+/* =====================================================
+   REKORDE
+===================================================== */
+
+function rekordLesen(spiel) {
+
+    const key =
+        aktuellerBenutzer
+        ? "nsah_" + aktuellerBenutzer + "_" + spiel
+        : "nsah_guest_" + spiel;
+
+    return Number(
+        localStorage.getItem(key) || 0
+    );
+}
+
+
+function rekordSpeichern(spiel, wert) {
+
+    if (!aktuellerBenutzer) {
+        return;
+    }
+
+    const key =
+        "nsah_" +
+        aktuellerBenutzer +
+        "_" +
+        spiel;
+
+    const alt =
+        rekordLesen(spiel);
+
+    if (wert > alt) {
+
+        localStorage.setItem(
+            key,
+            wert
+        );
+
+        updateRekordAnzeige(
+            spiel
+        );
+    }
+}
+
+
+function updateRekordAnzeige(spiel) {
+
+    const element =
+        document.getElementById(
+            spiel + "Rekord"
+        );
+
+    if (element) {
+
+        element.textContent =
+            rekordLesen(spiel);
+    }
+}
 
 
 /* =====================================================
@@ -1728,30 +1707,8 @@ let aktuellesSpiel = null;
 ===================================================== */
 
 let karte = null;
-
 let standortMarker = null;
 
-
-/* =====================================================
-   SPIEL VARIABLEN
-===================================================== */
-
-let flappyAktiv = false;
-
-let snakeAktiv = false;
-
-let tetrisAktiv = false;
-
-let flappyAnimation = null;
-
-let snakeInterval = null;
-
-let tetrisInterval = null;
-
-
-/* =====================================================
-   KARTE ÖFFNEN
-===================================================== */
 
 function kartenOeffnen() {
 
@@ -1762,37 +1719,34 @@ function kartenOeffnen() {
 
     if (!karte) {
 
-        karte = L.map(
-            "karte",
-            {
+        karte =
+            L.map(
+                "karte",
+                {
+                    worldCopyJump: false,
 
-                worldCopyJump: false,
+                    maxBounds: [
+                        [-90,-180],
+                        [90,180]
+                    ],
 
-                maxBounds: [
-                    [-90, -180],
-                    [90, 180]
-                ],
-
-                maxBoundsViscosity: 1.0
-
-            }
-        ).setView(
-            [20, 0],
-            2
-        );
+                    maxBoundsViscosity: 1.0
+                }
+            ).setView(
+                [20,0],
+                2
+            );
 
 
         L.tileLayer(
             "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             {
-
                 maxZoom: 19,
 
                 noWrap: true,
 
                 attribution:
                     "&copy; OpenStreetMap-Mitwirkende"
-
             }
         ).addTo(karte);
 
@@ -1811,7 +1765,7 @@ function kartenOeffnen() {
 
 
                     karte.setView(
-                        [lat, lon],
+                        [lat,lon],
                         13
                     );
 
@@ -1821,13 +1775,12 @@ function kartenOeffnen() {
                         karte.removeLayer(
                             standortMarker
                         );
-
                     }
 
 
                     standortMarker =
                         L.marker(
-                            [lat, lon]
+                            [lat,lon]
                         ).addTo(karte);
 
 
@@ -1842,15 +1795,12 @@ function kartenOeffnen() {
                 function() {
 
                     console.log(
-                        "Standort konnte nicht ermittelt werden."
+                        "Standort nicht verfügbar."
                     );
 
                 }
-
             );
-
         }
-
     }
 
 
@@ -1858,9 +1808,7 @@ function kartenOeffnen() {
         function() {
 
             if (karte) {
-
                 karte.invalidateSize();
-
             }
 
         },
@@ -1868,10 +1816,6 @@ function kartenOeffnen() {
     );
 }
 
-
-/* =====================================================
-   KARTE SCHLIESSEN
-===================================================== */
 
 function kartenSchliessen() {
 
@@ -1882,7 +1826,7 @@ function kartenSchliessen() {
 
 
 /* =====================================================
-   SPIELE ÖFFNEN
+   SPIELE MENÜ
 ===================================================== */
 
 function spieleOeffnen() {
@@ -1893,189 +1837,389 @@ function spieleOeffnen() {
 }
 
 
-/* =====================================================
-   SPIELE SCHLIESSEN
-===================================================== */
-
 function spieleSchliessen() {
-
-    spieleStoppen();
 
     document.getElementById(
         "spieleFenster"
     ).style.display = "none";
-
-    document.getElementById(
-        "spielBereich"
-    ).style.display = "none";
 }
 
 
-/* =====================================================
-   SPIEL STARTEN
-===================================================== */
+function spielOeffnen(spiel) {
 
-function spielStarten(name) {
-
-    if (!aktuellerBenutzer) {
-
-        alert(
-            "Bitte melde dich an, damit dein persönlicher Rekord gespeichert und angezeigt werden kann."
-        );
-
-        return;
-    }
-
-
-    spieleStoppen();
-
-
-    aktuellesSpiel = name;
+    spieleSchliessen();
 
 
     document.getElementById(
-        "spielBereich"
+        spiel + "Fenster"
     ).style.display = "block";
 
 
+    updateRekordAnzeige(
+        spiel
+    );
+}
+
+
+function spielSchliessen(spiel) {
+
     document.getElementById(
-        "spielName"
-    ).textContent = name;
+        spiel + "Fenster"
+    ).style.display = "none";
 
 
-    rekordAnzeigen();
-
-
-    if (name === "Flappy Bird") {
-
-        flappyBirdStarten();
-
+    if (spiel === "flappy") {
+        flappyStop();
     }
 
-
-    if (name === "Snake") {
-
-        snakeStarten();
-
+    if (spiel === "snake") {
+        snakeStop();
     }
 
-
-    if (name === "Tetris") {
-
-        tetrisStarten();
-
+    if (spiel === "tetris") {
+        tetrisStop();
     }
-
 }
 
 
 /* =====================================================
-   REKORD KEY
+   FLAPPY BIRD
 ===================================================== */
 
-function rekordKey() {
-
-    if (!aktuellerBenutzer) {
-
-        return null;
-    }
-
-
-    return (
-        "NSAH_REKORD_" +
-        aktuellerBenutzer +
-        "_" +
-        aktuellesSpiel
+const flappyCanvas =
+    document.getElementById(
+        "flappyCanvas"
     );
+
+const flappyCtx =
+    flappyCanvas.getContext("2d");
+
+
+let flappyBird;
+let flappyPipes;
+let flappyScore;
+let flappyRunning = false;
+let flappyAnimation = null;
+
+
+function flappyStart() {
+
+    flappyStop();
+
+
+    flappyBird = {
+
+        x: 80,
+        y: 230,
+
+        width: 25,
+        height: 25,
+
+        velocity: 0
+    };
+
+
+    flappyPipes = [];
+
+    flappyScore = 0;
+
+    flappyRunning = true;
+
+
+    flappyPipes.push(
+        flappyNeuePipe(
+            430
+        )
+    );
+
+
+    flappyAnimation =
+        requestAnimationFrame(
+            flappyLoop
+        );
 }
 
 
-/* =====================================================
-   REKORD HOLEN
-===================================================== */
+function flappyNeuePipe(x) {
 
-function rekordHolen() {
+    const gap = 150;
 
-    const key =
-        rekordKey();
+    const top =
+        70 +
+        Math.random() * 230;
+
+    return {
+
+        x: x,
+
+        width: 55,
+
+        top: top,
+
+        bottom:
+            top + gap,
+
+        passed: false
+    };
+}
 
 
-    if (!key) {
+function flappyLoop() {
 
-        return 0;
+    if (!flappyRunning) {
+        return;
     }
 
 
-    return parseInt(
-        localStorage.getItem(key) || "0"
-    );
-}
+    flappyBird.velocity += 0.45;
+
+    flappyBird.y +=
+        flappyBird.velocity;
 
 
-/* =====================================================
-   REKORD SPEICHERN
-===================================================== */
+    for (
+        let i = 0;
+        i < flappyPipes.length;
+        i++
+    ) {
 
-function rekordSpeichern(wert) {
+        const pipe =
+            flappyPipes[i];
 
-    if (!aktuellerBenutzer) {
+        pipe.x -= 2.5;
+
+
+        if (
+            !pipe.passed &&
+            pipe.x + pipe.width <
+            flappyBird.x
+        ) {
+
+            pipe.passed = true;
+
+            flappyScore++;
+
+
+            rekordSpeichern(
+                "flappy",
+                flappyScore
+            );
+        }
+    }
+
+
+    if (
+        flappyPipes.length === 0 ||
+        flappyPipes[
+            flappyPipes.length - 1
+        ].x < 230
+    ) {
+
+        flappyPipes.push(
+            flappyNeuePipe(
+                430
+            )
+        );
+    }
+
+
+    flappyPipes =
+        flappyPipes.filter(
+            pipe =>
+                pipe.x + pipe.width > 0
+        );
+
+
+    if (
+        flappyBird.y < 0 ||
+        flappyBird.y +
+        flappyBird.height >
+        flappyCanvas.height
+    ) {
+
+        flappyGameOver();
 
         return;
     }
 
 
-    const alterRekord =
-        rekordHolen();
+    for (
+        const pipe of flappyPipes
+    ) {
 
+        if (
+            flappyBird.x <
+                pipe.x + pipe.width &&
+            flappyBird.x +
+                flappyBird.width >
+                pipe.x &&
+            (
+                flappyBird.y <
+                    pipe.top ||
+                flappyBird.y +
+                    flappyBird.height >
+                    pipe.bottom
+            )
+        ) {
 
-    if (wert > alterRekord) {
+            flappyGameOver();
 
-        localStorage.setItem(
-            rekordKey(),
-            String(wert)
-        );
-
-        rekordAnzeigen();
-
+            return;
+        }
     }
 
+
+    flappyZeichnen();
+
+
+    flappyAnimation =
+        requestAnimationFrame(
+            flappyLoop
+        );
 }
 
 
-/* =====================================================
-   REKORD ANZEIGEN
-===================================================== */
+function flappyZeichnen() {
 
-function rekordAnzeigen() {
-
-    const rekord =
-        rekordHolen();
-
-
-    document.getElementById(
-        "rekordWert"
-    ).textContent =
-        rekord;
+    flappyCtx.clearRect(
+        0,
+        0,
+        flappyCanvas.width,
+        flappyCanvas.height
+    );
 
 
-    document.getElementById(
-        "rekordAnzeige"
-    ).style.display =
-        "block";
+    flappyCtx.fillStyle =
+        "#111111";
+
+    flappyCtx.fillRect(
+        0,
+        0,
+        flappyCanvas.width,
+        flappyCanvas.height
+    );
+
+
+    /* Vögel */
+
+    flappyCtx.fillStyle =
+        "white";
+
+    flappyCtx.fillRect(
+        flappyBird.x,
+        flappyBird.y,
+        flappyBird.width,
+        flappyBird.height
+    );
+
+
+    /* Rohre */
+
+    flappyCtx.fillStyle =
+        "#555555";
+
+
+    for (
+        const pipe of flappyPipes
+    ) {
+
+        flappyCtx.fillRect(
+            pipe.x,
+            0,
+            pipe.width,
+            pipe.top
+        );
+
+
+        flappyCtx.fillRect(
+            pipe.x,
+            pipe.bottom,
+            pipe.width,
+            flappyCanvas.height -
+            pipe.bottom
+        );
+    }
+
+
+    /* Score */
+
+    flappyCtx.fillStyle =
+        "white";
+
+    flappyCtx.font =
+        "bold 28px Arial";
+
+    flappyCtx.fillText(
+        flappyScore,
+        20,
+        40
+    );
 }
 
 
-/* =====================================================
-   SPIELE STOPPEN
-===================================================== */
+function flappyFlap() {
 
-function spieleStoppen() {
+    if (!flappyRunning) {
 
-    flappyAktiv = false;
+        flappyStart();
 
-    snakeAktiv = false;
+        return;
+    }
 
-    tetrisAktiv = false;
+
+    flappyBird.velocity =
+        -7;
+}
+
+
+function flappyGameOver() {
+
+    flappyRunning = false;
+
+
+    if (flappyAnimation) {
+
+        cancelAnimationFrame(
+            flappyAnimation
+        );
+    }
+
+
+    flappyZeichnen();
+
+
+    flappyCtx.fillStyle =
+        "white";
+
+    flappyCtx.font =
+        "bold 30px Arial";
+
+    flappyCtx.textAlign =
+        "center";
+
+    flappyCtx.fillText(
+        "Game Over",
+        flappyCanvas.width / 2,
+        flappyCanvas.height / 2
+    );
+
+    flappyCtx.font =
+        "18px Arial";
+
+    flappyCtx.fillText(
+        "Drücke Spielen für eine neue Runde",
+        flappyCanvas.width / 2,
+        flappyCanvas.height / 2 + 35
+    );
+
+    flappyCtx.textAlign =
+        "left";
+}
+
+
+function flappyStop() {
+
+    flappyRunning = false;
 
 
     if (flappyAnimation) {
@@ -2086,1431 +2230,1167 @@ function spieleStoppen() {
 
         flappyAnimation = null;
     }
-
-
-    if (snakeInterval) {
-
-        clearInterval(
-            snakeInterval
-        );
-
-        snakeInterval = null;
-    }
-
-
-    if (tetrisInterval) {
-
-        clearInterval(
-            tetrisInterval
-        );
-
-        tetrisInterval = null;
-    }
-
-
-    const flappy =
-        document.getElementById(
-            "flappyCanvas"
-        );
-
-    if (flappy) {
-
-        flappy.remove();
-    }
-
-
-    const snake =
-        document.getElementById(
-            "snakeCanvas"
-        );
-
-    if (snake) {
-
-        snake.remove();
-    }
-
-
-    const tetris =
-        document.getElementById(
-            "tetrisCanvas"
-        );
-
-    if (tetris) {
-
-        tetris.remove();
-    }
-
-
-    const steuerungen =
-        document.querySelectorAll(
-            ".spiel-steuerung"
-        );
-
-
-    steuerungen.forEach(
-        function(element) {
-
-            element.remove();
-
-        }
-    );
 }
 
 
-/* =====================================================
-   SPIEL SCHLIESSEN
-===================================================== */
-
-function spielSchliessen() {
-
-    spieleStoppen();
-
-
-    document.getElementById(
-        "spielBereich"
-    ).style.display = "none";
-}
-
-
-/* =====================================================
-   FLAPPY BIRD
-===================================================== */
-
-function flappyBirdStarten() {
-
-    const bereich =
-        document.getElementById(
-            "spielBereich"
-        );
-
-
-    const canvas =
-        document.createElement(
-            "canvas"
-        );
-
-
-    canvas.id =
-        "flappyCanvas";
-
-
-    canvas.width = 400;
-
-    canvas.height = 500;
-
-
-    bereich.insertBefore(
-        canvas,
-        document.getElementById(
-            "spielStatus"
-        )
-    );
-
-
-    const ctx =
-        canvas.getContext(
-            "2d"
-        );
-
-
-    let birdY = 250;
-
-    let velocity = 0;
-
-    const gravity = 0.45;
-
-    const jump = -7;
-
-    let score = 0;
-
-    let gameOver = false;
-
-    let pipeX = 400;
-
-    let pipeGap = 150;
-
-    let pipeTop =
-        Math.floor(
-            Math.random() * 200
-        ) + 50;
-
-
-    flappyAktiv = true;
-
-
-    document.getElementById(
-        "spielStatus"
-    ).textContent =
-        "Tippe oder klicke zum Fliegen!";
-
-
-    function springen() {
-
-        if (!flappyAktiv) {
-
-            return;
-        }
-
-
-        if (gameOver) {
-
-            flappyBirdStarten();
-
-            return;
-        }
-
-
-        velocity = jump;
-    }
-
-
-    canvas.addEventListener(
-        "click",
-        springen
-    );
-
-
-    canvas.addEventListener(
-        "touchstart",
-        function(event) {
-
-            event.preventDefault();
-
-            springen();
-
-        },
-        {
-            passive: false
-        }
-    );
-
-
-    function zeichnen() {
-
-        if (!flappyAktiv) {
-
-            return;
-        }
-
-
-        ctx.fillStyle =
-            "#202020";
-
-        ctx.fillRect(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
-
-
-        /* BODEN */
-
-        ctx.fillStyle =
-            "#444444";
-
-        ctx.fillRect(
-            0,
-            475,
-            canvas.width,
-            25
-        );
-
-
-        /* ROHR */
-
-        ctx.fillStyle =
-            "#555555";
-
-
-        ctx.fillRect(
-            pipeX,
-            0,
-            55,
-            pipeTop
-        );
-
-
-        ctx.fillRect(
-            pipeX,
-            pipeTop + pipeGap,
-            55,
-            475 - pipeTop - pipeGap
-        );
-
-
-        /* VOGEL */
-
-        ctx.font =
-            "34px Arial";
-
-        ctx.fillText(
-            "🐦",
-            70,
-            birdY
-        );
-
-
-        if (!gameOver) {
-
-            velocity += gravity;
-
-            birdY += velocity;
-
-
-            pipeX -= 2;
-
-
-            if (pipeX < -60) {
-
-                pipeX = 400;
-
-                pipeTop =
-                    Math.floor(
-                        Math.random() * 220
-                    ) + 40;
-
-                score++;
-
-                rekordSpeichern(
-                    score
-                );
-
-            }
-
-
-            const birdX = 70;
-
-            const birdSize = 28;
-
-
-            const kollidiertRohr =
-
-                birdX + birdSize > pipeX &&
-
-                birdX < pipeX + 55 &&
-
-                (
-                    birdY - birdSize < pipeTop ||
-
-                    birdY > pipeTop + pipeGap
-                );
-
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            document.getElementById(
+                "flappyFenster"
+            ).style.display === "block"
+        ) {
 
             if (
-                birdY > 475 ||
-                birdY < 0 ||
-                kollidiertRohr
+                event.code === "Space" ||
+                event.code === "ArrowUp"
             ) {
 
-                gameOver = true;
+                event.preventDefault();
 
-                document.getElementById(
-                    "spielStatus"
-                ).textContent =
-                    "Game Over! Klick zum Neustarten. Punktzahl: " +
-                    score;
-
+                flappyFlap();
             }
-
-
-            document.getElementById(
-                "spielStatus"
-            ).textContent =
-                "Punkte: " +
-                score +
-                " | Rekord: " +
-                rekordHolen();
-
         }
-
-
-        flappyAnimation =
-            requestAnimationFrame(
-                zeichnen
-            );
     }
+);
 
 
-    zeichnen();
-}
+flappyCanvas.addEventListener(
+    "pointerdown",
+    function() {
+
+        flappyFlap();
+
+    }
+);
 
 
 /* =====================================================
    SNAKE
 ===================================================== */
 
-function snakeStarten() {
-
-    const bereich =
-        document.getElementById(
-            "spielBereich"
-        );
-
-
-    const canvas =
-        document.createElement(
-            "canvas"
-        );
-
-
-    canvas.id =
-        "snakeCanvas";
-
-
-    canvas.width = 400;
-
-    canvas.height = 400;
-
-
-    bereich.insertBefore(
-        canvas,
-        document.getElementById(
-            "spielStatus"
-        )
+const snakeCanvas =
+    document.getElementById(
+        "snakeCanvas"
     );
 
-
-    const ctx =
-        canvas.getContext(
-            "2d"
-        );
+const snakeCtx =
+    snakeCanvas.getContext("2d");
 
 
-    const feld =
-        20;
+const snakeGrid = 20;
+
+const snakeCell =
+    snakeCanvas.width /
+    snakeGrid;
 
 
-    let snake = [
+let snake;
+let snakeFood;
+let snakeDirection;
+let snakeNextDirection;
+let snakeScore = 0;
+let snakeRunning = false;
+let snakeTimer = null;
+
+
+function snakeStart() {
+
+    snakeStop();
+
+
+    snake = [
+
         {
-            x: 200,
-            y: 200
+            x: 10,
+            y: 10
+        },
+
+        {
+            x: 9,
+            y: 10
+        },
+
+        {
+            x: 8,
+            y: 10
         }
+
     ];
 
 
-    let richtung = {
-        x: feld,
-        y: 0
+    snakeDirection =
+        {
+            x: 1,
+            y: 0
+        };
+
+
+    snakeNextDirection =
+        {
+            x: 1,
+            y: 0
+        };
+
+
+    snakeScore = 0;
+
+    snakeRunning = true;
+
+
+    snakeNeueNahrung();
+
+    snakeZeichnen();
+
+
+    snakeTimer =
+        setInterval(
+            snakeLoop,
+            100
+        );
+}
+
+
+function snakeNeueNahrung() {
+
+    do {
+
+        snakeFood = {
+
+            x:
+                Math.floor(
+                    Math.random() *
+                    snakeGrid
+                ),
+
+            y:
+                Math.floor(
+                    Math.random() *
+                    snakeGrid
+                )
+        };
+
+    } while (
+        snake.some(
+            teil =>
+                teil.x === snakeFood.x &&
+                teil.y === snakeFood.y
+        )
+    );
+}
+
+
+function snakeLoop() {
+
+    if (!snakeRunning) {
+        return;
+    }
+
+
+    snakeDirection =
+        snakeNextDirection;
+
+
+    const kopf = {
+
+        x:
+            snake[0].x +
+            snakeDirection.x,
+
+        y:
+            snake[0].y +
+            snakeDirection.y
     };
 
 
-    let essen =
-        neuesEssen();
+    if (
+        kopf.x < 0 ||
+        kopf.y < 0 ||
+        kopf.x >= snakeGrid ||
+        kopf.y >= snakeGrid
+    ) {
 
+        snakeGameOver();
 
-    let score = 0;
-
-    let gameOver = false;
-
-
-    snakeAktiv = true;
-
-
-    document.getElementById(
-        "spielStatus"
-    ).textContent =
-        "Benutze Pfeiltasten oder die Buttons.";
-
-
-    function neuesEssen() {
-
-        return {
-
-            x:
-                Math.floor(
-                    Math.random() *
-                    (canvas.width / feld)
-                ) * feld,
-
-            y:
-                Math.floor(
-                    Math.random() *
-                    (canvas.height / feld)
-                ) * feld
-
-        };
+        return;
     }
 
 
-    function zeichnen() {
+    if (
+        snake.some(
+            teil =>
+                teil.x === kopf.x &&
+                teil.y === kopf.y
+        )
+    ) {
 
-        ctx.fillStyle =
-            "#111111";
+        snakeGameOver();
 
-        ctx.fillRect(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
-
-
-        /* ESSEN */
-
-        ctx.font =
-            "20px Arial";
-
-        ctx.fillText(
-            "🍎",
-            essen.x,
-            essen.y + 18
-        );
-
-
-        /* SCHLANGE */
-
-        ctx.fillStyle =
-            "#eeeeee";
-
-
-        snake.forEach(
-            function(teil) {
-
-                ctx.fillRect(
-                    teil.x,
-                    teil.y,
-                    feld - 2,
-                    feld - 2
-                );
-
-            }
-        );
-
-
-        if (gameOver) {
-
-            ctx.font =
-                "24px Arial";
-
-            ctx.fillText(
-                "Game Over",
-                140,
-                190
-            );
-
-            return;
-        }
-
-
-        const kopf = {
-
-            x:
-                snake[0].x +
-                richtung.x,
-
-            y:
-                snake[0].y +
-                richtung.y
-
-        };
-
-
-        /* WAND */
-
-        if (
-            kopf.x < 0 ||
-            kopf.x >= canvas.width ||
-            kopf.y < 0 ||
-            kopf.y >= canvas.height
-        ) {
-
-            snakeGameOver();
-
-            return;
-        }
-
-
-        /* SELBST */
-
-        for (
-            let i = 0;
-            i < snake.length;
-            i++
-        ) {
-
-            if (
-                kopf.x === snake[i].x &&
-                kopf.y === snake[i].y
-            ) {
-
-                snakeGameOver();
-
-                return;
-            }
-
-        }
-
-
-        snake.unshift(
-            kopf
-        );
-
-
-        /* ESSEN */
-
-        if (
-            kopf.x === essen.x &&
-            kopf.y === essen.y
-        ) {
-
-            score++;
-
-            rekordSpeichern(
-                score
-            );
-
-            essen =
-                neuesEssen();
-
-        }
-        else {
-
-            snake.pop();
-
-        }
-
-
-        document.getElementById(
-            "spielStatus"
-        ).textContent =
-            "Punkte: " +
-            score +
-            " | Rekord: " +
-            rekordHolen();
+        return;
     }
 
 
-    function snakeGameOver() {
-
-        gameOver = true;
-
-        document.getElementById(
-            "spielStatus"
-        ).textContent =
-            "Game Over! Punktzahl: " +
-            score +
-            ". Drücke eine Richtung zum Neustart.";
-    }
-
-
-    function richtungSetzen(x,y) {
-
-        if (gameOver) {
-
-            snake = [
-                {
-                    x: 200,
-                    y: 200
-                }
-            ];
-
-            richtung = {
-                x: x,
-                y: y
-            };
-
-            essen =
-                neuesEssen();
-
-            score = 0;
-
-            gameOver = false;
-
-            return;
-        }
-
-
-        if (
-            richtung.x + x === 0 &&
-            richtung.y + y === 0
-        ) {
-
-            return;
-        }
-
-
-        richtung = {
-            x: x,
-            y: y
-        };
-    }
-
-
-    document.addEventListener(
-        "keydown",
-        function(event) {
-
-            if (
-                event.key === "ArrowUp"
-            ) {
-
-                richtungSetzen(
-                    0,
-                    -feld
-                );
-
-            }
-
-            if (
-                event.key === "ArrowDown"
-            ) {
-
-                richtungSetzen(
-                    0,
-                    feld
-                );
-
-            }
-
-            if (
-                event.key === "ArrowLeft"
-            ) {
-
-                richtungSetzen(
-                    -feld,
-                    0
-                );
-
-            }
-
-            if (
-                event.key === "ArrowRight"
-            ) {
-
-                richtungSetzen(
-                    feld,
-                    0
-                );
-
-            }
-
-        }
+    snake.unshift(
+        kopf
     );
 
 
-    const steuerung =
-        document.createElement(
-            "div"
+    if (
+        kopf.x === snakeFood.x &&
+        kopf.y === snakeFood.y
+    ) {
+
+        snakeScore++;
+
+
+        rekordSpeichern(
+            "snake",
+            snakeScore
         );
 
 
-    steuerung.className =
-        "spiel-steuerung steuerung";
+        snakeNeueNahrung();
+
+    } else {
+
+        snake.pop();
+    }
 
 
-    steuerung.innerHTML = `
-
-        <button onclick="snakeRichtung(0,-20)">
-            ⬆️
-        </button>
-
-        <button onclick="snakeRichtung(-20,0)">
-            ⬅️
-        </button>
-
-        <button onclick="snakeRichtung(0,20)">
-            ⬇️
-        </button>
-
-        <button onclick="snakeRichtung(20,0)">
-            ➡️
-        </button>
-
-    `;
-
-
-    bereich.appendChild(
-        steuerung
-    );
-
-
-    window.snakeRichtung =
-        function(x,y) {
-
-            richtungSetzen(
-                x,
-                y
-            );
-
-        };
-
-
-    snakeInterval =
-        setInterval(
-            zeichnen,
-            120
-        );
+    snakeZeichnen();
 }
+
+
+function snakeZeichnen() {
+
+    snakeCtx.clearRect(
+        0,
+        0,
+        snakeCanvas.width,
+        snakeCanvas.height
+    );
+
+
+    snakeCtx.fillStyle =
+        "#050505";
+
+    snakeCtx.fillRect(
+        0,
+        0,
+        snakeCanvas.width,
+        snakeCanvas.height
+    );
+
+
+    /* Nahrung */
+
+    snakeCtx.fillStyle =
+        "white";
+
+    snakeCtx.fillRect(
+        snakeFood.x * snakeCell + 3,
+        snakeFood.y * snakeCell + 3,
+        snakeCell - 6,
+        snakeCell - 6
+    );
+
+
+    /* Schlange */
+
+    snakeCtx.fillStyle =
+        "#888888";
+
+
+    snake.forEach(
+        function(teil,index) {
+
+            snakeCtx.fillRect(
+                teil.x * snakeCell + 2,
+                teil.y * snakeCell + 2,
+                snakeCell - 4,
+                snakeCell - 4
+            );
+
+        }
+    );
+
+
+    snakeCtx.fillStyle =
+        "white";
+
+    snakeCtx.font =
+        "bold 20px Arial";
+
+    snakeCtx.fillText(
+        snakeScore,
+        10,
+        25
+    );
+}
+
+
+function snakeRichtung(richtung) {
+
+    const richtungen = {
+
+        up:
+            {
+                x: 0,
+                y: -1
+            },
+
+        down:
+            {
+                x: 0,
+                y: 1
+            },
+
+        left:
+            {
+                x: -1,
+                y: 0
+            },
+
+        right:
+            {
+                x: 1,
+                y: 0
+            }
+    };
+
+
+    const neu =
+        richtungen[
+            richtung
+        ];
+
+
+    if (
+        neu.x ===
+            -snakeDirection.x &&
+        neu.y ===
+            -snakeDirection.y
+    ) {
+
+        return;
+    }
+
+
+    snakeNextDirection =
+        neu;
+}
+
+
+function snakeGameOver() {
+
+    snakeRunning = false;
+
+
+    clearInterval(
+        snakeTimer
+    );
+
+
+    snakeCtx.fillStyle =
+        "white";
+
+    snakeCtx.font =
+        "bold 30px Arial";
+
+    snakeCtx.textAlign =
+        "center";
+
+    snakeCtx.fillText(
+        "Game Over",
+        snakeCanvas.width / 2,
+        snakeCanvas.height / 2
+    );
+
+    snakeCtx.font =
+        "18px Arial";
+
+    snakeCtx.fillText(
+        "Drücke Spielen für eine neue Runde",
+        snakeCanvas.width / 2,
+        snakeCanvas.height / 2 + 35
+    );
+
+    snakeCtx.textAlign =
+        "left";
+}
+
+
+function snakeStop() {
+
+    snakeRunning = false;
+
+
+    clearInterval(
+        snakeTimer
+    );
+
+    snakeTimer = null;
+}
+
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            document.getElementById(
+                "snakeFenster"
+            ).style.display !== "block"
+        ) {
+
+            return;
+        }
+
+
+        const keys = {
+
+            ArrowUp: "up",
+            ArrowDown: "down",
+            ArrowLeft: "left",
+            ArrowRight: "right",
+
+            w: "up",
+            s: "down",
+            a: "left",
+            d: "right",
+
+            W: "up",
+            S: "down",
+            A: "left",
+            D: "right"
+        };
+
+
+        if (keys[event.key]) {
+
+            event.preventDefault();
+
+            snakeRichtung(
+                keys[event.key]
+            );
+        }
+    }
+);
 
 
 /* =====================================================
    TETRIS
 ===================================================== */
 
-function tetrisStarten() {
+const tetrisCanvas =
+    document.getElementById(
+        "tetrisCanvas"
+    );
 
-    const bereich =
-        document.getElementById(
-            "spielBereich"
+const tetrisCtx =
+    tetrisCanvas.getContext("2d");
+
+
+const TETRIS_COLS = 10;
+const TETRIS_ROWS = 20;
+const TETRIS_SIZE = 24;
+
+
+let tetrisBoard;
+let tetrisPiece;
+let tetrisScore = 0;
+let tetrisRunning = false;
+let tetrisTimer = null;
+
+
+/* =====================================================
+   TETRIS FIGUREN
+===================================================== */
+
+const TETRIS_SHAPES = [
+
+    [
+        [1,1,1,1]
+    ],
+
+    [
+        [1,1],
+        [1,1]
+    ],
+
+    [
+        [0,1,0],
+        [1,1,1]
+    ],
+
+    [
+        [1,0,0],
+        [1,1,1]
+    ],
+
+    [
+        [0,0,1],
+        [1,1,1]
+    ],
+
+    [
+        [0,1,1],
+        [1,1,0]
+    ],
+
+    [
+        [1,1,0],
+        [0,1,1]
+    ]
+
+];
+
+
+function tetrisStart() {
+
+    tetrisStop();
+
+
+    tetrisBoard =
+        Array.from(
+            {
+                length:
+                    TETRIS_ROWS
+            },
+            () =>
+                Array(
+                    TETRIS_COLS
+                ).fill(0)
         );
 
 
-    const canvas =
-        document.createElement(
-            "canvas"
+    tetrisScore = 0;
+
+    tetrisRunning = true;
+
+
+    tetrisNeueFigur();
+
+    tetrisZeichnen();
+
+
+    /*
+       Sauberer Fall:
+       Die Figur fällt nicht hektisch,
+       sondern in gleichmäßigen Abständen.
+    */
+
+    tetrisTimer =
+        setInterval(
+            tetrisTick,
+            550
+        );
+}
+
+
+function tetrisNeueFigur() {
+
+    const index =
+        Math.floor(
+            Math.random() *
+            TETRIS_SHAPES.length
         );
 
 
-    canvas.id =
-        "tetrisCanvas";
+    const shape =
+        TETRIS_SHAPES[
+            index
+        ].map(
+            row =>
+                row.slice()
+        );
 
 
-    canvas.width = 240;
+    tetrisPiece = {
 
-    canvas.height = 480;
+        shape: shape,
+
+        x:
+            Math.floor(
+                (
+                    TETRIS_COLS -
+                    shape[0].length
+                ) / 2
+            ),
+
+        y: 0
+    };
 
 
-    bereich.insertBefore(
-        canvas,
-        document.getElementById(
-            "spielStatus"
+    if (
+        tetrisKollision(
+            tetrisPiece.x,
+            tetrisPiece.y,
+            tetrisPiece.shape
         )
+    ) {
+
+        tetrisGameOver();
+    }
+}
+
+
+function tetrisKollision(
+    x,
+    y,
+    shape
+) {
+
+    for (
+        let row = 0;
+        row < shape.length;
+        row++
+    ) {
+
+        for (
+            let col = 0;
+            col < shape[row].length;
+            col++
+        ) {
+
+            if (!shape[row][col]) {
+                continue;
+            }
+
+
+            const bx =
+                x + col;
+
+            const by =
+                y + row;
+
+
+            if (
+                bx < 0 ||
+                bx >= TETRIS_COLS ||
+                by >= TETRIS_ROWS
+            ) {
+
+                return true;
+            }
+
+
+            if (
+                by >= 0 &&
+                tetrisBoard[by][bx]
+            ) {
+
+                return true;
+            }
+        }
+    }
+
+
+    return false;
+}
+
+
+function tetrisTick() {
+
+    if (!tetrisRunning) {
+        return;
+    }
+
+
+    if (
+        !tetrisKollision(
+            tetrisPiece.x,
+            tetrisPiece.y + 1,
+            tetrisPiece.shape
+        )
+    ) {
+
+        tetrisPiece.y++;
+
+    } else {
+
+        tetrisFestsetzen();
+
+        tetrisLinien();
+
+        tetrisNeueFigur();
+    }
+
+
+    tetrisZeichnen();
+}
+
+
+function tetrisMove(richtung) {
+
+    if (!tetrisRunning) {
+        return;
+    }
+
+
+    /*
+       Nur horizontal bewegen.
+       Dadurch gibt es keine unerwünschte
+       Bewegung nach oben.
+    */
+
+    const neuesX =
+        tetrisPiece.x +
+        richtung;
+
+
+    if (
+        !tetrisKollision(
+            neuesX,
+            tetrisPiece.y,
+            tetrisPiece.shape
+        )
+    ) {
+
+        tetrisPiece.x =
+            neuesX;
+
+        tetrisZeichnen();
+    }
+}
+
+
+function tetrisDrop() {
+
+    if (!tetrisRunning) {
+        return;
+    }
+
+
+    if (
+        !tetrisKollision(
+            tetrisPiece.x,
+            tetrisPiece.y + 1,
+            tetrisPiece.shape
+        )
+    ) {
+
+        tetrisPiece.y++;
+
+    } else {
+
+        tetrisFestsetzen();
+
+        tetrisLinien();
+
+        tetrisNeueFigur();
+    }
+
+
+    tetrisZeichnen();
+}
+
+
+function tetrisFestsetzen() {
+
+    for (
+        let row = 0;
+        row < tetrisPiece.shape.length;
+        row++
+    ) {
+
+        for (
+            let col = 0;
+            col <
+            tetrisPiece.shape[row].length;
+            col++
+        ) {
+
+            if (
+                tetrisPiece.shape[row][col]
+            ) {
+
+                const y =
+                    tetrisPiece.y +
+                    row;
+
+                const x =
+                    tetrisPiece.x +
+                    col;
+
+
+                if (
+                    y >= 0 &&
+                    y < TETRIS_ROWS &&
+                    x >= 0 &&
+                    x < TETRIS_COLS
+                ) {
+
+                    tetrisBoard[y][x] = 1;
+                }
+            }
+        }
+    }
+}
+
+
+function tetrisLinien() {
+
+    let geloscht = 0;
+
+
+    for (
+        let row =
+            TETRIS_ROWS - 1;
+        row >= 0;
+        row--
+    ) {
+
+        if (
+            tetrisBoard[row]
+                .every(
+                    feld =>
+                        feld === 1
+                )
+        ) {
+
+            tetrisBoard.splice(
+                row,
+                1
+            );
+
+
+            tetrisBoard.unshift(
+                Array(
+                    TETRIS_COLS
+                ).fill(0)
+            );
+
+
+            geloscht++;
+
+            row++;
+        }
+    }
+
+
+    if (geloscht > 0) {
+
+        tetrisScore +=
+            geloscht * 10;
+
+
+        rekordSpeichern(
+            "tetris",
+            tetrisScore
+        );
+    }
+}
+
+
+function tetrisZeichnen() {
+
+    tetrisCtx.clearRect(
+        0,
+        0,
+        tetrisCanvas.width,
+        tetrisCanvas.height
     );
 
 
-    const ctx =
-        canvas.getContext(
-            "2d"
-        );
+    tetrisCtx.fillStyle =
+        "#050505";
+
+    tetrisCtx.fillRect(
+        0,
+        0,
+        tetrisCanvas.width,
+        tetrisCanvas.height
+    );
 
 
-    const spalten = 10;
+    /* Spielfeld */
 
-    const zeilen = 20;
-
-    const groesse = 24;
-
-
-    let feld =
-        Array.from(
-            {
-                length: zeilen
-            },
-            function() {
-
-                return Array(
-                    spalten
-                ).fill(0);
-
-            }
-        );
-
-
-    const formen = [
-
-        [
-            [1,1,1,1]
-        ],
-
-        [
-            [1,1],
-            [1,1]
-        ],
-
-        [
-            [0,1,0],
-            [1,1,1]
-        ],
-
-        [
-            [1,0,0],
-            [1,1,1]
-        ],
-
-        [
-            [0,0,1],
-            [1,1,1]
-        ],
-
-        [
-            [0,1,1],
-            [1,1,0]
-        ],
-
-        [
-            [1,1,0],
-            [0,1,1]
-        ]
-
-    ];
-
-
-    let stein =
-        neuerTetrisStein();
-
-
-    let score = 0;
-
-    let gameOver = false;
-
-
-    tetrisAktiv = true;
-
-
-    document.getElementById(
-        "spielStatus"
-    ).textContent =
-        "Pfeiltasten oder Buttons zum Spielen.";
-
-
-    function neuerTetrisStein() {
-
-        const form =
-            formen[
-                Math.floor(
-                    Math.random() *
-                    formen.length
-                )
-            ];
-
-
-        return {
-
-            form:
-                form.map(
-                    function(row) {
-
-                        return row.slice();
-
-                    }
-                ),
-
-            x: 3,
-
-            y: 0
-
-        };
-
-    }
-
-
-    function zeichneFeld() {
-
-        ctx.fillStyle =
-            "#111111";
-
-        ctx.fillRect(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-        );
-
+    for (
+        let row = 0;
+        row < TETRIS_ROWS;
+        row++
+    ) {
 
         for (
-            let y = 0;
-            y < zeilen;
-            y++
+            let col = 0;
+            col < TETRIS_COLS;
+            col++
         ) {
 
-            for (
-                let x = 0;
-                x < spalten;
-                x++
+            if (
+                tetrisBoard[row][col]
             ) {
 
-                if (
-                    feld[y][x]
-                ) {
-
-                    zeichneBlock(
-                        x,
-                        y
-                    );
-
-                }
-
-            }
-
-        }
-
-
-        stein.form.forEach(
-            function(row,y) {
-
-                row.forEach(
-                    function(value,x) {
-
-                        if (value) {
-
-                            zeichneBlock(
-                                stein.x + x,
-                                stein.y + y
-                            );
-
-                        }
-
-                    }
+                tetrisTetrisBlock(
+                    col,
+                    row
                 );
-
             }
-        );
-
+        }
     }
 
 
-    function zeichneBlock(x,y) {
+    /* Aktuelle Figur */
 
-        ctx.fillStyle =
-            "#dddddd";
-
-        ctx.fillRect(
-            x * groesse + 1,
-            y * groesse + 1,
-            groesse - 2,
-            groesse - 2
-        );
-    }
-
-
-    function passt(x,y,form) {
+    if (tetrisPiece) {
 
         for (
             let row = 0;
-            row < form.length;
+            row <
+            tetrisPiece.shape.length;
             row++
         ) {
 
             for (
                 let col = 0;
-                col < form[row].length;
+                col <
+                tetrisPiece.shape[row].length;
                 col++
             ) {
 
-                if (!form[row][col]) {
-
-                    continue;
-                }
-
-
-                const nx =
-                    x + col;
-
-                const ny =
-                    y + row;
-
-
                 if (
-                    nx < 0 ||
-                    nx >= spalten ||
-                    ny >= zeilen
+                    tetrisPiece.shape[row][col]
                 ) {
 
-                    return false;
+                    tetrisTetrisBlock(
+                        tetrisPiece.x +
+                        col,
 
+                        tetrisPiece.y +
+                        row
+                    );
                 }
-
-
-                if (
-                    ny >= 0 &&
-                    feld[ny][nx]
-                ) {
-
-                    return false;
-
-                }
-
             }
-
         }
-
-        return true;
     }
 
 
-    function drehen(form) {
+    /* Linien */
 
-        return form[0].map(
-            function(_, index) {
+    tetrisCtx.strokeStyle =
+        "#181818";
 
-                return form.map(
-                    function(row) {
-
-                        return row[index];
-
-                    }
-                ).reverse();
-
-            }
-        );
-    }
+    tetrisCtx.lineWidth = 1;
 
 
-    function drehenStein() {
+    for (
+        let x = 0;
+        x <= TETRIS_COLS;
+        x++
+    ) {
 
-        const neueForm =
-            drehen(
-                stein.form
-            );
+        tetrisCtx.beginPath();
 
-
-        if (
-            passt(
-                stein.x,
-                stein.y,
-                neueForm
-            )
-        ) {
-
-            stein.form =
-                neueForm;
-
-        }
-
-    }
-
-
-    function nachUnten() {
-
-        if (
-            passt(
-                stein.x,
-                stein.y + 1,
-                stein.form
-            )
-        ) {
-
-            stein.y++;
-
-        }
-        else {
-
-            festmachen();
-
-        }
-
-    }
-
-
-    function festmachen() {
-
-        stein.form.forEach(
-            function(row,y) {
-
-                row.forEach(
-                    function(value,x) {
-
-                        if (value) {
-
-                            if (
-                                stein.y + y < 0
-                            ) {
-
-                                gameOver =
-                                    true;
-
-                            }
-                            else {
-
-                                feld[
-                                    stein.y + y
-                                ][
-                                    stein.x + x
-                                ] = 1;
-
-                            }
-
-                        }
-
-                    }
-                );
-
-            }
+        tetrisCtx.moveTo(
+            x * TETRIS_SIZE,
+            0
         );
 
+        tetrisCtx.lineTo(
+            x * TETRIS_SIZE,
+            TETRIS_ROWS *
+            TETRIS_SIZE
+        );
 
-        if (gameOver) {
-
-            document.getElementById(
-                "spielStatus"
-            ).textContent =
-                "Tetris Game Over! Punkte: " +
-                score;
-
-            return;
-        }
-
-
-        zeilenLöschen();
-
-
-        stein =
-            neuerTetrisStein();
-
-
-        if (
-            !passt(
-                stein.x,
-                stein.y,
-                stein.form
-            )
-        ) {
-
-            gameOver = true;
-
-            document.getElementById(
-                "spielStatus"
-            ).textContent =
-                "Tetris Game Over! Punkte: " +
-                score;
-
-        }
-
+        tetrisCtx.stroke();
     }
 
 
-    function zeilenLöschen() {
+    for (
+        let y = 0;
+        y <= TETRIS_ROWS;
+        y++
+    ) {
 
-        let geloescht = 0;
+        tetrisCtx.beginPath();
 
+        tetrisCtx.moveTo(
+            0,
+            y * TETRIS_SIZE
+        );
 
-        for (
-            let y = zeilen - 1;
-            y >= 0;
-            y--
-        ) {
+        tetrisCtx.lineTo(
+            TETRIS_COLS *
+            TETRIS_SIZE,
+            y * TETRIS_SIZE
+        );
 
-            if (
-                feld[y].every(
-                    function(value) {
-
-                        return value !== 0;
-
-                    }
-                )
-            ) {
-
-                feld.splice(
-                    y,
-                    1
-                );
-
-
-                feld.unshift(
-                    Array(
-                        spalten
-                    ).fill(0)
-                );
-
-
-                geloescht++;
-
-                y++;
-
-            }
-
-        }
-
-
-        if (
-            geloescht > 0
-        ) {
-
-            score +=
-                geloescht * 10;
-
-
-            rekordSpeichern(
-                score
-            );
-
-        }
-
+        tetrisCtx.stroke();
     }
 
 
-    function bewegen(dx) {
+    tetrisCtx.fillStyle =
+        "white";
 
-        if (gameOver) {
+    tetrisCtx.font =
+        "bold 18px Arial";
 
-            return;
-        }
-
-
-        if (
-            passt(
-                stein.x + dx,
-                stein.y,
-                stein.form
-            )
-        ) {
-
-            stein.x += dx;
-
-        }
-
-    }
+    tetrisCtx.fillText(
+        tetrisScore,
+        8,
+        20
+    );
+}
 
 
-    document.addEventListener(
-        "keydown",
-        function(event) {
+function tetrisTetrisBlock(
+    x,
+    y
+) {
 
-            if (!tetrisAktiv) {
-
-                return;
-            }
-
-
-            if (
-                event.key === "ArrowLeft"
-            ) {
-
-                bewegen(-1);
-
-            }
+    tetrisCtx.fillStyle =
+        "#888888";
 
 
-            if (
-                event.key === "ArrowRight"
-            ) {
-
-                bewegen(1);
-
-            }
-
-
-            if (
-                event.key === "ArrowDown"
-            ) {
-
-                nachUnten();
-
-            }
+    tetrisCtx.fillRect(
+        x * TETRIS_SIZE + 2,
+        y * TETRIS_SIZE + 2,
+        TETRIS_SIZE - 4,
+        TETRIS_SIZE - 4
+    );
+}
 
 
-            if (
-                event.key === "ArrowUp"
-            ) {
+function tetrisGameOver() {
 
-                drehenStein();
+    tetrisRunning = false;
 
-            }
 
-        }
+    clearInterval(
+        tetrisTimer
     );
 
 
-    const steuerung =
-        document.createElement(
-            "div"
-        );
+    tetrisTimer = null;
 
 
-    steuerung.className =
-        "spiel-steuerung steuerung";
+    tetrisCtx.fillStyle =
+        "white";
 
+    tetrisCtx.font =
+        "bold 28px Arial";
 
-    steuerung.innerHTML = `
+    tetrisCtx.textAlign =
+        "center";
 
-        <button onclick="tetrisAktion('left')">
-            ⬅️
-        </button>
-
-        <button onclick="tetrisAktion('rotate')">
-            🔄
-        </button>
-
-        <button onclick="tetrisAktion('down')">
-            ⬇️
-        </button>
-
-        <button onclick="tetrisAktion('right')">
-            ➡️
-        </button>
-
-    `;
-
-
-    bereich.appendChild(
-        steuerung
+    tetrisCtx.fillText(
+        "Game Over",
+        tetrisCanvas.width / 2,
+        tetrisCanvas.height / 2
     );
 
+    tetrisCtx.font =
+        "15px Arial";
 
-    window.tetrisAktion =
-        function(aktion) {
+    tetrisCtx.fillText(
+        "Drücke Spielen für eine neue Runde",
+        tetrisCanvas.width / 2,
+        tetrisCanvas.height / 2 + 30
+    );
 
-            if (
-                aktion === "left"
-            ) {
-
-                bewegen(-1);
-
-            }
-
-
-            if (
-                aktion === "right"
-            ) {
-
-                bewegen(1);
-
-            }
+    tetrisCtx.textAlign =
+        "left";
+}
 
 
-            if (
-                aktion === "down"
-            ) {
+function tetrisStop() {
 
-                nachUnten();
-
-            }
+    tetrisRunning = false;
 
 
-            if (
-                aktion === "rotate"
-            ) {
+    clearInterval(
+        tetrisTimer
+    );
 
-                drehenStein();
-
-            }
-
-        };
-
-
-    tetrisInterval =
-        setInterval(
-            function() {
-
-                if (!gameOver) {
-
-                    nachUnten();
-
-                    zeichneFeld();
-
-
-                    document.getElementById(
-                        "spielStatus"
-                    ).textContent =
-                        "Punkte: " +
-                        score +
-                        " | Rekord: " +
-                        rekordHolen();
-
-                }
-
-            },
-            600
-        );
-
-
-    zeichneFeld();
+    tetrisTimer = null;
 }
 
 
 /* =====================================================
-   LOGIN ÖFFNEN
+   TETRIS TASTATUR
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            document.getElementById(
+                "tetrisFenster"
+            ).style.display !== "block"
+        ) {
+
+            return;
+        }
+
+
+        /*
+           WICHTIG:
+
+           ArrowUp macht NICHTS.
+           Dadurch kann der Stein niemals
+           mit Pfeil hoch nach oben gehen.
+
+           ArrowDown = schneller fallen
+           ArrowLeft = links
+           ArrowRight = rechts
+        */
+
+
+        if (
+            event.key ===
+            "ArrowLeft"
+        ) {
+
+            event.preventDefault();
+
+            tetrisMove(-1);
+        }
+
+
+        if (
+            event.key ===
+            "ArrowRight"
+        ) {
+
+            event.preventDefault();
+
+            tetrisMove(1);
+        }
+
+
+        if (
+            event.key ===
+            "ArrowDown"
+        ) {
+
+            event.preventDefault();
+
+            tetrisDrop();
+        }
+
+
+        if (
+            event.key ===
+            "ArrowUp"
+        ) {
+
+            event.preventDefault();
+
+            /*
+               Absichtlich leer.
+               Kein Hochbewegen.
+            */
+        }
+    }
+);
+
+
+/* =====================================================
+   LOGIN FUNKTIONEN
 ===================================================== */
 
 function anmeldenOeffnen() {
@@ -3521,10 +3401,6 @@ function anmeldenOeffnen() {
 }
 
 
-/* =====================================================
-   LOGIN SCHLIESSEN
-===================================================== */
-
 function anmeldenSchliessen() {
 
     document.getElementById(
@@ -3533,26 +3409,19 @@ function anmeldenSchliessen() {
 }
 
 
-/* =====================================================
-   ANMELDEN TAB
-===================================================== */
-
 function anmeldenTabOeffnen() {
 
     document.getElementById(
         "anmeldenForm"
     ).classList.add("aktiv");
 
-
     document.getElementById(
         "registrierenForm"
     ).classList.remove("aktiv");
 
-
     document.getElementById(
         "anmeldenTab"
     ).classList.add("aktiv");
-
 
     document.getElementById(
         "registrierenTab"
@@ -3560,26 +3429,19 @@ function anmeldenTabOeffnen() {
 }
 
 
-/* =====================================================
-   REGISTRIEREN TAB
-===================================================== */
-
 function registrierenTabOeffnen() {
 
     document.getElementById(
         "registrierenForm"
     ).classList.add("aktiv");
 
-
     document.getElementById(
         "anmeldenForm"
     ).classList.remove("aktiv");
 
-
     document.getElementById(
         "registrierenTab"
     ).classList.add("aktiv");
-
 
     document.getElementById(
         "anmeldenTab"
@@ -3633,7 +3495,8 @@ async function registrieren() {
 
 
     if (
-        password !== password2
+        password !==
+        password2
     ) {
 
         alert(
@@ -3662,7 +3525,6 @@ async function registrieren() {
             await fetch(
                 "/api/register",
                 {
-
                     method: "POST",
 
                     headers: {
@@ -3671,19 +3533,18 @@ async function registrieren() {
                     },
 
                     body:
-                        JSON.stringify({
+                        JSON.stringify(
+                            {
+                                username:
+                                    username,
 
-                            username:
-                                username,
+                                email:
+                                    email,
 
-                            email:
-                                email,
-
-                            password:
-                                password
-
-                        })
-
+                                password:
+                                    password
+                            }
+                        )
                 }
             );
 
@@ -3692,14 +3553,7 @@ async function registrieren() {
             await antwort.json();
 
 
-        if (
-            daten.success
-        ) {
-
-            alert(
-                "Konto erfolgreich erstellt!"
-            );
-
+        if (daten.success) {
 
             benutzerAnzeigen(
                 daten.username,
@@ -3710,48 +3564,27 @@ async function registrieren() {
             anmeldenSchliessen();
 
 
-            document.getElementById(
-                "registerUsername"
-            ).value = "";
+            alert(
+                "Konto erfolgreich erstellt!"
+            );
 
-
-            document.getElementById(
-                "registerEmail"
-            ).value = "";
-
-
-            document.getElementById(
-                "registerPassword"
-            ).value = "";
-
-
-            document.getElementById(
-                "registerPassword2"
-            ).value = "";
-
-        }
-        else {
+        } else {
 
             alert(
                 daten.message
             );
-
         }
 
-    }
-    catch (fehler) {
+    } catch (fehler) {
 
         console.error(
             fehler
         );
 
-
         alert(
             "Der Server konnte nicht erreicht werden."
         );
-
     }
-
 }
 
 
@@ -3792,7 +3625,6 @@ async function anmelden() {
             await fetch(
                 "/api/login",
                 {
-
                     method: "POST",
 
                     headers: {
@@ -3801,16 +3633,15 @@ async function anmelden() {
                     },
 
                     body:
-                        JSON.stringify({
+                        JSON.stringify(
+                            {
+                                email:
+                                    email,
 
-                            email:
-                                email,
-
-                            password:
-                                password
-
-                        })
-
+                                password:
+                                    password
+                            }
+                        )
                 }
             );
 
@@ -3819,9 +3650,7 @@ async function anmelden() {
             await antwort.json();
 
 
-        if (
-            daten.success
-        ) {
+        if (daten.success) {
 
             benutzerAnzeigen(
                 daten.username,
@@ -3832,45 +3661,29 @@ async function anmelden() {
             anmeldenSchliessen();
 
 
-            document.getElementById(
-                "loginEmail"
-            ).value = "";
-
-
-            document.getElementById(
-                "loginPassword"
-            ).value = "";
-
-
             alert(
-                "Willkommen zurück, " +
-                daten.username +
-                "!"
+                "Willkommen zurück, "
+                + daten.username
+                + "!"
             );
 
-        }
-        else {
+        } else {
 
             alert(
                 daten.message
             );
-
         }
 
-    }
-    catch (fehler) {
+    } catch (fehler) {
 
         console.error(
             fehler
         );
 
-
         alert(
             "Der Server konnte nicht erreicht werden."
         );
-
     }
-
 }
 
 
@@ -3889,12 +3702,14 @@ function benutzerAnzeigen(
 
     document.getElementById(
         "anmeldenButton"
-    ).style.display = "none";
+    ).style.display =
+        "none";
 
 
     document.getElementById(
         "benutzerButton"
-    ).style.display = "block";
+    ).style.display =
+        "block";
 
 
     document.getElementById(
@@ -3913,6 +3728,19 @@ function benutzerAnzeigen(
         "benutzerEmail"
     ).textContent =
         email;
+
+
+    updateRekordAnzeige(
+        "flappy"
+    );
+
+    updateRekordAnzeige(
+        "snake"
+    );
+
+    updateRekordAnzeige(
+        "tetris"
+    );
 }
 
 
@@ -3929,18 +3757,18 @@ function benutzerMenueOeffnen() {
 
 
     if (
-        menue.style.display === "block"
+        menue.style.display ===
+        "block"
     ) {
 
-        menue.style.display = "none";
+        menue.style.display =
+            "none";
 
+    } else {
+
+        menue.style.display =
+            "block";
     }
-    else {
-
-        menue.style.display = "block";
-
-    }
-
 }
 
 
@@ -3949,9 +3777,6 @@ function benutzerMenueOeffnen() {
 ===================================================== */
 
 async function abmelden() {
-
-    spieleStoppen();
-
 
     try {
 
@@ -3968,9 +3793,7 @@ async function abmelden() {
             await antwort.json();
 
 
-        if (
-            daten.success
-        ) {
+        if (daten.success) {
 
             aktuellerBenutzer =
                 null;
@@ -3978,44 +3801,42 @@ async function abmelden() {
 
             document.getElementById(
                 "benutzerButton"
-            ).style.display = "none";
+            ).style.display =
+                "none";
 
 
             document.getElementById(
                 "anmeldenButton"
-            ).style.display = "block";
+            ).style.display =
+                "block";
 
 
             document.getElementById(
                 "benutzerMenue"
-            ).style.display = "none";
+            ).style.display =
+                "none";
 
 
             alert(
                 "Du wurdest abgemeldet."
             );
-
         }
 
-    }
-    catch (fehler) {
+    } catch (fehler) {
 
         console.error(
             fehler
         );
 
-
         alert(
             "Beim Abmelden ist ein Fehler aufgetreten."
         );
-
     }
-
 }
 
 
 /* =====================================================
-   BENUTZER PRÜFEN
+   LOGIN BEIM START PRÜFEN
 ===================================================== */
 
 async function benutzerPruefen() {
@@ -4040,19 +3861,14 @@ async function benutzerPruefen() {
                 daten.username,
                 daten.email
             );
-
         }
 
-    }
-    catch (fehler) {
+    } catch (fehler) {
 
-        console.error(
-            "Benutzerprüfung fehlgeschlagen:",
-            fehler
+        console.log(
+            "Benutzerprüfung fehlgeschlagen."
         );
-
     }
-
 }
 
 
@@ -4065,5 +3881,4 @@ benutzerPruefen();
 </script>
 
 </body>
-
 </html>
