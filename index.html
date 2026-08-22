@@ -2,51 +2,84 @@
 <html lang="de">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>NSAH - Nützliche Sparsame Alltags Hilfe</title>
 
-    <!-- Leaflet Karte -->
+
+    <!-- =========================
+         LEAFLET
+         ========================= -->
+
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    />
+    >
+
+
+    <!-- =========================
+         LEAFLET ROUTING MACHINE
+         ========================= -->
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"
+    >
+
 
     <style>
+
 
         /* =========================
            HINTERGRUND
            ========================= */
 
         body {
+
             margin: 0;
+
             background-color: black;
+
             color: white;
+
             font-family: Arial, sans-serif;
+
         }
 
 
         /* =========================
-           NSAH
+           NSAH LOGO
            ========================= */
 
- .logo {
-    position: absolute;
+        .logo {
 
-    top: 30px;
-    left: 50%;
+            position: absolute;
 
-    transform: translateX(-50%);
+            top: 30px;
 
-    font-size: 80px;
-    font-weight: bold;
+            left: 50%;
 
-    text-shadow:
-        0 0 4px rgba(255, 255, 255, 0.7),
-        0 0 10px rgba(255, 255, 255, 0.4),
-        0 0 18px rgba(255, 255, 255, 0.2);
-}
+            transform: translateX(-50%);
+
+            font-size: 80px;
+
+            font-weight: bold;
+
+
+            /* Dezenter Glow */
+
+            text-shadow:
+
+                0 0 4px rgba(255, 255, 255, 0.7),
+
+                0 0 10px rgba(255, 255, 255, 0.4),
+
+                0 0 18px rgba(255, 255, 255, 0.2);
+
+        }
 
 
         /* =========================
@@ -54,9 +87,11 @@
            ========================= */
 
         .untertitel {
+
             position: absolute;
 
             top: 110px;
+
             left: 50%;
 
             transform: translateX(-50%);
@@ -66,24 +101,28 @@
             color: white;
 
             white-space: nowrap;
+
         }
 
 
         /* =========================
-           DUNKELGRAUER STRICH
+           STRICH
            ========================= */
 
         .strich {
+
             position: fixed;
 
             left: 10%;
 
             top: 0;
+
             bottom: 0;
 
             width: 2px;
 
             background-color: #333333;
+
         }
 
 
@@ -92,9 +131,11 @@
            ========================= */
 
         .anmelden-button {
+
             position: fixed;
 
             top: 25px;
+
             left: 25px;
 
             padding: 12px 20px;
@@ -108,16 +149,20 @@
             border-radius: 7px;
 
             font-size: 16px;
+
             font-weight: bold;
 
             cursor: pointer;
 
             z-index: 50;
+
         }
 
 
         .anmelden-button:hover {
+
             background-color: #333333;
+
         }
 
 
@@ -126,11 +171,13 @@
            ========================= */
 
         .benutzer-button {
+
             display: none;
 
             position: fixed;
 
             top: 25px;
+
             left: 25px;
 
             padding: 12px 20px;
@@ -144,16 +191,20 @@
             border-radius: 7px;
 
             font-size: 16px;
+
             font-weight: bold;
 
             cursor: pointer;
 
             z-index: 50;
+
         }
 
 
         .benutzer-button:hover {
+
             background-color: #333333;
+
         }
 
 
@@ -162,9 +213,11 @@
            ========================= */
 
         .karten-button {
+
             position: fixed;
 
             top: 80px;
+
             left: 25px;
 
             padding: 12px 20px;
@@ -178,16 +231,20 @@
             border-radius: 7px;
 
             font-size: 16px;
+
             font-weight: bold;
 
             cursor: pointer;
 
             z-index: 50;
+
         }
 
 
         .karten-button:hover {
+
             background-color: #333333;
+
         }
 
 
@@ -196,11 +253,13 @@
            ========================= */
 
         .benutzer-menue {
+
             display: none;
 
             position: fixed;
 
             top: 75px;
+
             left: 25px;
 
             width: 230px;
@@ -216,19 +275,23 @@
             box-sizing: border-box;
 
             z-index: 200;
+
         }
 
 
         .benutzer-name {
+
             font-size: 18px;
 
             font-weight: bold;
 
             margin-bottom: 5px;
+
         }
 
 
         .benutzer-email {
+
             color: #888888;
 
             font-size: 13px;
@@ -236,10 +299,12 @@
             margin-bottom: 15px;
 
             word-break: break-all;
+
         }
 
 
         .abmelden-button {
+
             width: 100%;
 
             height: 40px;
@@ -253,29 +318,33 @@
             border-radius: 6px;
 
             cursor: pointer;
+
         }
 
 
         .abmelden-button:hover {
+
             background-color: #333333;
+
         }
 
 
         /* =====================================================
            ANMELDE HINTERGRUND
-           WICHTIG:
-           LIEGT ÜBER DER GESAMTEN SEITE
            ===================================================== */
 
         .fenster-hintergrund {
+
             display: none;
 
             position: fixed;
 
             top: 0;
+
             left: 0;
 
             width: 100vw;
+
             height: 100vh;
 
             background-color: rgba(0, 0, 0, 0.85);
@@ -283,6 +352,7 @@
             z-index: 9999;
 
             box-sizing: border-box;
+
         }
 
 
@@ -291,9 +361,11 @@
            ========================= */
 
         .anmelde-fenster {
+
             position: absolute;
 
             top: 50%;
+
             left: 50%;
 
             transform: translate(-50%, -50%);
@@ -317,9 +389,11 @@
             box-sizing: border-box;
 
             box-shadow:
+
                 0 0 30px rgba(255, 255, 255, 0.1);
 
             z-index: 10000;
+
         }
 
 
@@ -328,6 +402,7 @@
            ========================= */
 
         .fenster-kopf {
+
             display: flex;
 
             justify-content: space-between;
@@ -335,13 +410,16 @@
             align-items: center;
 
             margin-bottom: 25px;
+
         }
 
 
         .fenster-titel {
+
             font-size: 25px;
 
             font-weight: bold;
+
         }
 
 
@@ -350,6 +428,7 @@
            ========================= */
 
         .schliessen {
+
             background: none;
 
             border: none;
@@ -361,6 +440,7 @@
             cursor: pointer;
 
             padding: 0;
+
         }
 
 
@@ -369,13 +449,16 @@
            ========================= */
 
         .tabs {
+
             display: flex;
 
             margin-bottom: 20px;
+
         }
 
 
         .tab {
+
             flex: 1;
 
             padding: 12px;
@@ -389,13 +472,16 @@
             cursor: pointer;
 
             font-size: 15px;
+
         }
 
 
         .tab.aktiv {
+
             background-color: #333333;
 
             color: white;
+
         }
 
 
@@ -404,25 +490,32 @@
            ========================= */
 
         .formular {
+
             display: none;
+
         }
 
 
         .formular.aktiv {
+
             display: block;
+
         }
 
 
         .formular label {
+
             display: block;
 
             margin-bottom: 7px;
 
             color: #cccccc;
+
         }
 
 
         .formular input {
+
             width: 100%;
 
             height: 45px;
@@ -444,11 +537,14 @@
             outline: none;
 
             font-size: 15px;
+
         }
 
 
         .formular input:focus {
+
             border-color: #777777;
+
         }
 
 
@@ -457,6 +553,7 @@
            ========================= */
 
         .formular-button {
+
             width: 100%;
 
             height: 45px;
@@ -474,11 +571,14 @@
             font-size: 16px;
 
             font-weight: bold;
+
         }
 
 
         .formular-button:hover {
+
             background-color: #444444;
+
         }
 
 
@@ -487,6 +587,7 @@
            ========================= */
 
         .hinweis {
+
             margin-top: 15px;
 
             text-align: center;
@@ -494,39 +595,47 @@
             color: #777777;
 
             font-size: 13px;
+
         }
 
 
-        /* =========================
+        /* =====================================================
            KARTEN FENSTER
-           ========================= */
+           ===================================================== */
 
         .karten-hintergrund {
+
             display: none;
 
             position: fixed;
 
             top: 0;
+
             left: 0;
 
             width: 100%;
+
             height: 100%;
 
             background-color: rgba(0, 0, 0, 0.85);
 
             z-index: 1000;
+
         }
 
 
         .karten-fenster {
+
             position: absolute;
 
             top: 50%;
+
             left: 50%;
 
             transform: translate(-50%, -50%);
 
             width: 90%;
+
             height: 90%;
 
             background-color: #111111;
@@ -536,10 +645,16 @@
             border-radius: 12px;
 
             overflow: hidden;
+
         }
 
 
+        /* =========================
+           KARTEN KOPF
+           ========================= */
+
         .karten-kopf {
+
             height: 55px;
 
             display: flex;
@@ -555,17 +670,21 @@
             background-color: #151515;
 
             border-bottom: 1px solid #333333;
+
         }
 
 
         .karten-titel {
+
             font-size: 20px;
 
             font-weight: bold;
+
         }
 
 
         .karten-schliessen {
+
             background: none;
 
             border: none;
@@ -575,13 +694,20 @@
             font-size: 28px;
 
             cursor: pointer;
+
         }
 
 
+        /* =========================
+           KARTE
+           ========================= */
+
         #karte {
+
             width: 100%;
 
             height: calc(100% - 55px);
+
         }
 
 
@@ -590,9 +716,11 @@
            ========================= */
 
         .standort-button {
+
             position: absolute;
 
             right: 15px;
+
             bottom: 15px;
 
             z-index: 1000;
@@ -614,12 +742,16 @@
             cursor: pointer;
 
             box-shadow:
+
                 0 2px 8px rgba(0, 0, 0, 0.4);
+
         }
 
 
         .standort-button:hover {
+
             background-color: #eeeeee;
+
         }
 
 
@@ -631,20 +763,24 @@
 
 
             body {
+
                 min-width: 0;
 
                 overflow-x: hidden;
+
             }
 
 
             /* =========================
-               NSAH
+               LOGO
                ========================= */
 
             .logo {
+
                 position: absolute;
 
                 top: 25px;
+
                 left: 63%;
 
                 transform: translateX(-50%);
@@ -652,6 +788,7 @@
                 font-size: 52px;
 
                 white-space: nowrap;
+
             }
 
 
@@ -660,9 +797,11 @@
                ========================= */
 
             .untertitel {
+
                 position: absolute;
 
                 top: 95px;
+
                 left: 63%;
 
                 transform: translateX(-50%);
@@ -676,6 +815,7 @@
                 text-align: center;
 
                 white-space: normal;
+
             }
 
 
@@ -684,17 +824,20 @@
                ========================= */
 
             .strich {
+
                 left: 24%;
 
                 width: 2px;
+
             }
 
 
             /* =========================
-               ANMELDEN BUTTON
+               ANMELDEN
                ========================= */
 
             .anmelden-button {
+
                 top: 18px;
 
                 left: 0;
@@ -704,6 +847,7 @@
                 font-size: 13px;
 
                 z-index: 50;
+
             }
 
 
@@ -712,6 +856,7 @@
                ========================= */
 
             .karten-button {
+
                 top: 58px;
 
                 left: 5px;
@@ -721,14 +866,16 @@
                 font-size: 13px;
 
                 z-index: 50;
+
             }
 
 
             /* =========================
-               BENUTZER BUTTON
+               BENUTZER
                ========================= */
 
             .benutzer-button {
+
                 top: 18px;
 
                 left: 12px;
@@ -746,6 +893,7 @@
                 text-overflow: ellipsis;
 
                 white-space: nowrap;
+
             }
 
 
@@ -754,6 +902,7 @@
                ========================= */
 
             .benutzer-menue {
+
                 top: 65px;
 
                 left: 12px;
@@ -763,40 +912,43 @@
                 max-width: 260px;
 
                 z-index: 200;
+
             }
 
 
             /* =================================================
-               ANMELDE FENSTER AUF HANDY
-               BLEIBT EXAKT IN DER MITTE
+               LOGIN AUF HANDY
                ================================================= */
 
             .fenster-hintergrund {
+
                 position: fixed;
 
                 top: 0;
+
                 left: 0;
 
                 width: 100vw;
+
                 height: 100vh;
 
                 display: none;
-
-                align-items: center;
-                justify-content: center;
 
                 padding: 15px;
 
                 box-sizing: border-box;
 
                 z-index: 9999;
+
             }
 
 
             .anmelde-fenster {
+
                 position: absolute;
 
                 top: 50%;
+
                 left: 50%;
 
                 transform: translate(-50%, -50%);
@@ -814,81 +966,77 @@
                 box-sizing: border-box;
 
                 z-index: 10000;
+
             }
 
-
-            /* =========================
-               TITEL
-               ========================= */
 
             .fenster-titel {
+
                 font-size: 21px;
+
             }
 
 
-            /* =========================
-               TABS
-               ========================= */
-
             .tab {
+
                 padding: 12px 5px;
 
                 font-size: 14px;
+
             }
 
 
-            /* =========================
-               EINGABEFELDER
-               ========================= */
-
             .formular input {
+
                 width: 100%;
 
                 height: 48px;
 
                 font-size: 16px;
+
             }
 
 
-            /* =========================
-               FORMULAR BUTTON
-               ========================= */
-
             .formular-button {
+
                 height: 48px;
 
                 font-size: 16px;
+
             }
 
-
-            /* =========================
-               SCHLIESSEN
-               ========================= */
 
             .schliessen {
+
                 font-size: 26px;
+
             }
 
 
             /* =========================
-               KARTEN FENSTER
+               KARTE AUF HANDY
                ========================= */
 
             .karten-fenster {
+
                 width: 96%;
 
                 height: 92%;
 
                 border-radius: 10px;
+
             }
 
 
             .karten-titel {
+
                 font-size: 17px;
+
             }
 
 
             .standort-button {
+
                 right: 10px;
 
                 bottom: 10px;
@@ -896,9 +1044,11 @@
                 padding: 9px 11px;
 
                 font-size: 13px;
+
             }
 
         }
+
 
     </style>
 
@@ -913,21 +1063,25 @@
          ========================= -->
 
     <div class="logo">
+
         NSAH
+
     </div>
 
 
     <!-- =========================
-         BEDEUTUNG
+         UNTERTITEL
          ========================= -->
 
     <div class="untertitel">
+
         Nützliche Sparsame Alltags Hilfe
+
     </div>
 
 
     <!-- =========================
-         DUNKELGRAUER STRICH
+         STRICH
          ========================= -->
 
     <div class="strich"></div>
@@ -969,7 +1123,10 @@
         id="benutzerButton"
         onclick="benutzerMenueOeffnen()">
 
-        👤 <span id="benutzerNameOben">Benutzer</span>
+        👤
+        <span id="benutzerNameOben">
+            Benutzer
+        </span>
 
     </button>
 
@@ -1009,7 +1166,6 @@
 
     <!-- =====================================================
          ANMELDE FENSTER
-         LIEGT ÜBER ALLEM
          ===================================================== -->
 
     <div
@@ -1020,14 +1176,13 @@
         <div class="anmelde-fenster">
 
 
-            <!-- =========================
-                 KOPF
-                 ========================= -->
-
             <div class="fenster-kopf">
 
+
                 <div class="fenster-titel">
+
                     NSAH Konto
+
                 </div>
 
 
@@ -1039,6 +1194,7 @@
 
                 </button>
 
+
             </div>
 
 
@@ -1047,6 +1203,7 @@
                  ========================= -->
 
             <div class="tabs">
+
 
                 <button
                     class="tab aktiv"
@@ -1067,11 +1224,12 @@
 
                 </button>
 
+
             </div>
 
 
             <!-- =========================
-                 ANMELDEN FORMULAR
+                 ANMELDEN
                  ========================= -->
 
             <div
@@ -1080,25 +1238,31 @@
 
 
                 <label>
+
                     E-Mail
+
                 </label>
 
 
                 <input
                     type="email"
                     id="loginEmail"
-                    placeholder="Deine E-Mail">
+                    placeholder="Deine E-Mail"
+                >
 
 
                 <label>
+
                     Passwort
+
                 </label>
 
 
                 <input
                     type="password"
                     id="loginPassword"
-                    placeholder="Dein Passwort">
+                    placeholder="Dein Passwort"
+                >
 
 
                 <button
@@ -1122,7 +1286,7 @@
 
 
             <!-- =========================
-                 REGISTRIEREN FORMULAR
+                 REGISTRIEREN
                  ========================= -->
 
             <div
@@ -1131,47 +1295,59 @@
 
 
                 <label>
+
                     Benutzername
+
                 </label>
 
 
                 <input
                     type="text"
                     id="registerUsername"
-                    placeholder="Dein Benutzername">
+                    placeholder="Dein Benutzername"
+                >
 
 
                 <label>
+
                     E-Mail
+
                 </label>
 
 
                 <input
                     type="email"
                     id="registerEmail"
-                    placeholder="Deine E-Mail">
+                    placeholder="Deine E-Mail"
+                >
 
 
                 <label>
+
                     Passwort
+
                 </label>
 
 
                 <input
                     type="password"
                     id="registerPassword"
-                    placeholder="Dein Passwort">
+                    placeholder="Dein Passwort"
+                >
 
 
                 <label>
+
                     Passwort wiederholen
+
                 </label>
 
 
                 <input
                     type="password"
                     id="registerPassword2"
-                    placeholder="Passwort wiederholen">
+                    placeholder="Passwort wiederholen"
+                >
 
 
                 <button
@@ -1185,14 +1361,16 @@
 
             </div>
 
+
         </div>
+
 
     </div>
 
 
-    <!-- =========================
+    <!-- =====================================================
          KARTEN FENSTER
-         ========================= -->
+         ===================================================== -->
 
     <div
         class="karten-hintergrund"
@@ -1204,8 +1382,11 @@
 
             <div class="karten-kopf">
 
+
                 <div class="karten-titel">
+
                     🗺️ NSAH Weltkarte
+
                 </div>
 
 
@@ -1217,11 +1398,20 @@
 
                 </button>
 
+
             </div>
 
 
+            <!-- =========================
+                 KARTE
+                 ========================= -->
+
             <div id="karte"></div>
 
+
+            <!-- =========================
+                 STANDORT BUTTON
+                 ========================= -->
 
             <button
                 class="standort-button"
@@ -1233,6 +1423,7 @@
 
 
         </div>
+
 
     </div>
 
@@ -1246,75 +1437,317 @@
     </script>
 
 
+    <!-- =========================
+         ROUTING
+         ========================= -->
+
+    <script
+        src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js">
+    </script>
+
+
     <script>
 
 
-        /* =========================
+        /* =====================================================
            KARTEN VARIABLEN
-           ========================= */
+           ===================================================== */
 
         let karte = null;
 
         let standortMarker = null;
 
+        let zielMarker = null;
 
-        /* =========================
+        let routingControl = null;
+
+        let aktuellerStandort = null;
+
+
+        /* =====================================================
            KARTE ÖFFNEN
-           ========================= */
+           ===================================================== */
 
         function kartenOeffnen() {
+
 
             document.getElementById(
                 "kartenFenster"
             ).style.display = "block";
 
 
+            /* =========================
+               KARTE ERSTELLEN
+               ========================= */
+
             if (!karte) {
 
-                karte = L.map("karte").setView(
+
+                karte = L.map(
+                    "karte",
+                    {
+
+                        worldCopyJump: false,
+
+                        maxBounds: [
+                            [-90, -180],
+                            [90, 180]
+                        ],
+
+                        maxBoundsViscosity: 1.0
+
+                    }
+                ).setView(
+
                     [20, 0],
+
                     2
+
                 );
 
 
+                /* =========================
+                   OPENSTREETMAP
+                   ========================= */
+
                 L.tileLayer(
+
                     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
                     {
+
                         maxZoom: 19,
+
+                        noWrap: true,
 
                         attribution:
                             "&copy; OpenStreetMap-Mitwirkende"
+
                     }
+
                 ).addTo(karte);
 
 
-                setTimeout(function () {
+                /* =========================
+                   KLICK AUF KARTE
+                   ========================= */
 
-                    karte.invalidateSize();
+                karte.on(
+                    "click",
+                    function(e) {
 
-                }, 200);
 
+                        /* Standort noch nicht bekannt */
+
+                        if (!aktuellerStandort) {
+
+
+                            alert(
+                                "Dein Standort wird noch ermittelt. Bitte einen Moment warten."
+                            );
+
+
+                            eigenenStandortFinden();
+
+
+                            return;
+
+                        }
+
+
+                        /* =========================
+                           ZIEL KOORDINATEN
+                           ========================= */
+
+                        const zielLatitude =
+                            e.latlng.lat;
+
+
+                        const zielLongitude =
+                            e.latlng.lng;
+
+
+                        /* =========================
+                           ALTEN ZIELMARKER ENTFERNEN
+                           ========================= */
+
+                        if (zielMarker) {
+
+                            karte.removeLayer(
+                                zielMarker
+                            );
+
+                        }
+
+
+                        /* =========================
+                           ALTE ROUTE ENTFERNEN
+                           ========================= */
+
+                        if (routingControl) {
+
+                            karte.removeControl(
+                                routingControl
+                            );
+
+                            routingControl = null;
+
+                        }
+
+
+                        /* =========================
+                           NEUEN ZIELMARKER
+                           ========================= */
+
+                        zielMarker =
+                            L.marker(
+                                [
+                                    zielLatitude,
+                                    zielLongitude
+                                ]
+                            ).addTo(karte);
+
+
+                        zielMarker
+                            .bindPopup(
+                                "📍 Ziel"
+                            )
+                            .openPopup();
+
+
+                        /* =========================
+                           ROUTE BERECHNEN
+                           ========================= */
+
+                        routingControl =
+                            L.Routing.control(
+
+                                {
+
+                                    waypoints: [
+
+                                        L.latLng(
+
+                                            aktuellerStandort.latitude,
+
+                                            aktuellerStandort.longitude
+
+                                        ),
+
+                                        L.latLng(
+
+                                            zielLatitude,
+
+                                            zielLongitude
+
+                                        )
+
+                                    ],
+
+
+                                    routeWhileDragging:
+                                        false,
+
+
+                                    showAlternatives:
+                                        false,
+
+
+                                    addWaypoints:
+                                        false,
+
+
+                                    draggableWaypoints:
+                                        false,
+
+
+                                    fitSelectedRoutes:
+                                        true,
+
+
+                                    createMarker:
+                                        function() {
+
+                                            return null;
+
+                                        },
+
+
+                                    lineOptions: {
+
+                                        styles: [
+
+                                            {
+
+                                                opacity: 0.9,
+
+                                                weight: 6
+
+                                            }
+
+                                        ]
+
+                                    }
+
+                                }
+
+                            ).addTo(karte);
+
+
+                    }
+                );
+
+
+                /* =========================
+                   KARTE GRÖSSE AKTUALISIEREN
+                   ========================= */
+
+                setTimeout(
+
+                    function() {
+
+                        karte.invalidateSize();
+
+                    },
+
+                    200
+
+                );
+
+
+                /* =========================
+                   STANDORT AUTOMATISCH
+                   ========================= */
 
                 eigenenStandortFinden();
 
+
             } else {
 
-                setTimeout(function () {
 
-                    karte.invalidateSize();
+                setTimeout(
 
-                }, 200);
+                    function() {
+
+                        karte.invalidateSize();
+
+                    },
+
+                    200
+
+                );
 
             }
 
         }
 
 
-        /* =========================
+        /* =====================================================
            KARTE SCHLIESSEN
-           ========================= */
+           ===================================================== */
 
         function kartenSchliessen() {
+
 
             document.getElementById(
                 "kartenFenster"
@@ -1323,17 +1756,20 @@
         }
 
 
-        /* =========================
+        /* =====================================================
            EIGENEN STANDORT FINDEN
-           ========================= */
+           ===================================================== */
 
         function eigenenStandortFinden() {
 
+
             if (!navigator.geolocation) {
+
 
                 alert(
                     "Dein Browser unterstützt keine Standortbestimmung."
                 );
+
 
                 return;
 
@@ -1342,35 +1778,82 @@
 
             navigator.geolocation.getCurrentPosition(
 
-                function (position) {
+
+                function(position) {
+
+
+                    /* =========================
+                       KOORDINATEN
+                       ========================= */
 
                     const latitude =
                         position.coords.latitude;
+
 
                     const longitude =
                         position.coords.longitude;
 
 
+                    /* =========================
+                       STANDORT SPEICHERN
+                       ========================= */
+
+                    aktuellerStandort = {
+
+                        latitude:
+                            latitude,
+
+                        longitude:
+                            longitude
+
+                    };
+
+
+                    /* =========================
+                       KARTE ZUM STANDORT
+                       ========================= */
+
                     karte.setView(
-                        [latitude, longitude],
+
+                        [
+                            latitude,
+                            longitude
+                        ],
+
                         13
+
                     );
 
 
+                    /* =========================
+                       ALTEN MARKER ENTFERNEN
+                       ========================= */
+
                     if (standortMarker) {
+
 
                         karte.removeLayer(
                             standortMarker
                         );
 
+
                     }
 
 
+                    /* =========================
+                       NEUEN STANDORT MARKER
+                       ========================= */
+
                     standortMarker =
-                        L.marker([
-                            latitude,
-                            longitude
-                        ]).addTo(karte);
+
+                        L.marker(
+
+                            [
+                                latitude,
+                                longitude
+                            ]
+
+                        ).addTo(karte);
 
 
                     standortMarker
@@ -1379,45 +1862,65 @@
                         )
                         .openPopup();
 
+
                 },
 
 
-                function (fehler) {
+                function(fehler) {
+
 
                     if (fehler.code === 1) {
+
 
                         alert(
                             "Der Zugriff auf deinen Standort wurde verweigert."
                         );
 
-                    } else if (fehler.code === 2) {
+
+                    }
+
+                    else if (fehler.code === 2) {
+
 
                         alert(
                             "Dein Standort konnte nicht ermittelt werden."
                         );
 
-                    } else if (fehler.code === 3) {
+
+                    }
+
+                    else if (fehler.code === 3) {
+
 
                         alert(
                             "Die Standortabfrage hat zu lange gedauert."
                         );
 
-                    } else {
+
+                    }
+
+                    else {
+
 
                         alert(
                             "Dein Standort konnte nicht ermittelt werden."
                         );
 
+
                     }
+
 
                 },
 
+
                 {
+
                     enableHighAccuracy: true,
 
                     timeout: 10000,
 
                     maximumAge: 0
+
                 }
 
             );
@@ -1425,11 +1928,12 @@
         }
 
 
-        /* =========================
+        /* =====================================================
            ANMELDE FENSTER ÖFFNEN
-           ========================= */
+           ===================================================== */
 
         function anmeldenOeffnen() {
+
 
             document.getElementById(
                 "anmeldeFenster"
@@ -1438,11 +1942,12 @@
         }
 
 
-        /* =========================
+        /* =====================================================
            ANMELDE FENSTER SCHLIESSEN
-           ========================= */
+           ===================================================== */
 
         function anmeldenSchliessen() {
+
 
             document.getElementById(
                 "anmeldeFenster"
@@ -1451,12 +1956,13 @@
         }
 
 
-        /* =========================
+        /* =====================================================
            ANMELDEN TAB
-           ========================= */
+           ===================================================== */
 
         function anmeldenTabOeffnen() {
 
+
             document.getElementById(
                 "anmeldenForm"
             ).classList.add("aktiv");
@@ -1479,12 +1985,13 @@
         }
 
 
-        /* =========================
+        /* =====================================================
            REGISTRIEREN TAB
-           ========================= */
+           ===================================================== */
 
         function registrierenTabOeffnen() {
 
+
             document.getElementById(
                 "registrierenForm"
             ).classList.add("aktiv");
@@ -1507,68 +2014,88 @@
         }
 
 
-        /* =========================
+        /* =====================================================
            REGISTRIEREN
-           ========================= */
+           ===================================================== */
 
         async function registrieren() {
 
+
             const username =
+
                 document.getElementById(
                     "registerUsername"
                 ).value.trim();
 
 
             const email =
+
                 document.getElementById(
                     "registerEmail"
                 ).value.trim();
 
 
             const password =
+
                 document.getElementById(
                     "registerPassword"
                 ).value;
 
 
             const password2 =
+
                 document.getElementById(
                     "registerPassword2"
                 ).value;
 
 
             if (
+
                 !username ||
+
                 !email ||
+
                 !password ||
+
                 !password2
+
             ) {
+
 
                 alert(
                     "Bitte fülle alle Felder aus."
                 );
 
+
                 return;
 
             }
 
 
-            if (password !== password2) {
+            if (
+                password !== password2
+            ) {
+
 
                 alert(
                     "Die Passwörter stimmen nicht überein."
                 );
 
+
                 return;
 
             }
 
 
-            if (password.length < 6) {
+            if (
+                password.length < 6
+            ) {
+
 
                 alert(
                     "Das Passwort muss mindestens 6 Zeichen haben."
                 );
+
 
                 return;
 
@@ -1577,29 +2104,41 @@
 
             try {
 
+
                 const antwort =
+
                     await fetch(
+
                         "/api/register",
+
                         {
 
                             method: "POST",
 
                             headers: {
+
                                 "Content-Type":
                                     "application/json"
+
                             },
 
-                            body: JSON.stringify({
+                            body:
 
-                                username: username,
+                                JSON.stringify({
 
-                                email: email,
+                                    username:
+                                        username,
 
-                                password: password
+                                    email:
+                                        email,
 
-                            })
+                                    password:
+                                        password
+
+                                })
 
                         }
+
                     );
 
 
@@ -1609,14 +2148,18 @@
 
                 if (daten.success) {
 
+
                     alert(
                         "Konto erfolgreich erstellt!"
                     );
 
 
                     benutzerAnzeigen(
+
                         daten.username,
+
                         daten.email
+
                     );
 
 
@@ -1642,16 +2185,24 @@
                         "registerPassword2"
                     ).value = "";
 
-                } else {
+
+                }
+
+                else {
+
 
                     alert(
                         daten.message
                     );
 
+
                 }
 
 
-            } catch (fehler) {
+            }
+
+            catch (fehler) {
+
 
                 console.error(
                     fehler
@@ -1662,34 +2213,43 @@
                     "Der Server konnte nicht erreicht werden."
                 );
 
+
             }
 
         }
 
 
-        /* =========================
+        /* =====================================================
            ANMELDEN
-           ========================= */
+           ===================================================== */
 
         async function anmelden() {
 
+
             const email =
+
                 document.getElementById(
                     "loginEmail"
                 ).value.trim();
 
 
             const password =
+
                 document.getElementById(
                     "loginPassword"
                 ).value;
 
 
-            if (!email || !password) {
+            if (
+                !email ||
+                !password
+            ) {
+
 
                 alert(
                     "Bitte E-Mail und Passwort eingeben."
                 );
+
 
                 return;
 
@@ -1698,27 +2258,38 @@
 
             try {
 
+
                 const antwort =
+
                     await fetch(
+
                         "/api/login",
+
                         {
 
                             method: "POST",
 
                             headers: {
+
                                 "Content-Type":
                                     "application/json"
+
                             },
 
-                            body: JSON.stringify({
+                            body:
 
-                                email: email,
+                                JSON.stringify({
 
-                                password: password
+                                    email:
+                                        email,
 
-                            })
+                                    password:
+                                        password
+
+                                })
 
                         }
+
                     );
 
 
@@ -1728,9 +2299,13 @@
 
                 if (daten.success) {
 
+
                     benutzerAnzeigen(
+
                         daten.username,
+
                         daten.email
+
                     );
 
 
@@ -1748,21 +2323,33 @@
 
 
                     alert(
+
                         "Willkommen zurück, "
-                        + daten.username
-                        + "!"
+                        +
+                        daten.username
+                        +
+                        "!"
+
                     );
 
-                } else {
+
+                }
+
+                else {
+
 
                     alert(
                         daten.message
                     );
 
+
                 }
 
 
-            } catch (fehler) {
+            }
+
+            catch (fehler) {
+
 
                 console.error(
                     fehler
@@ -1773,19 +2360,24 @@
                     "Der Server konnte nicht erreicht werden."
                 );
 
+
             }
 
         }
 
 
-        /* =========================
+        /* =====================================================
            BENUTZER ANZEIGEN
-           ========================= */
+           ===================================================== */
 
         function benutzerAnzeigen(
+
             username,
+
             email
+
         ) {
+
 
             document.getElementById(
                 "anmeldenButton"
@@ -1799,62 +2391,87 @@
 
             document.getElementById(
                 "benutzerNameOben"
-            ).textContent = username;
+            ).textContent =
+                username;
 
 
             document.getElementById(
                 "benutzerName"
-            ).textContent = username;
+            ).textContent =
+                username;
 
 
             document.getElementById(
                 "benutzerEmail"
-            ).textContent = email;
+            ).textContent =
+                email;
 
         }
 
 
-        /* =========================
-           BENUTZER MENÜ ÖFFNEN
-           ========================= */
+        /* =====================================================
+           BENUTZER MENÜ
+           ===================================================== */
 
         function benutzerMenueOeffnen() {
 
+
             const menue =
+
                 document.getElementById(
                     "benutzerMenue"
                 );
 
 
             if (
-                menue.style.display === "block"
+
+                menue.style.display
+                ===
+                "block"
+
             ) {
 
-                menue.style.display = "none";
 
-            } else {
+                menue.style.display =
+                    "none";
 
-                menue.style.display = "block";
+
+            }
+
+            else {
+
+
+                menue.style.display =
+                    "block";
+
 
             }
 
         }
 
 
-        /* =========================
+        /* =====================================================
            ABMELDEN
-           ========================= */
+           ===================================================== */
 
         async function abmelden() {
 
+
             try {
 
+
                 const antwort =
+
                     await fetch(
+
                         "/api/logout",
+
                         {
+
                             method: "POST"
+
                         }
+
                     );
 
 
@@ -1864,29 +2481,37 @@
 
                 if (daten.success) {
 
+
                     document.getElementById(
                         "benutzerButton"
-                    ).style.display = "none";
+                    ).style.display =
+                        "none";
 
 
                     document.getElementById(
                         "anmeldenButton"
-                    ).style.display = "block";
+                    ).style.display =
+                        "block";
 
 
                     document.getElementById(
                         "benutzerMenue"
-                    ).style.display = "none";
+                    ).style.display =
+                        "none";
 
 
                     alert(
                         "Du wurdest abgemeldet."
                     );
 
+
                 }
 
 
-            } catch (fehler) {
+            }
+
+            catch (fehler) {
+
 
                 console.error(
                     fehler
@@ -1897,20 +2522,24 @@
                     "Beim Abmelden ist ein Fehler aufgetreten."
                 );
 
+
             }
 
         }
 
 
-        /* =========================
-           BEIM SEITENSTART PRÜFEN
-           ========================= */
+        /* =====================================================
+           BENUTZER PRÜFEN
+           ===================================================== */
 
         async function benutzerPruefen() {
 
+
             try {
 
+
                 const antwort =
+
                     await fetch(
                         "/api/me"
                     );
@@ -1922,35 +2551,20 @@
 
                 if (daten.loggedIn) {
 
+
                     benutzerAnzeigen(
+
                         daten.username,
+
                         daten.email
+
                     );
+
 
                 }
 
 
-            } catch (fehler) {
-
-                console.error(
-                    "Benutzerprüfung fehlgeschlagen:",
-                    fehler
-                );
-
             }
 
-        }
+            catch (fehler) {
 
-
-        /* =========================
-           START
-           ========================= */
-
-        benutzerPruefen();
-
-
-    </script>
-
-</body>
-
-</html>
