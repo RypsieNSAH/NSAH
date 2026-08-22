@@ -16,35 +16,50 @@
 
     <style>
 
-        /* =========================
-           HINTERGRUND
-        ========================= */
+   /* =========================
+   HINTERGRUND
+========================= */
 
-        body {
-            margin: 0;
+body {
+    margin: 0;
 
-            background-color: black;
+    background-color: black;
 
-            /*
-                Hintergrundbild aus deinem GitHub-Ordner
-                "Nsah bilder"
-            */
+    background-image:
+        linear-gradient(
+            rgba(0, 0, 0, 0.30),
+            rgba(0, 0, 0, 0.30)
+        ),
+        url("Nsah%20bilder/Screenshot2026-08-22214731(1).png");
 
-            background-image:
-                linear-gradient(
-                    rgba(0, 0, 0, 0.30),
-                    rgba(0, 0, 0, 0.30)
-                ),
-                url("Nsah%20bilder/Screenshot2026-08-22214731(1).png");
+    /*
+    ==========================================
+    BILD EINSTELLUNGEN
+    ==========================================
 
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
+    X = horizontal
+    Y = vertikal
 
-            color: white;
-            font-family: Arial, sans-serif;
-        }
+    Beispiel:
+    50% 50% = Mitte
+    0% 0%   = oben links
+    100% 0% = oben rechts
+    0% 100% = unten links
+    100% 100% = unten rechts
+    */
+
+    background-size: 100% auto;
+
+    background-position: 50% 50%;
+
+    background-repeat: no-repeat;
+
+    background-attachment: fixed;
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+}
 
 
         /* =========================
