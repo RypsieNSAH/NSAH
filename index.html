@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="de">
 
@@ -10,7 +9,6 @@
 
 <title>NSAH - Nützliche Sparsame Alltags Hilfe</title>
 
-
 <!-- =========================
      LEAFLET KARTE
 ========================= -->
@@ -18,14 +16,13 @@
 <link
 rel="stylesheet"
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
-
+>
 
 <style>
 
-/* =========================
-   GRUNDLEGENDES
-========================= */
+/* =========================================================
+   GRUNDLAYOUT
+========================================================= */
 
 * {
     box-sizing: border-box;
@@ -33,13 +30,10 @@ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 
 html,
 body {
-
     margin: 0;
-
     padding: 0;
 
     width: 100%;
-
     min-height: 100%;
 
     background-color: black;
@@ -51,69 +45,79 @@ body {
     overflow-x: hidden;
 }
 
-body {
 
-    position: relative;
-}
-
-
-/* =========================
+/* =========================================================
    HINTERGRUNDBILD
-========================= */
+========================================================= */
 
 .hintergrund-bild {
 
     position: fixed;
 
     left: 50%;
-
     top: 50%;
 
-    transform:
-        translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 
     width: 40vw;
-
     height: 40vh;
 
-    min-width: 280px;
+    background-image:
+        url("Nsah bilder/Screenshot2026-08-22214731(1).png");
 
-    min-height: 220px;
+    background-size: cover;
 
-    max-width: 800px;
+    background-position: center;
 
-    max-height: 600px;
+    background-repeat: no-repeat;
 
     border-radius: 25px;
-
-    overflow: hidden;
 
     z-index: 0;
 
-    pointer-events: none;
+    opacity: 1;
 
-    opacity: 0.95;
+    pointer-events: none;
 }
 
-.hintergrund-bild img {
 
-    width: 100%;
+/* Dunkler Schleier über dem Bild */
 
-    height: 100%;
+.hintergrund-bild::after {
 
-    display: block;
+    content: "";
 
-    object-fit: cover;
+    position: absolute;
 
-    object-position: center;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.15);
 
     border-radius: 25px;
 }
 
 
-/* =========================
+/* =========================================================
+   HAUPTINHALT
+========================================================= */
+
+.logo,
+.untertitel,
+.strich,
+.anmelden-button,
+.karten-button,
+.spiele-button,
+.benutzer-button {
+
+    position: relative;
+
+    z-index: 10;
+}
+
+
+/* =========================================================
    LOGO
-========================= */
+========================================================= */
 
 .logo {
 
@@ -123,33 +127,24 @@ body {
 
     left: 50%;
 
-    transform:
-        translateX(-50%);
+    transform: translateX(-50%);
 
     font-size: 80px;
 
     font-weight: bold;
 
-    text-align: center;
-
-    z-index: 10;
+    white-space: nowrap;
 
     text-shadow:
-
-        0 0 4px
-        rgba(255,255,255,0.7),
-
-        0 0 10px
-        rgba(255,255,255,0.35),
-
-        0 0 18px
-        rgba(255,255,255,0.15);
+        0 0 4px rgba(255,255,255,0.7),
+        0 0 10px rgba(255,255,255,0.35),
+        0 0 18px rgba(255,255,255,0.15);
 }
 
 
-/* =========================
+/* =========================================================
    UNTERTITEL
-========================= */
+========================================================= */
 
 .untertitel {
 
@@ -159,8 +154,7 @@ body {
 
     left: 50%;
 
-    transform:
-        translateX(-50%);
+    transform: translateX(-50%);
 
     font-size: 26px;
 
@@ -168,15 +162,14 @@ body {
 
     white-space: nowrap;
 
-    text-align: center;
-
-    z-index: 10;
+    text-shadow:
+        0 0 5px rgba(0,0,0,0.8);
 }
 
 
-/* =========================
+/* =========================================================
    STRICH
-========================= */
+========================================================= */
 
 .strich {
 
@@ -192,19 +185,18 @@ body {
 
     background-color: #333333;
 
-    z-index: 10;
+    z-index: 5;
 }
 
 
-/* =========================
-   BUTTONS
-========================= */
+/* =========================================================
+   ALLGEMEINE BUTTONS
+========================================================= */
 
 .anmelden-button,
+.benutzer-button,
 .karten-button,
-.benutzer-button {
-
-    position: fixed;
+.spiele-button {
 
     padding: 12px 20px;
 
@@ -222,63 +214,102 @@ body {
 
     cursor: pointer;
 
-    z-index: 50;
-
-    transition: 0.2s;
+    transition:
+        background-color 0.2s,
+        transform 0.15s;
 }
 
+
 .anmelden-button:hover,
+.benutzer-button:hover,
 .karten-button:hover,
-.benutzer-button:hover {
+.spiele-button:hover {
 
     background-color: #333333;
 
-    transform:
-        translateY(-1px);
 }
 
 
-/* =========================
-   ANMELDEN
-========================= */
+.anmelden-button:active,
+.benutzer-button:active,
+.karten-button:active,
+.spiele-button:active {
+
+    transform: scale(0.97);
+}
+
+
+/* =========================================================
+   ANMELDEN BUTTON
+========================================================= */
 
 .anmelden-button {
+
+    position: fixed;
 
     top: 25px;
 
     left: 25px;
+
+    z-index: 100;
 }
 
 
-/* =========================
-   KARTE BUTTON
-========================= */
-
-.karten-button {
-
-    top: 80px;
-
-    left: 25px;
-}
-
-
-/* =========================
+/* =========================================================
    BENUTZER BUTTON
-========================= */
+========================================================= */
 
 .benutzer-button {
 
     display: none;
 
+    position: fixed;
+
     top: 25px;
 
     left: 25px;
+
+    max-width: 220px;
+
+    z-index: 100;
 }
 
 
-/* =========================
+/* =========================================================
+   KARTEN BUTTON
+========================================================= */
+
+.karten-button {
+
+    position: fixed;
+
+    top: 80px;
+
+    left: 25px;
+
+    z-index: 100;
+}
+
+
+/* =========================================================
+   SPIELE BUTTON
+========================================================= */
+
+.spiele-button {
+
+    position: fixed;
+
+    top: 135px;
+
+    left: 25px;
+
+    z-index: 100;
+}
+
+
+/* =========================================================
    BENUTZER MENÜ
-========================= */
+========================================================= */
 
 .benutzer-menue {
 
@@ -292,16 +323,19 @@ body {
 
     width: 230px;
 
-    padding: 15px;
-
     background-color: #111111;
 
     border: 1px solid #333333;
 
     border-radius: 8px;
 
-    z-index: 200;
+    padding: 15px;
+
+    box-sizing: border-box;
+
+    z-index: 500;
 }
+
 
 .benutzer-name {
 
@@ -311,6 +345,7 @@ body {
 
     margin-bottom: 5px;
 }
+
 
 .benutzer-email {
 
@@ -322,6 +357,7 @@ body {
 
     word-break: break-all;
 }
+
 
 .abmelden-button {
 
@@ -340,43 +376,40 @@ body {
     cursor: pointer;
 }
 
+
 .abmelden-button:hover {
 
     background-color: #333333;
 }
 
 
-/* =========================
-   MODAL HINTERGRUND
-========================= */
+/* =========================================================
+   ALLGEMEINER MODAL HINTERGRUND
+========================================================= */
 
 .fenster-hintergrund,
 .karten-hintergrund,
-.spiele-hintergrund,
-.flappy-hintergrund {
+.spiele-hintergrund {
 
     display: none;
 
     position: fixed;
 
-    top: 0;
-
-    left: 0;
+    inset: 0;
 
     width: 100%;
 
     height: 100%;
 
-    background-color:
-        rgba(0,0,0,0.85);
+    background-color: rgba(0,0,0,0.85);
 
-    z-index: 9999;
+    z-index: 1000;
 }
 
 
-/* =========================
+/* =========================================================
    LOGIN FENSTER
-========================= */
+========================================================= */
 
 .anmelde-fenster {
 
@@ -386,16 +419,13 @@ body {
 
     left: 50%;
 
-    transform:
-        translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 
     width: 400px;
 
-    max-width:
-        calc(100vw - 30px);
+    max-width: calc(100vw - 30px);
 
-    max-height:
-        calc(100vh - 30px);
+    max-height: calc(100vh - 30px);
 
     overflow-y: auto;
 
@@ -408,26 +438,25 @@ body {
     padding: 30px;
 
     box-shadow:
-        0 0 30px
-        rgba(255,255,255,0.1);
+        0 0 30px rgba(255,255,255,0.1);
 }
 
 
-/* =========================
+/* =========================================================
    FENSTER KOPF
-========================= */
+========================================================= */
 
 .fenster-kopf {
 
     display: flex;
 
-    justify-content:
-        space-between;
+    justify-content: space-between;
 
     align-items: center;
 
     margin-bottom: 25px;
 }
+
 
 .fenster-titel {
 
@@ -436,10 +465,8 @@ body {
     font-weight: bold;
 }
 
-.schliessen,
-.karten-schliessen,
-.spiele-schliessen,
-.flappy-schliessen {
+
+.schliessen {
 
     background: none;
 
@@ -453,9 +480,9 @@ body {
 }
 
 
-/* =========================
+/* =========================================================
    TABS
-========================= */
+========================================================= */
 
 .tabs {
 
@@ -463,6 +490,7 @@ body {
 
     margin-bottom: 20px;
 }
+
 
 .tab {
 
@@ -481,6 +509,7 @@ body {
     font-size: 15px;
 }
 
+
 .tab.aktiv {
 
     background-color: #333333;
@@ -489,19 +518,21 @@ body {
 }
 
 
-/* =========================
-   FORMULAR
-========================= */
+/* =========================================================
+   FORMULARE
+========================================================= */
 
 .formular {
 
     display: none;
 }
 
+
 .formular.aktiv {
 
     display: block;
 }
+
 
 .formular label {
 
@@ -511,6 +542,7 @@ body {
 
     color: #cccccc;
 }
+
 
 .formular input {
 
@@ -535,15 +567,16 @@ body {
     font-size: 15px;
 }
 
+
 .formular input:focus {
 
     border-color: #777777;
 }
 
 
-/* =========================
+/* =========================================================
    FORMULAR BUTTON
-========================= */
+========================================================= */
 
 .formular-button {
 
@@ -566,15 +599,12 @@ body {
     font-weight: bold;
 }
 
+
 .formular-button:hover {
 
     background-color: #444444;
 }
 
-
-/* =========================
-   HINWEIS
-========================= */
 
 .hinweis {
 
@@ -588,9 +618,9 @@ body {
 }
 
 
-/* =========================
+/* =========================================================
    KARTEN FENSTER
-========================= */
+========================================================= */
 
 .karten-fenster {
 
@@ -600,14 +630,11 @@ body {
 
     left: 50%;
 
-    transform:
-        translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 
     width: 80%;
 
     height: 80%;
-
-    max-width: 1200px;
 
     background-color: #111111;
 
@@ -616,27 +643,16 @@ body {
     border-radius: 12px;
 
     overflow: hidden;
-
-    display: flex;
-
-    flex-direction: column;
 }
 
-
-/* =========================
-   KARTEN KOPF
-========================= */
 
 .karten-kopf {
 
     height: 55px;
 
-    flex-shrink: 0;
-
     display: flex;
 
-    justify-content:
-        space-between;
+    justify-content: space-between;
 
     align-items: center;
 
@@ -644,9 +660,9 @@ body {
 
     background-color: #151515;
 
-    border-bottom:
-        1px solid #333333;
+    border-bottom: 1px solid #333333;
 }
+
 
 .karten-titel {
 
@@ -656,65 +672,31 @@ body {
 }
 
 
-/* =========================
-   KARTE
-========================= */
+.karten-schliessen {
+
+    background: none;
+
+    border: none;
+
+    color: white;
+
+    font-size: 28px;
+
+    cursor: pointer;
+}
+
 
 #karte {
 
     width: 100%;
 
-    flex: 1;
-
-    min-height: 0;
+    height: calc(100% - 55px);
 }
 
 
-/* =========================
-   SPIELE BUTTON
-========================= */
-
-.spiele-button {
-
-    width:
-        calc(100% - 30px);
-
-    height: 50px;
-
-    flex-shrink: 0;
-
-    margin:
-        10px 15px 15px 15px;
-
-    background-color: #222222;
-
-    color: white;
-
-    border: 1px solid #444444;
-
-    border-radius: 8px;
-
-    font-size: 17px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-.spiele-button:hover {
-
-    background-color: #333333;
-
-    transform:
-        translateY(-1px);
-}
-
-
-/* =========================
+/* =========================================================
    SPIELE FENSTER
-========================= */
+========================================================= */
 
 .spiele-fenster {
 
@@ -724,16 +706,13 @@ body {
 
     left: 50%;
 
-    transform:
-        translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 
     width: 700px;
 
-    max-width:
-        calc(100vw - 30px);
+    max-width: calc(100vw - 30px);
 
-    max-height:
-        calc(100vh - 30px);
+    max-height: calc(100vh - 30px);
 
     overflow-y: auto;
 
@@ -741,31 +720,23 @@ body {
 
     border: 2px solid #333333;
 
-    border-radius: 14px;
+    border-radius: 12px;
 
     padding: 20px;
-
-    box-shadow:
-        0 0 40px
-        rgba(255,255,255,0.08);
 }
 
-
-/* =========================
-   SPIELE KOPF
-========================= */
 
 .spiele-kopf {
 
     display: flex;
 
-    justify-content:
-        space-between;
+    justify-content: space-between;
 
     align-items: center;
 
     margin-bottom: 20px;
 }
+
 
 .spiele-titel {
 
@@ -775,71 +746,168 @@ body {
 }
 
 
-/* =========================
+.spiele-schliessen {
+
+    background: none;
+
+    border: none;
+
+    color: white;
+
+    font-size: 28px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
    SPIELE AUSWAHL
-========================= */
+========================================================= */
 
 .spiele-auswahl {
 
     display: grid;
 
-    grid-template-columns:
-        repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
 
     gap: 15px;
 }
 
 
-/* =========================
-   EINZELNES SPIEL
-========================= */
+.spiel-karte {
 
-.spiel {
+    min-height: 140px;
 
-    min-height: 150px;
+    padding: 20px;
 
     background-color: #1b1b1b;
 
-    border: 1px solid #333333;
+    border: 1px solid #3a3a3a;
 
     border-radius: 10px;
 
-    padding: 15px;
+    color: white;
 
     cursor: pointer;
 
+    transition:
+        transform 0.2s,
+        background-color 0.2s,
+        border-color 0.2s;
+
     text-align: center;
-
-    transition: 0.2s;
 }
 
-.spiel:hover {
 
-    background-color: #252525;
+.spiel-karte:hover {
 
-    border-color: #555555;
+    background-color: #292929;
 
-    transform:
-        translateY(-2px);
+    border-color: #666666;
+
+    transform: translateY(-3px);
 }
+
 
 .spiel-icon {
 
-    font-size: 45px;
+    font-size: 42px;
 
     margin-bottom: 10px;
 }
 
+
 .spiel-name {
 
-    font-size: 18px;
+    font-size: 17px;
 
     font-weight: bold;
-
-    margin-bottom: 7px;
 }
 
-.spiel-info {
+
+.spiel-beschreibung {
+
+    margin-top: 6px;
+
+    color: #888888;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   SPIELBEREICH
+========================================================= */
+
+.spiel-bereich {
+
+    display: none;
+
+    text-align: center;
+}
+
+
+.spiel-bereich.aktiv {
+
+    display: block;
+}
+
+
+.zurueck-spiele {
+
+    display: inline-block;
+
+    margin-bottom: 15px;
+
+    padding: 10px 16px;
+
+    background-color: #222222;
+
+    color: white;
+
+    border: 1px solid #444444;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+}
+
+
+.game-canvas-container {
+
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+}
+
+
+#flappyCanvas {
+
+    width: 100%;
+
+    max-width: 500px;
+
+    height: auto;
+
+    background-color: #111111;
+
+    border: 2px solid #444444;
+
+    border-radius: 10px;
+
+    touch-action: none;
+
+    display: block;
+}
+
+
+.flappy-hinweis {
+
+    margin-top: 10px;
 
     color: #888888;
 
@@ -847,230 +915,152 @@ body {
 }
 
 
-/* =========================
-   FLAPPY BIRD FENSTER
-========================= */
+/* =========================================================
+   SPIEL PLATZHALTER
+========================================================= */
 
-.flappy-fenster {
+.platzhalter-spiel {
 
-    position: absolute;
+    padding: 50px 20px;
 
-    top: 50%;
+    background-color: #181818;
 
-    left: 50%;
+    border: 1px solid #333333;
 
-    transform:
-        translate(-50%, -50%);
-
-    width: 520px;
-
-    max-width:
-        calc(100vw - 20px);
-
-    max-height:
-        calc(100vh - 20px);
-
-    overflow-y: auto;
-
-    background-color: #111111;
-
-    border: 2px solid #333333;
-
-    border-radius: 14px;
-
-    padding: 15px;
-
-    text-align: center;
+    border-radius: 10px;
 }
 
 
-/* =========================
-   FLAPPY KOPF
-========================= */
+.platzhalter-spiel h2 {
 
-.flappy-kopf {
+    margin-top: 0;
 
-    display: flex;
-
-    justify-content:
-        space-between;
-
-    align-items: center;
-
-    margin-bottom: 10px;
-}
-
-.flappy-titel {
-
-    font-size: 22px;
-
-    font-weight: bold;
+    font-size: 25px;
 }
 
 
-/* =========================
-   FLAPPY CANVAS
-========================= */
+.platzhalter-spiel p {
 
-#flappyCanvas {
+    color: #888888;
 
-    width: 100%;
-
-    max-width: 480px;
-
-    height: auto;
-
-    display: block;
-
-    margin: 0 auto;
-
-    background-color: #87ceeb;
-
-    border-radius: 8px;
-
-    cursor: pointer;
-
-    touch-action: manipulation;
-}
-
-.flappy-info {
-
-    margin-top: 10px;
-
-    color: #999999;
-
-    font-size: 14px;
+    line-height: 1.5;
 }
 
 
-/* =========================
+/* =========================================================
    HANDY
-========================= */
+========================================================= */
 
 @media (max-width: 600px) {
 
 
-    /* =====================
-       BILD
-    ===================== */
+    body {
+
+        overflow-x: hidden;
+    }
+
+
+    /* =====================================================
+       HINTERGRUNDBILD HANDY
+    ===================================================== */
 
     .hintergrund-bild {
 
-        width: 70vw;
+        width: 72vw;
 
-        height: 30vh;
+        height: 35vh;
 
-        min-width: 0;
+        max-width: 350px;
 
-        min-height: 0;
+        border-radius: 20px;
 
-        top: 58%;
+        left: 62%;
 
-        border-radius: 18px;
-    }
-
-    .hintergrund-bild img {
-
-        border-radius: 18px;
+        top: 45%;
     }
 
 
-    /* =====================
-       LOGO
-    ===================== */
+    /* =====================================================
+       LOGO HANDY
+    ===================================================== */
 
     .logo {
 
-        top: 25px;
+        top: 22px;
 
         left: 63%;
 
-        font-size: 52px;
+        font-size: 50px;
 
         white-space: nowrap;
     }
 
 
-    /* =====================
-       UNTERTITEL
-    ===================== */
+    /* =====================================================
+       UNTERTITEL HANDY
+    ===================================================== */
 
     .untertitel {
 
-        top: 95px;
+        top: 85px;
 
         left: 63%;
 
-        width: 75%;
+        width: 72%;
 
-        font-size: 18px;
+        font-size: 17px;
 
-        line-height: 1.4;
+        line-height: 1.35;
+
+        text-align: center;
 
         white-space: normal;
     }
 
 
-    /* =====================
-       STRICH
-    ===================== */
+    /* =====================================================
+       STRICH HANDY
+    ===================================================== */
 
     .strich {
 
         left: 24%;
+
+        width: 2px;
     }
 
 
-    /* =====================
-       ANMELDEN
-    ===================== */
+    /* =====================================================
+       ANMELDEN HANDY
+    ===================================================== */
 
     .anmelden-button {
 
-        top: 18px;
-
-        left: 0;
-
-        padding:
-            8px 11px;
-
-        font-size: 13px;
-    }
-
-
-    /* =====================
-       KARTE BUTTON
-    ===================== */
-
-    .karten-button {
-
-        top: 58px;
+        top: 15px;
 
         left: 5px;
 
-        padding:
-            8px 11px;
+        padding: 8px 10px;
 
         font-size: 13px;
     }
 
 
-    /* =====================
-       BENUTZER
-    ===================== */
+    /* =====================================================
+       BENUTZER HANDY
+    ===================================================== */
 
     .benutzer-button {
 
-        top: 18px;
+        top: 15px;
 
         left: 5px;
 
-        padding:
-            9px 11px;
+        padding: 8px 10px;
 
         font-size: 13px;
 
-        max-width: 150px;
+        max-width: 145px;
 
         overflow: hidden;
 
@@ -1080,41 +1070,89 @@ body {
     }
 
 
-    /* =====================
-       BENUTZER MENÜ
-    ===================== */
+    /* =====================================================
+       KARTEN BUTTON HANDY
+    ===================================================== */
+
+    .karten-button {
+
+        top: 57px;
+
+        left: 5px;
+
+        padding: 8px 10px;
+
+        font-size: 13px;
+    }
+
+
+    /* =====================================================
+       SPIELE BUTTON HANDY
+    ===================================================== */
+
+    .spiele-button {
+
+        top: 99px;
+
+        left: 5px;
+
+        padding: 8px 10px;
+
+        font-size: 13px;
+    }
+
+
+    /* =====================================================
+       BENUTZER MENÜ HANDY
+    ===================================================== */
 
     .benutzer-menue {
 
-        top: 65px;
+        top: 58px;
 
-        left: 12px;
+        left: 5px;
 
-        width:
-            calc(100% - 24px);
+        width: calc(100vw - 10px);
 
         max-width: 260px;
     }
 
 
-    /* =====================
-       LOGIN
-    ===================== */
+    /* =====================================================
+       LOGIN HANDY
+    ===================================================== */
+
+    .fenster-hintergrund {
+
+        padding: 15px;
+
+        overflow-y: auto;
+    }
+
 
     .anmelde-fenster {
 
-        width:
-            calc(100vw - 30px);
+        width: calc(100vw - 30px);
 
         max-width: 380px;
 
-        padding: 22px;
+        padding: 20px;
+
+        max-height: calc(100vh - 30px);
     }
 
 
     .fenster-titel {
 
         font-size: 21px;
+    }
+
+
+    .tab {
+
+        padding: 12px 5px;
+
+        font-size: 14px;
     }
 
 
@@ -1134,15 +1172,25 @@ body {
     }
 
 
-    /* =====================
-       KARTE
-    ===================== */
+    /* =====================================================
+       KARTE HANDY
+    ===================================================== */
 
     .karten-fenster {
 
-        width: 95%;
+        width: 96%;
 
-        height: 85%;
+        height: 82%;
+
+        border-radius: 10px;
+    }
+
+
+    .karten-kopf {
+
+        height: 50px;
+
+        padding: 0 10px;
     }
 
 
@@ -1152,38 +1200,27 @@ body {
     }
 
 
-    /* =====================
-       SPIELE BUTTON
-    ===================== */
+    #karte {
 
-    .spiele-button {
-
-        width:
-            calc(100% - 20px);
-
-        height: 48px;
-
-        margin:
-            8px 10px 10px 10px;
-
-        font-size: 15px;
+        height: calc(100% - 50px);
     }
 
 
-    /* =====================
-       SPIELE FENSTER
-    ===================== */
+    /* =====================================================
+       SPIELE HANDY
+    ===================================================== */
 
     .spiele-fenster {
 
-        width:
-            calc(100vw - 20px);
+        width: calc(100vw - 20px);
 
         max-width: none;
 
+        max-height: calc(100vh - 20px);
+
         padding: 15px;
 
-        border-radius: 12px;
+        border-radius: 10px;
     }
 
 
@@ -1195,61 +1232,92 @@ body {
 
     .spiele-auswahl {
 
-        grid-template-columns:
-            repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);
 
         gap: 10px;
     }
 
 
-    .spiel {
+    .spiel-karte {
 
         min-height: 125px;
 
-        padding: 10px;
+        padding: 14px 8px;
     }
 
 
     .spiel-icon {
 
-        font-size: 36px;
+        font-size: 34px;
     }
 
 
     .spiel-name {
 
-        font-size: 15px;
+        font-size: 14px;
     }
 
 
-    .spiel-info {
+    .spiel-beschreibung {
 
         font-size: 11px;
     }
 
 
-    /* =====================
-       FLAPPY
-    ===================== */
+    #flappyCanvas {
 
-    .flappy-fenster {
+        width: 100%;
 
-        width:
-            calc(100vw - 20px);
+        max-width: 100%;
+    }
 
-        padding: 10px;
+}
+
+
+/* =========================================================
+   SEHR KLEINE HANDYS
+========================================================= */
+
+@media (max-width: 380px) {
+
+
+    .logo {
+
+        font-size: 42px;
+
+        left: 64%;
     }
 
 
-    .flappy-titel {
+    .untertitel {
 
-        font-size: 19px;
+        font-size: 15px;
+
+        left: 64%;
+
+        width: 70%;
     }
 
 
-    .flappy-info {
+    .spiele-auswahl {
 
-        font-size: 12px;
+        grid-template-columns: 1fr 1fr;
+
+        gap: 8px;
+    }
+
+
+    .spiel-karte {
+
+        min-height: 110px;
+
+        padding: 10px 5px;
+    }
+
+
+    .spiel-icon {
+
+        font-size: 30px;
     }
 
 }
@@ -1262,48 +1330,41 @@ body {
 <body>
 
 
-<!-- =========================
+<!-- =========================================================
      HINTERGRUNDBILD
-========================= -->
+========================================================= -->
 
-<div class="hintergrund-bild">
-
-    <img
-        src="Nsah bilder/Screenshot2026-08-22214731(1).png"
-        alt="NSAH Hintergrundbild"
-    >
-
-</div>
+<div class="hintergrund-bild"></div>
 
 
-<!-- =========================
+<!-- =========================================================
      LOGO
-========================= -->
+========================================================= -->
 
 <div class="logo">
     NSAH
 </div>
 
 
-<!-- =========================
+<!-- =========================================================
      UNTERTITEL
-========================= -->
+========================================================= -->
 
 <div class="untertitel">
     Nützliche Sparsame Alltags Hilfe
 </div>
 
 
-<!-- =========================
+<!-- =========================================================
      STRICH
-========================= -->
+========================================================= -->
 
 <div class="strich"></div>
 
 
-<!-- =========================
-     ANMELDEN BUTTON
-========================= -->
+<!-- =========================================================
+     ANMELDEN
+========================================================= -->
 
 <button
     class="anmelden-button"
@@ -1314,9 +1375,9 @@ body {
 </button>
 
 
-<!-- =========================
+<!-- =========================================================
      KARTEN BUTTON
-========================= -->
+========================================================= -->
 
 <button
     class="karten-button"
@@ -1326,9 +1387,21 @@ body {
 </button>
 
 
-<!-- =========================
+<!-- =========================================================
+     SPIELE BUTTON
+========================================================= -->
+
+<button
+    class="spiele-button"
+    onclick="spieleOeffnen()"
+>
+    🎮 Spiele Spiele
+</button>
+
+
+<!-- =========================================================
      BENUTZER BUTTON
-========================= -->
+========================================================= -->
 
 <button
     class="benutzer-button"
@@ -1336,17 +1409,15 @@ body {
     onclick="benutzerMenueOeffnen()"
 >
     👤
-
     <span id="benutzerNameOben">
         Benutzer
     </span>
-
 </button>
 
 
-<!-- =========================
+<!-- =========================================================
      BENUTZER MENÜ
-========================= -->
+========================================================= -->
 
 <div
     class="benutzer-menue"
@@ -1356,14 +1427,12 @@ body {
     <div
         class="benutzer-name"
         id="benutzerName"
-    >
-    </div>
+    ></div>
 
     <div
         class="benutzer-email"
         id="benutzerEmail"
-    >
-    </div>
+    ></div>
 
     <button
         class="abmelden-button"
@@ -1375,9 +1444,9 @@ body {
 </div>
 
 
-<!-- =========================
+<!-- =========================================================
      LOGIN FENSTER
-========================= -->
+========================================================= -->
 
 <div
     class="fenster-hintergrund"
@@ -1385,7 +1454,6 @@ body {
 >
 
     <div class="anmelde-fenster">
-
 
         <div class="fenster-kopf">
 
@@ -1402,8 +1470,6 @@ body {
 
         </div>
 
-
-        <!-- TABS -->
 
         <div class="tabs">
 
@@ -1426,7 +1492,7 @@ body {
         </div>
 
 
-        <!-- ANMELDEN FORMULAR -->
+        <!-- ANMELDEN -->
 
         <div
             class="formular aktiv"
@@ -1464,18 +1530,14 @@ body {
 
 
             <div class="hinweis">
-
                 Noch kein Konto?
-
-                Klicke oben auf
-                „Registrieren“.
-
+                Klicke oben auf „Registrieren“.
             </div>
 
         </div>
 
 
-        <!-- REGISTRIEREN FORMULAR -->
+        <!-- REGISTRIEREN -->
 
         <div
             class="formular"
@@ -1540,9 +1602,9 @@ body {
 </div>
 
 
-<!-- =========================
+<!-- =========================================================
      KARTEN FENSTER
-========================= -->
+========================================================= -->
 
 <div
     class="karten-hintergrund"
@@ -1550,7 +1612,6 @@ body {
 >
 
     <div class="karten-fenster">
-
 
         <div class="karten-kopf">
 
@@ -1567,30 +1628,16 @@ body {
 
         </div>
 
-
-        <!-- KARTE -->
-
         <div id="karte"></div>
-
-
-        <!-- SPIELE BUTTON -->
-
-        <button
-            class="spiele-button"
-            onclick="spieleOeffnen()"
-        >
-            🎮 Spiele Spiele
-        </button>
-
 
     </div>
 
 </div>
 
 
-<!-- =========================
+<!-- =========================================================
      SPIELE FENSTER
-========================= -->
+========================================================= -->
 
 <div
     class="spiele-hintergrund"
@@ -1599,6 +1646,8 @@ body {
 
     <div class="spiele-fenster">
 
+
+        <!-- SPIELE KOPF -->
 
         <div class="spiele-kopf">
 
@@ -1616,14 +1665,21 @@ body {
         </div>
 
 
-        <div class="spiele-auswahl">
+        <!-- =================================================
+             SPIELE AUSWAHL
+        ================================================= -->
+
+        <div
+            class="spiele-auswahl"
+            id="spieleAuswahl"
+        >
 
 
             <!-- SPIEL 1 -->
 
             <div
-                class="spiel"
-                onclick="flappyOeffnen()"
+                class="spiel-karte"
+                onclick="spielOeffnen('flappy')"
             >
 
                 <div class="spiel-icon">
@@ -1634,7 +1690,7 @@ body {
                     Flappy Bird
                 </div>
 
-                <div class="spiel-info">
+                <div class="spiel-beschreibung">
                     Fliege durch die Rohre
                 </div>
 
@@ -1644,8 +1700,8 @@ body {
             <!-- SPIEL 2 -->
 
             <div
-                class="spiel"
-                onclick="spielNochNichtFertig('Snake')"
+                class="spiel-karte"
+                onclick="spielOeffnen('snake')"
             >
 
                 <div class="spiel-icon">
@@ -1656,8 +1712,8 @@ body {
                     Snake
                 </div>
 
-                <div class="spiel-info">
-                    Demnächst
+                <div class="spiel-beschreibung">
+                    Klassiker
                 </div>
 
             </div>
@@ -1666,8 +1722,8 @@ body {
             <!-- SPIEL 3 -->
 
             <div
-                class="spiel"
-                onclick="spielNochNichtFertig('Memory')"
+                class="spiel-karte"
+                onclick="spielOeffnen('memory')"
             >
 
                 <div class="spiel-icon">
@@ -1678,8 +1734,8 @@ body {
                     Memory
                 </div>
 
-                <div class="spiel-info">
-                    Demnächst
+                <div class="spiel-beschreibung">
+                    Finde die Paare
                 </div>
 
             </div>
@@ -1688,52 +1744,8 @@ body {
             <!-- SPIEL 4 -->
 
             <div
-                class="spiel"
-                onclick="spielNochNichtFertig('2048')"
-            >
-
-                <div class="spiel-icon">
-                    🔢
-                </div>
-
-                <div class="spiel-name">
-                    2048
-                </div>
-
-                <div class="spiel-info">
-                    Demnächst
-                </div>
-
-            </div>
-
-
-            <!-- SPIEL 5 -->
-
-            <div
-                class="spiel"
-                onclick="spielNochNichtFertig('Tetris')"
-            >
-
-                <div class="spiel-icon">
-                    🧱
-                </div>
-
-                <div class="spiel-name">
-                    Tetris
-                </div>
-
-                <div class="spiel-info">
-                    Demnächst
-                </div>
-
-            </div>
-
-
-            <!-- SPIEL 6 -->
-
-            <div
-                class="spiel"
-                onclick="spielNochNichtFertig('Reaktionsspiel')"
+                class="spiel-karte"
+                onclick="spielOeffnen('reaktion')"
             >
 
                 <div class="spiel-icon">
@@ -1744,59 +1756,122 @@ body {
                     Reaktion
                 </div>
 
-                <div class="spiel-info">
-                    Demnächst
+                <div class="spiel-beschreibung">
+                    Wie schnell bist du?
                 </div>
 
             </div>
 
 
-        </div>
+            <!-- SPIEL 5 -->
 
-    </div>
+            <div
+                class="spiel-karte"
+                onclick="spielOeffnen('zahlen')"
+            >
 
-</div>
+                <div class="spiel-icon">
+                    🔢
+                </div>
 
+                <div class="spiel-name">
+                    Zahlen-Spiel
+                </div>
 
-<!-- =========================
-     FLAPPY BIRD FENSTER
-========================= -->
+                <div class="spiel-beschreibung">
+                    Teste dein Gehirn
+                </div>
 
-<div
-    class="flappy-hintergrund"
-    id="flappyFenster"
->
-
-    <div class="flappy-fenster">
-
-
-        <div class="flappy-kopf">
-
-            <div class="flappy-titel">
-                🐦 Flappy Bird
             </div>
 
-            <button
-                class="flappy-schliessen"
-                onclick="flappySchliessen()"
+
+            <!-- SPIEL 6 -->
+
+            <div
+                class="spiel-karte"
+                onclick="spielOeffnen('klicker')"
             >
-                ×
-            </button>
+
+                <div class="spiel-icon">
+                    🖱️
+                </div>
+
+                <div class="spiel-name">
+                    Klicker
+                </div>
+
+                <div class="spiel-beschreibung">
+                    Klicke so schnell du kannst
+                </div>
+
+            </div>
 
         </div>
 
 
-        <canvas
-            id="flappyCanvas"
-            width="480"
-            height="600"
-        ></canvas>
+        <!-- =================================================
+             FLAPPY BIRD
+        ================================================= -->
+
+        <div
+            class="spiel-bereich"
+            id="flappySpiel"
+        >
+
+            <button
+                class="zurueck-spiele"
+                onclick="zurueckZurSpieleAuswahl()"
+            >
+                ← Zurück zu den Spielen
+            </button>
 
 
-        <div class="flappy-info">
+            <div class="game-canvas-container">
 
-            Tippe, klicke oder drücke
-            die Leertaste zum Fliegen.
+                <canvas
+                    id="flappyCanvas"
+                    width="500"
+                    height="600"
+                ></canvas>
+
+            </div>
+
+
+            <div class="flappy-hinweis">
+                Tippe, klicke oder drücke LEERTASTE zum Fliegen.
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PLATZHALTER SPIELE
+        ================================================= -->
+
+        <div
+            class="spiel-bereich"
+            id="platzhalterSpiel"
+        >
+
+            <button
+                class="zurueck-spiele"
+                onclick="zurueckZurSpieleAuswahl()"
+            >
+                ← Zurück zu den Spielen
+            </button>
+
+
+            <div class="platzhalter-spiel">
+
+                <h2 id="platzhalterTitel">
+                    Spiel
+                </h2>
+
+                <p id="platzhalterText">
+                    Dieses Spiel wird bald verfügbar sein.
+                </p>
+
+            </div>
 
         </div>
 
@@ -1806,29 +1881,29 @@ body {
 </div>
 
 
-<!-- =========================
-     LEAFLET JAVASCRIPT
-========================= -->
+<!-- =========================================================
+     LEAFLET
+========================================================= -->
 
 <script
-src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script>
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
 
 
 <script>
 
-/* =====================================================
-   KARTE
-===================================================== */
+/* =========================================================
+   KARTEN VARIABLEN
+========================================================= */
 
 let karte = null;
 
 let standortMarker = null;
 
 
-/* =========================
+/* =========================================================
    KARTE ÖFFNEN
-========================= */
+========================================================= */
 
 function kartenOeffnen() {
 
@@ -1874,9 +1949,7 @@ function kartenOeffnen() {
         ).addTo(karte);
 
 
-        if (
-            navigator.geolocation
-        ) {
+        if (navigator.geolocation) {
 
             navigator.geolocation.getCurrentPosition(
 
@@ -1895,9 +1968,7 @@ function kartenOeffnen() {
                     );
 
 
-                    if (
-                        standortMarker
-                    ) {
+                    if (standortMarker) {
 
                         karte.removeLayer(
                             standortMarker
@@ -1945,70 +2016,216 @@ function kartenOeffnen() {
             }
 
         },
-        300
+        200
     );
+
 }
 
 
-/* =========================
+/* =========================================================
    KARTE SCHLIESSEN
-========================= */
+========================================================= */
 
 function kartenSchliessen() {
 
     document.getElementById(
         "kartenFenster"
     ).style.display = "none";
+
 }
 
 
-/* =====================================================
-   SPIELE
-===================================================== */
-
-
-/* =========================
+/* =========================================================
    SPIELE ÖFFNEN
-========================= */
+========================================================= */
 
 function spieleOeffnen() {
 
     document.getElementById(
         "spieleFenster"
     ).style.display = "block";
+
+
+    zurueckZurSpieleAuswahl();
+
 }
 
 
-/* =========================
+/* =========================================================
    SPIELE SCHLIESSEN
-========================= */
+========================================================= */
 
 function spieleSchliessen() {
 
     document.getElementById(
         "spieleFenster"
     ).style.display = "none";
+
+
+    flappyStoppen();
+
 }
 
 
-/* =========================
-   NOCH NICHT FERTIG
-========================= */
+/* =========================================================
+   SPIEL ÖFFNEN
+========================================================= */
 
-function spielNochNichtFertig(name) {
+function spielOeffnen(spiel) {
 
-    alert(
-        name +
-        " kommt bald! 🎮"
+    document.getElementById(
+        "spieleAuswahl"
+    ).style.display = "none";
+
+
+    document.querySelectorAll(
+        ".spiel-bereich"
+    ).forEach(
+        function(element) {
+
+            element.classList.remove(
+                "aktiv"
+            );
+
+        }
     );
+
+
+    if (spiel === "flappy") {
+
+        document.getElementById(
+            "flappySpiel"
+        ).classList.add(
+            "aktiv"
+        );
+
+
+        flappyStarten();
+
+    }
+
+    else {
+
+        let titel = "Spiel";
+
+        let text =
+            "Dieses Spiel wird bald verfügbar sein.";
+
+
+        if (spiel === "snake") {
+
+            titel = "🐍 Snake";
+
+            text =
+                "Snake ist vorbereitet. Eine vollständige Version kann hier als Nächstes eingebaut werden.";
+
+        }
+
+
+        if (spiel === "memory") {
+
+            titel = "🧠 Memory";
+
+            text =
+                "Finde später alle Kartenpaare.";
+
+        }
+
+
+        if (spiel === "reaktion") {
+
+            titel = "⚡ Reaktion";
+
+            text =
+                "Teste deine Reaktionsgeschwindigkeit.";
+
+        }
+
+
+        if (spiel === "zahlen") {
+
+            titel = "🔢 Zahlen-Spiel";
+
+            text =
+                "Teste dein Zahlen- und Kopfrechenvermögen.";
+
+        }
+
+
+        if (spiel === "klicker") {
+
+            titel = "🖱️ Klicker";
+
+            text =
+                "Klicke so schnell wie möglich.";
+
+        }
+
+
+        document.getElementById(
+            "platzhalterTitel"
+        ).textContent = titel;
+
+
+        document.getElementById(
+            "platzhalterText"
+        ).textContent = text;
+
+
+        document.getElementById(
+            "platzhalterSpiel"
+        ).classList.add(
+            "aktiv"
+        );
+
+    }
+
 }
 
 
-/* =====================================================
-   FLAPPY BIRD
-===================================================== */
+/* =========================================================
+   ZURÜCK ZUR SPIELAUSWAHL
+========================================================= */
 
-let flappySpielLaeuft = false;
+function zurueckZurSpieleAuswahl() {
+
+    flappyStoppen();
+
+
+    document.querySelectorAll(
+        ".spiel-bereich"
+    ).forEach(
+        function(element) {
+
+            element.classList.remove(
+                "aktiv"
+            );
+
+        }
+    );
+
+
+    document.getElementById(
+        "spieleAuswahl"
+    ).style.display = "grid";
+
+}
+
+
+/* =========================================================
+   FLAPPY BIRD
+========================================================= */
+
+const flappyCanvas =
+    document.getElementById(
+        "flappyCanvas"
+    );
+
+const flappyCtx =
+    flappyCanvas.getContext(
+        "2d"
+    );
+
 
 let flappyAnimation = null;
 
@@ -2016,618 +2233,656 @@ let flappyBird = null;
 
 let flappyRohre = [];
 
-let flappyPunkte = 0;
+let flappyScore = 0;
 
-let flappyLetztesRohr = 0;
+let flappyGameOver = false;
 
+let flappySpielLaeuft = false;
 
-/* =========================
-   FLAPPY ÖFFNEN
-========================= */
-
-function flappyOeffnen() {
-
-    document.getElementById(
-        "spieleFenster"
-    ).style.display = "none";
+let flappyLetzteZeit = 0;
 
 
-    document.getElementById(
-        "flappyFenster"
-    ).style.display = "block";
-
-
-    flappyStarten();
-}
-
-
-/* =========================
-   FLAPPY SCHLIESSEN
-========================= */
-
-function flappySchliessen() {
-
-    document.getElementById(
-        "flappyFenster"
-    ).style.display = "none";
-
-
-    flappySpielLaeuft = false;
-
-
-    if (
-        flappyAnimation
-    ) {
-
-        cancelAnimationFrame(
-            flappyAnimation
-        );
-
-    }
-}
-
-
-/* =========================
-   FLAPPY STARTEN
-========================= */
+/* =========================================================
+   FLAPPY START
+========================================================= */
 
 function flappyStarten() {
 
-    const canvas =
-        document.getElementById(
-            "flappyCanvas"
-        );
-
-
-    const ctx =
-        canvas.getContext(
-            "2d"
-        );
-
-
-    flappySpielLaeuft = true;
-
-    flappyPunkte = 0;
-
-    flappyRohre = [];
-
-    flappyLetztesRohr =
-        Date.now();
+    flappyStoppen();
 
 
     flappyBird = {
 
         x: 100,
 
-        y: 250,
+        y: 300,
 
         radius: 16,
 
-        geschwindigkeit: 0,
-
-        sprung: -7,
-
-        gravitation: 0.35
+        velocity: 0
 
     };
 
 
-    function zeichnen() {
+    flappyRohre = [];
 
-        if (
-            !flappySpielLaeuft
-        ) {
+    flappyScore = 0;
 
-            return;
+    flappyGameOver = false;
 
-        }
+    flappySpielLaeuft = true;
+
+    flappyLetzteZeit = performance.now();
 
 
-        /* =====================
-           HINTERGRUND
-        ===================== */
+    flappyNeuesRohr();
 
-        ctx.fillStyle =
-            "#87CEEB";
 
-        ctx.fillRect(
-            0,
-            0,
-            canvas.width,
-            canvas.height
+    flappyAnimation =
+        requestAnimationFrame(
+            flappyLoop
         );
-
-
-        /* =====================
-           WOLKE
-        ===================== */
-
-        ctx.fillStyle =
-            "rgba(255,255,255,0.8)";
-
-
-        ctx.beginPath();
-
-        ctx.arc(
-            90,
-            100,
-            30,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.arc(
-            120,
-            100,
-            40,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.arc(
-            155,
-            105,
-            28,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fill();
-
-
-        /* =====================
-           BODEN
-        ===================== */
-
-        ctx.fillStyle =
-            "#75B843";
-
-        ctx.fillRect(
-            0,
-            canvas.height - 50,
-            canvas.width,
-            50
-        );
-
-
-        /* =====================
-           VOGEL PHYSIK
-        ===================== */
-
-        flappyBird.geschwindigkeit +=
-            flappyBird.gravitation;
-
-
-        flappyBird.y +=
-            flappyBird.geschwindigkeit;
-
-
-        /* =====================
-           NEUES ROHR
-        ===================== */
-
-        if (
-            Date.now() -
-            flappyLetztesRohr
-            >
-            1500
-        ) {
-
-            const luecke = 160;
-
-            const maxHoehe = 300;
-
-            const oben =
-                Math.random() *
-                maxHoehe +
-                50;
-
-
-            flappyRohre.push({
-
-                x: canvas.width,
-
-                oben: oben,
-
-                unten:
-                    oben + luecke,
-
-                punkt: false
-
-            });
-
-
-            flappyLetztesRohr =
-                Date.now();
-        }
-
-
-        /* =====================
-           ROHRE
-        ===================== */
-
-        for (
-            let i =
-                flappyRohre.length - 1;
-
-            i >= 0;
-
-            i--
-        ) {
-
-            const rohr =
-                flappyRohre[i];
-
-
-            rohr.x -= 3;
-
-
-            ctx.fillStyle =
-                "#2E8B35";
-
-
-            /* oberes Rohr */
-
-            ctx.fillRect(
-                rohr.x,
-                0,
-                55,
-                rohr.oben
-            );
-
-
-            /* unteres Rohr */
-
-            ctx.fillRect(
-                rohr.x,
-                rohr.unten,
-                55,
-                canvas.height -
-                rohr.unten -
-                50
-            );
-
-
-            /* =================
-               PUNKT
-            ================= */
-
-            if (
-
-                !rohr.punkt &&
-
-                rohr.x + 55 <
-                flappyBird.x
-
-            ) {
-
-                rohr.punkt = true;
-
-                flappyPunkte++;
-
-            }
-
-
-            /* =================
-               KOLLISION
-            ================= */
-
-            const vogelLinks =
-                flappyBird.x -
-                flappyBird.radius;
-
-
-            const vogelRechts =
-                flappyBird.x +
-                flappyBird.radius;
-
-
-            const vogelOben =
-                flappyBird.y -
-                flappyBird.radius;
-
-
-            const vogelUnten =
-                flappyBird.y +
-                flappyBird.radius;
-
-
-            if (
-
-                vogelRechts >
-                rohr.x &&
-
-                vogelLinks <
-                rohr.x + 55 &&
-
-                (
-
-                    vogelOben <
-                    rohr.oben ||
-
-                    vogelUnten >
-                    rohr.unten
-
-                )
-
-            ) {
-
-                flappyGameOver();
-
-            }
-
-
-            /* =================
-               ALTES ROHR
-            ================= */
-
-            if (
-                rohr.x < -70
-            ) {
-
-                flappyRohre.splice(
-                    i,
-                    1
-                );
-
-            }
-
-        }
-
-
-        /* =====================
-           DECKE / BODEN
-        ===================== */
-
-        if (
-
-            flappyBird.y +
-            flappyBird.radius
-            >
-            canvas.height - 50
-
-            ||
-
-            flappyBird.y -
-            flappyBird.radius
-            <
-            0
-
-        ) {
-
-            flappyGameOver();
-
-        }
-
-
-        /* =====================
-           VOGEL
-        ===================== */
-
-        ctx.fillStyle =
-            "#FFD21F";
-
-
-        ctx.beginPath();
-
-        ctx.arc(
-
-            flappyBird.x,
-
-            flappyBird.y,
-
-            flappyBird.radius,
-
-            0,
-
-            Math.PI * 2
-
-        );
-
-        ctx.fill();
-
-
-        /* =====================
-           AUGE
-        ===================== */
-
-        ctx.fillStyle =
-            "white";
-
-
-        ctx.beginPath();
-
-        ctx.arc(
-
-            flappyBird.x + 6,
-
-            flappyBird.y - 5,
-
-            5,
-
-            0,
-
-            Math.PI * 2
-
-        );
-
-        ctx.fill();
-
-
-        ctx.fillStyle =
-            "black";
-
-
-        ctx.beginPath();
-
-        ctx.arc(
-
-            flappyBird.x + 8,
-
-            flappyBird.y - 5,
-
-            2,
-
-            0,
-
-            Math.PI * 2
-
-        );
-
-        ctx.fill();
-
-
-        /* =====================
-           SCHNABEL
-        ===================== */
-
-        ctx.fillStyle =
-            "#FF8C00";
-
-
-        ctx.fillRect(
-
-            flappyBird.x + 14,
-
-            flappyBird.y - 3,
-
-            12,
-
-            7
-
-        );
-
-
-        /* =====================
-           PUNKTE
-        ===================== */
-
-        ctx.fillStyle =
-            "white";
-
-
-        ctx.font =
-            "bold 35px Arial";
-
-
-        ctx.textAlign =
-            "center";
-
-
-        ctx.fillText(
-
-            flappyPunkte,
-
-            canvas.width / 2,
-
-            55
-
-        );
-
-
-        flappyAnimation =
-            requestAnimationFrame(
-                zeichnen
-            );
-
-    }
-
-
-    zeichnen();
 
 }
 
 
-/* =========================
-   FLAPPY SPRINGEN
-========================= */
+/* =========================================================
+   FLAPPY STOPPEN
+========================================================= */
 
-function flappySpringen() {
+function flappyStoppen() {
 
-    if (
-
-        !flappySpielLaeuft ||
-
-        !flappyBird
-
-    ) {
-
-        return;
-
-    }
+    flappySpielLaeuft = false;
 
 
-    flappyBird.geschwindigkeit =
-        flappyBird.sprung;
-}
-
-
-/* =========================
-   GAME OVER
-========================= */
-
-function flappyGameOver() {
-
-    if (
-        !flappySpielLaeuft
-    ) {
-
-        return;
-
-    }
-
-
-    flappySpielLaeuft =
-        false;
-
-
-    if (
-        flappyAnimation
-    ) {
+    if (flappyAnimation) {
 
         cancelAnimationFrame(
             flappyAnimation
         );
 
+        flappyAnimation = null;
+
     }
 
-
-    setTimeout(
-        function() {
-
-            alert(
-
-                "Game Over!\n\n" +
-
-                "Punkte: " +
-                flappyPunkte
-
-            );
-
-
-            flappyStarten();
-
-        },
-        100
-    );
 }
 
 
-/* =========================
-   TASTATUR
-========================= */
+/* =========================================================
+   NEUES ROHR
+========================================================= */
+
+function flappyNeuesRohr() {
+
+    const luecke = 155;
+
+    const minOben = 80;
+
+    const maxOben =
+        flappyCanvas.height -
+        luecke -
+        100;
+
+
+    const oben =
+        Math.floor(
+            Math.random() *
+            (maxOben - minOben)
+            +
+            minOben
+        );
+
+
+    flappyRohre.push({
+
+        x: flappyCanvas.width,
+
+        breite: 70,
+
+        oben: oben,
+
+        luecke: luecke,
+
+        gewertet: false
+
+    });
+
+}
+
+
+/* =========================================================
+   FLAPPY FLIEGEN
+========================================================= */
+
+function flappyFliegen() {
+
+    if (!flappySpielLaeuft) {
+
+        return;
+
+    }
+
+
+    if (flappyGameOver) {
+
+        flappyStarten();
+
+        return;
+
+    }
+
+
+    flappyBird.velocity =
+        -7.5;
+
+}
+
+
+/* =========================================================
+   FLAPPY UPDATE
+========================================================= */
+
+function flappyUpdate(delta) {
+
+    if (!flappySpielLaeuft) {
+
+        return;
+
+    }
+
+
+    if (flappyGameOver) {
+
+        return;
+
+    }
+
+
+    const dt =
+        Math.min(
+            delta / 16.67,
+            2
+        );
+
+
+    /* SCHWERKRAFT */
+
+    flappyBird.velocity +=
+        0.42 * dt;
+
+
+    flappyBird.y +=
+        flappyBird.velocity * dt;
+
+
+    /* ROHRE */
+
+    for (
+        let i = 0;
+        i < flappyRohre.length;
+        i++
+    ) {
+
+        const rohr =
+            flappyRohre[i];
+
+
+        rohr.x -=
+            3.2 * dt;
+
+
+        /* PUNKTE */
+
+        if (
+            !rohr.gewertet &&
+            rohr.x + rohr.breite <
+            flappyBird.x
+        ) {
+
+            rohr.gewertet = true;
+
+            flappyScore++;
+
+        }
+
+
+        /* KOLLISION */
+
+        const birdLinks =
+            flappyBird.x -
+            flappyBird.radius;
+
+
+        const birdRechts =
+            flappyBird.x +
+            flappyBird.radius;
+
+
+        const birdOben =
+            flappyBird.y -
+            flappyBird.radius;
+
+
+        const birdUnten =
+            flappyBird.y +
+            flappyBird.radius;
+
+
+        const rohrLinks =
+            rohr.x;
+
+
+        const rohrRechts =
+            rohr.x +
+            rohr.breite;
+
+
+        if (
+            birdRechts > rohrLinks &&
+            birdLinks < rohrRechts
+        ) {
+
+            if (
+                birdOben < rohr.oben ||
+                birdUnten >
+                rohr.oben +
+                rohr.luecke
+            ) {
+
+                flappyGameOver = true;
+
+            }
+
+        }
+
+    }
+
+
+    /* NEUES ROHR */
+
+    if (
+        flappyRohre.length === 0 ||
+        flappyRohre[
+            flappyRohre.length - 1
+        ].x <
+        flappyCanvas.width - 250
+    ) {
+
+        flappyNeuesRohr();
+
+    }
+
+
+    /* ALTE ROHRE LÖSCHEN */
+
+    flappyRohre =
+        flappyRohre.filter(
+            function(rohr) {
+
+                return (
+                    rohr.x +
+                    rohr.breite >
+                    -20
+                );
+
+            }
+        );
+
+
+    /* BODEN / DECKE */
+
+    if (
+        flappyBird.y -
+        flappyBird.radius <= 0
+        ||
+        flappyBird.y +
+        flappyBird.radius >=
+        flappyCanvas.height
+    ) {
+
+        flappyGameOver = true;
+
+    }
+
+}
+
+
+/* =========================================================
+   FLAPPY ZEICHNEN
+========================================================= */
+
+function flappyZeichnen() {
+
+    const ctx =
+        flappyCtx;
+
+    const width =
+        flappyCanvas.width;
+
+    const height =
+        flappyCanvas.height;
+
+
+    /* HINTERGRUND */
+
+    ctx.fillStyle =
+        "#151515";
+
+    ctx.fillRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    /* GITTER */
+
+    ctx.strokeStyle =
+        "#222222";
+
+    ctx.lineWidth = 1;
+
+
+    for (
+        let x = 0;
+        x < width;
+        x += 50
+    ) {
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x,
+            0
+        );
+
+        ctx.lineTo(
+            x,
+            height
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    for (
+        let y = 0;
+        y < height;
+        y += 50
+    ) {
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            0,
+            y
+        );
+
+        ctx.lineTo(
+            width,
+            y
+        );
+
+        ctx.stroke();
+
+    }
+
+
+    /* ROHRE */
+
+    flappyRohre.forEach(
+        function(rohr) {
+
+            ctx.fillStyle =
+                "#555555";
+
+
+            ctx.fillRect(
+                rohr.x,
+                0,
+                rohr.breite,
+                rohr.oben
+            );
+
+
+            ctx.fillRect(
+                rohr.x,
+                rohr.oben +
+                rohr.luecke,
+                rohr.breite,
+                height -
+                rohr.oben -
+                rohr.luecke
+            );
+
+
+            ctx.strokeStyle =
+                "#888888";
+
+
+            ctx.strokeRect(
+                rohr.x,
+                0,
+                rohr.breite,
+                rohr.oben
+            );
+
+
+            ctx.strokeRect(
+                rohr.x,
+                rohr.oben +
+                rohr.luecke,
+                rohr.breite,
+                height -
+                rohr.oben -
+                rohr.luecke
+            );
+
+        }
+    );
+
+
+    /* VOGEL */
+
+    if (flappyBird) {
+
+        ctx.beginPath();
+
+        ctx.arc(
+            flappyBird.x,
+            flappyBird.y,
+            flappyBird.radius,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fillStyle =
+            "#ffffff";
+
+        ctx.fill();
+
+        ctx.strokeStyle =
+            "#aaaaaa";
+
+        ctx.stroke();
+
+
+        /* AUGE */
+
+        ctx.beginPath();
+
+        ctx.arc(
+            flappyBird.x + 6,
+            flappyBird.y - 5,
+            3,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fillStyle =
+            "#000000";
+
+        ctx.fill();
+
+    }
+
+
+    /* PUNKTE */
+
+    ctx.fillStyle =
+        "#ffffff";
+
+    ctx.font =
+        "bold 32px Arial";
+
+    ctx.textAlign =
+        "center";
+
+    ctx.fillText(
+        flappyScore,
+        width / 2,
+        50
+    );
+
+
+    /* GAME OVER */
+
+    if (flappyGameOver) {
+
+        ctx.fillStyle =
+            "rgba(0,0,0,0.65)";
+
+        ctx.fillRect(
+            0,
+            0,
+            width,
+            height
+        );
+
+
+        ctx.fillStyle =
+            "#ffffff";
+
+        ctx.font =
+            "bold 36px Arial";
+
+        ctx.textAlign =
+            "center";
+
+        ctx.fillText(
+            "GAME OVER",
+            width / 2,
+            height / 2 - 30
+        );
+
+
+        ctx.font =
+            "20px Arial";
+
+        ctx.fillText(
+            "Tippen zum Neustart",
+            width / 2,
+            height / 2 + 15
+        );
+
+
+        ctx.font =
+            "18px Arial";
+
+        ctx.fillText(
+            "Punkte: " +
+            flappyScore,
+            width / 2,
+            height / 2 + 50
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FLAPPY LOOP
+========================================================= */
+
+function flappyLoop(zeit) {
+
+    if (!flappySpielLaeuft) {
+
+        return;
+
+    }
+
+
+    const delta =
+        zeit -
+        flappyLetzteZeit;
+
+
+    flappyLetzteZeit =
+        zeit;
+
+
+    flappyUpdate(
+        delta
+    );
+
+
+    flappyZeichnen();
+
+
+    flappyAnimation =
+        requestAnimationFrame(
+            flappyLoop
+        );
+
+}
+
+
+/* =========================================================
+   FLAPPY STEUERUNG
+========================================================= */
+
+flappyCanvas.addEventListener(
+    "pointerdown",
+    function(event) {
+
+        event.preventDefault();
+
+        flappyFliegen();
+
+    }
+);
+
 
 document.addEventListener(
     "keydown",
     function(event) {
 
         if (
-            event.code === "Space"
+            event.code ===
+            "Space"
         ) {
 
-            event.preventDefault();
+            const flappyFenster =
+                document.getElementById(
+                    "flappySpiel"
+                );
 
-            flappySpringen();
+
+            if (
+                flappyFenster.classList.contains(
+                    "aktiv"
+                )
+            ) {
+
+                event.preventDefault();
+
+                flappyFliegen();
+
+            }
 
         }
 
@@ -2635,103 +2890,35 @@ document.addEventListener(
 );
 
 
-/* =========================
-   MAUS
-========================= */
-
-document.addEventListener(
-    "click",
-    function(event) {
-
-        const canvas =
-            document.getElementById(
-                "flappyCanvas"
-            );
-
-
-        if (
-
-            canvas &&
-
-            event.target === canvas
-
-        ) {
-
-            flappySpringen();
-
-        }
-
-    }
-);
-
-
-/* =========================
-   HANDY TOUCH
-========================= */
-
-document.addEventListener(
-    "touchstart",
-    function(event) {
-
-        const canvas =
-            document.getElementById(
-                "flappyCanvas"
-            );
-
-
-        if (
-
-            canvas &&
-
-            event.target === canvas
-
-        ) {
-
-            event.preventDefault();
-
-            flappySpringen();
-
-        }
-
-    },
-    {
-        passive: false
-    }
-);
-
-
-/* =====================================================
-   LOGIN
-===================================================== */
-
-
-/* =========================
+/* =========================================================
    LOGIN ÖFFNEN
-========================= */
+========================================================= */
 
 function anmeldenOeffnen() {
 
     document.getElementById(
         "anmeldeFenster"
     ).style.display = "block";
+
 }
 
 
-/* =========================
+/* =========================================================
    LOGIN SCHLIESSEN
-========================= */
+========================================================= */
 
 function anmeldenSchliessen() {
 
     document.getElementById(
         "anmeldeFenster"
     ).style.display = "none";
+
 }
 
 
-/* =========================
+/* =========================================================
    LOGIN TAB
-========================= */
+========================================================= */
 
 function anmeldenTabOeffnen() {
 
@@ -2753,12 +2940,13 @@ function anmeldenTabOeffnen() {
     document.getElementById(
         "registrierenTab"
     ).classList.remove("aktiv");
+
 }
 
 
-/* =========================
+/* =========================================================
    REGISTRIEREN TAB
-========================= */
+========================================================= */
 
 function registrierenTabOeffnen() {
 
@@ -2780,12 +2968,13 @@ function registrierenTabOeffnen() {
     document.getElementById(
         "anmeldenTab"
     ).classList.remove("aktiv");
+
 }
 
 
-/* =========================
+/* =========================================================
    REGISTRIEREN
-========================= */
+========================================================= */
 
 async function registrieren() {
 
@@ -2814,15 +3003,10 @@ async function registrieren() {
 
 
     if (
-
         !username ||
-
         !email ||
-
         !password ||
-
         !password2
-
     ) {
 
         alert(
@@ -2830,11 +3014,13 @@ async function registrieren() {
         );
 
         return;
+
     }
 
 
     if (
-        password !== password2
+        password !==
+        password2
     ) {
 
         alert(
@@ -2842,6 +3028,7 @@ async function registrieren() {
         );
 
         return;
+
     }
 
 
@@ -2854,6 +3041,7 @@ async function registrieren() {
         );
 
         return;
+
     }
 
 
@@ -2867,15 +3055,12 @@ async function registrieren() {
                     method: "POST",
 
                     headers: {
-
                         "Content-Type":
                             "application/json"
-
                     },
 
                     body:
                         JSON.stringify({
-
                             username:
                                 username,
 
@@ -2884,7 +3069,6 @@ async function registrieren() {
 
                             password:
                                 password
-
                         })
 
                 }
@@ -2895,9 +3079,7 @@ async function registrieren() {
             await antwort.json();
 
 
-        if (
-            daten.success
-        ) {
+        if (daten.success) {
 
             alert(
                 "Konto erfolgreich erstellt!"
@@ -2960,9 +3142,9 @@ async function registrieren() {
 }
 
 
-/* =========================
+/* =========================================================
    ANMELDEN
-========================= */
+========================================================= */
 
 async function anmelden() {
 
@@ -2988,6 +3170,7 @@ async function anmelden() {
         );
 
         return;
+
     }
 
 
@@ -3001,21 +3184,17 @@ async function anmelden() {
                     method: "POST",
 
                     headers: {
-
                         "Content-Type":
                             "application/json"
-
                     },
 
                     body:
                         JSON.stringify({
-
                             email:
                                 email,
 
                             password:
                                 password
-
                         })
 
                 }
@@ -3026,9 +3205,7 @@ async function anmelden() {
             await antwort.json();
 
 
-        if (
-            daten.success
-        ) {
+        if (daten.success) {
 
             benutzerAnzeigen(
                 daten.username,
@@ -3050,13 +3227,11 @@ async function anmelden() {
 
 
             alert(
-
-                "Willkommen zurück, " +
-
-                daten.username +
-
+                "Willkommen zurück, "
+                +
+                daten.username
+                +
                 "!"
-
             );
 
         }
@@ -3087,9 +3262,9 @@ async function anmelden() {
 }
 
 
-/* =========================
+/* =========================================================
    BENUTZER ANZEIGEN
-========================= */
+========================================================= */
 
 function benutzerAnzeigen(
     username,
@@ -3122,12 +3297,13 @@ function benutzerAnzeigen(
         "benutzerEmail"
     ).textContent =
         email;
+
 }
 
 
-/* =========================
+/* =========================================================
    BENUTZER MENÜ
-========================= */
+========================================================= */
 
 function benutzerMenueOeffnen() {
 
@@ -3138,7 +3314,8 @@ function benutzerMenueOeffnen() {
 
 
     if (
-        menue.style.display === "block"
+        menue.style.display ===
+        "block"
     ) {
 
         menue.style.display =
@@ -3156,9 +3333,9 @@ function benutzerMenueOeffnen() {
 }
 
 
-/* =========================
+/* =========================================================
    ABMELDEN
-========================= */
+========================================================= */
 
 async function abmelden() {
 
@@ -3168,9 +3345,7 @@ async function abmelden() {
             await fetch(
                 "/api/logout",
                 {
-
                     method: "POST"
-
                 }
             );
 
@@ -3179,9 +3354,7 @@ async function abmelden() {
             await antwort.json();
 
 
-        if (
-            daten.success
-        ) {
+        if (daten.success) {
 
             document.getElementById(
                 "benutzerButton"
@@ -3225,9 +3398,9 @@ async function abmelden() {
 }
 
 
-/* =========================
+/* =========================================================
    BENUTZER PRÜFEN
-========================= */
+========================================================= */
 
 async function benutzerPruefen() {
 
@@ -3268,9 +3441,67 @@ async function benutzerPruefen() {
 }
 
 
-/* =====================================================
+/* =========================================================
+   MODAL BEI KLICK AUF HINTERGRUND SCHLIESSEN
+========================================================= */
+
+document.getElementById(
+    "anmeldeFenster"
+).addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target === this
+        ) {
+
+            anmeldenSchliessen();
+
+        }
+
+    }
+);
+
+
+document.getElementById(
+    "kartenFenster"
+).addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target === this
+        ) {
+
+            kartenSchliessen();
+
+        }
+
+    }
+);
+
+
+document.getElementById(
+    "spieleFenster"
+).addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target === this
+        ) {
+
+            spieleSchliessen();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
    START
-===================================================== */
+========================================================= */
 
 benutzerPruefen();
 
@@ -3279,5 +3510,3 @@ benutzerPruefen();
 </body>
 
 </html>
-```
-
