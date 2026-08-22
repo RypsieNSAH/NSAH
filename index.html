@@ -1,27 +1,46 @@
+```html
 <!DOCTYPE html>
 <html lang="de">
 
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
 
-    <title>NSAH - Nützliche Sparsame Alltags Hilfe</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Leaflet für die Karte -->
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    >
+<title>NSAH - Nützliche Sparsame Alltags Hilfe</title>
 
-    <style>
+
+<!-- =========================
+     LEAFLET KARTE
+========================= -->
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+
+<style>
 
 /* =========================
-   HINTERGRUND
+   GRUNDLEGENDES
 ========================= */
 
+* {
+    box-sizing: border-box;
+}
+
+html,
 body {
+
     margin: 0;
+
+    padding: 0;
+
+    width: 100%;
+
+    min-height: 100%;
 
     background-color: black;
 
@@ -30,6 +49,11 @@ body {
     font-family: Arial, sans-serif;
 
     overflow-x: hidden;
+}
+
+body {
+
+    position: relative;
 }
 
 
@@ -41,780 +65,1196 @@ body {
 
     position: fixed;
 
-    /* =========================
-       POSITION DES BILDES
-       =========================
-
-       X = horizontal
-       Y = vertikal
-
-       Du kannst diese beiden Werte
-       später einfach verändern.
-    */
-
     left: 50%;
+
     top: 50%;
 
-    transform: translate(-50%, -50%);
-
-
-    /* =========================
-       GRÖSSE
-       ========================= */
+    transform:
+        translate(-50%, -50%);
 
     width: 40vw;
+
     height: 40vh;
 
+    min-width: 280px;
 
-    /* =========================
-       BILD
-       ========================= */
+    min-height: 220px;
 
-    background-image:
-        url("Nsah%20bilder/Screenshot2026-08-22214731(1).png");
+    max-width: 800px;
 
-    background-size: cover;
-
-    background-position: center;
-
-    background-repeat: no-repeat;
-
-
-    /* =========================
-       ABGERUNDETE ECKEN
-       ========================= */
+    max-height: 600px;
 
     border-radius: 25px;
 
+    overflow: hidden;
 
-    /* =========================
-       EBENE
-       ========================= */
+    z-index: 0;
 
-    z-index: -1;
+    pointer-events: none;
+
+    opacity: 0.95;
+}
+
+.hintergrund-bild img {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+    object-position: center;
+
+    border-radius: 25px;
 }
 
 
-        /* =========================
-           NSAH
-        ========================= */
+/* =========================
+   LOGO
+========================= */
 
-        .logo {
-            position: absolute;
+.logo {
 
-            top: 30px;
-            left: 50%;
+    position: absolute;
 
-            transform: translateX(-50%);
+    top: 30px;
 
-            font-size: 80px;
-            font-weight: bold;
+    left: 50%;
 
-            text-shadow:
-                0 0 4px rgba(255, 255, 255, 0.7),
-                0 0 10px rgba(255, 255, 255, 0.35),
-                0 0 18px rgba(255, 255, 255, 0.15);
-        }
+    transform:
+        translateX(-50%);
 
+    font-size: 80px;
 
-        /* =========================
-           UNTERTITEL
-        ========================= */
+    font-weight: bold;
 
-        .untertitel {
-            position: absolute;
+    text-align: center;
 
-            top: 110px;
-            left: 50%;
+    z-index: 10;
 
-            transform: translateX(-50%);
+    text-shadow:
 
-            font-size: 26px;
-            color: white;
+        0 0 4px
+        rgba(255,255,255,0.7),
 
-            white-space: nowrap;
-        }
+        0 0 10px
+        rgba(255,255,255,0.35),
 
+        0 0 18px
+        rgba(255,255,255,0.15);
+}
 
-        /* =========================
-           DUNKELGRAUER STRICH
-        ========================= */
 
-        .strich {
-            position: fixed;
+/* =========================
+   UNTERTITEL
+========================= */
 
-            left: 10%;
-            top: 0;
-            bottom: 0;
+.untertitel {
 
-            width: 2px;
+    position: absolute;
 
-            background-color: #333333;
-        }
+    top: 110px;
 
+    left: 50%;
 
-        /* =========================
-           ANMELDEN BUTTON
-        ========================= */
+    transform:
+        translateX(-50%);
 
-        .anmelden-button {
-            position: fixed;
+    font-size: 26px;
 
-            top: 25px;
-            left: 25px;
+    color: white;
 
-            padding: 12px 20px;
+    white-space: nowrap;
 
-            background-color: #222222;
-            color: white;
+    text-align: center;
 
-            border: 1px solid #444444;
-            border-radius: 7px;
+    z-index: 10;
+}
 
-            font-size: 16px;
-            font-weight: bold;
 
-            cursor: pointer;
+/* =========================
+   STRICH
+========================= */
 
-            z-index: 50;
-        }
+.strich {
 
-        .anmelden-button:hover {
-            background-color: #333333;
-        }
+    position: fixed;
 
+    left: 10%;
 
-        /* =========================
-           BENUTZER BUTTON
-        ========================= */
+    top: 0;
 
-        .benutzer-button {
-            display: none;
+    bottom: 0;
 
-            position: fixed;
+    width: 2px;
 
-            top: 25px;
-            left: 25px;
+    background-color: #333333;
 
-            padding: 12px 20px;
+    z-index: 10;
+}
 
-            background-color: #222222;
-            color: white;
 
-            border: 1px solid #444444;
-            border-radius: 7px;
+/* =========================
+   BUTTONS
+========================= */
 
-            font-size: 16px;
-            font-weight: bold;
+.anmelden-button,
+.karten-button,
+.benutzer-button {
 
-            cursor: pointer;
+    position: fixed;
 
-            z-index: 50;
-        }
+    padding: 12px 20px;
 
-        .benutzer-button:hover {
-            background-color: #333333;
-        }
+    background-color: #222222;
 
+    color: white;
 
-        /* =========================
-           BENUTZER MENÜ
-        ========================= */
+    border: 1px solid #444444;
 
-        .benutzer-menue {
-            display: none;
+    border-radius: 7px;
 
-            position: fixed;
+    font-size: 16px;
 
-            top: 75px;
-            left: 25px;
+    font-weight: bold;
 
-            width: 230px;
+    cursor: pointer;
 
-            background-color: #111111;
+    z-index: 50;
 
-            border: 1px solid #333333;
-            border-radius: 8px;
+    transition: 0.2s;
+}
 
-            padding: 15px;
+.anmelden-button:hover,
+.karten-button:hover,
+.benutzer-button:hover {
 
-            box-sizing: border-box;
+    background-color: #333333;
 
-            z-index: 200;
-        }
+    transform:
+        translateY(-1px);
+}
 
-        .benutzer-name {
-            font-size: 18px;
-            font-weight: bold;
 
-            margin-bottom: 5px;
-        }
+/* =========================
+   ANMELDEN
+========================= */
 
-        .benutzer-email {
-            color: #888888;
+.anmelden-button {
 
-            font-size: 13px;
+    top: 25px;
 
-            margin-bottom: 15px;
+    left: 25px;
+}
 
-            word-break: break-all;
-        }
 
-        .abmelden-button {
-            width: 100%;
-            height: 40px;
+/* =========================
+   KARTE BUTTON
+========================= */
 
-            background-color: #222222;
-            color: white;
+.karten-button {
 
-            border: 1px solid #444444;
-            border-radius: 6px;
+    top: 80px;
 
-            cursor: pointer;
-        }
+    left: 25px;
+}
 
-        .abmelden-button:hover {
-            background-color: #333333;
-        }
 
+/* =========================
+   BENUTZER BUTTON
+========================= */
 
-        /* =========================
-           KARTEN BUTTON
-        ========================= */
+.benutzer-button {
 
-        .karten-button {
-            position: fixed;
+    display: none;
 
-            top: 80px;
-            left: 25px;
+    top: 25px;
 
-            padding: 12px 20px;
+    left: 25px;
+}
 
-            background-color: #222222;
-            color: white;
 
-            border: 1px solid #444444;
-            border-radius: 7px;
+/* =========================
+   BENUTZER MENÜ
+========================= */
 
-            font-size: 16px;
-            font-weight: bold;
+.benutzer-menue {
 
-            cursor: pointer;
+    display: none;
 
-            z-index: 50;
-        }
+    position: fixed;
 
-        .karten-button:hover {
-            background-color: #333333;
-        }
+    top: 75px;
 
+    left: 25px;
 
-        /* =========================
-           ANMELDE FENSTER HINTERGRUND
-        ========================= */
+    width: 230px;
 
-        .fenster-hintergrund {
-            display: none;
+    padding: 15px;
 
-            position: fixed;
+    background-color: #111111;
 
-            top: 0;
-            left: 0;
+    border: 1px solid #333333;
 
-            width: 100%;
-            height: 100%;
+    border-radius: 8px;
 
-            background-color: rgba(0, 0, 0, 0.8);
+    z-index: 200;
+}
 
-            z-index: 9999;
-        }
+.benutzer-name {
 
+    font-size: 18px;
 
-        /* =========================
-           ANMELDE FENSTER
-        ========================= */
+    font-weight: bold;
 
-        .anmelde-fenster {
-            position: absolute;
+    margin-bottom: 5px;
+}
 
-            top: 50%;
-            left: 50%;
+.benutzer-email {
 
-            transform: translate(-50%, -50%);
+    color: #888888;
 
-            width: 400px;
+    font-size: 13px;
 
-            background-color: #111111;
+    margin-bottom: 15px;
 
-            border: 2px solid #333333;
-            border-radius: 12px;
+    word-break: break-all;
+}
 
-            padding: 30px;
+.abmelden-button {
 
-            box-sizing: border-box;
+    width: 100%;
 
-            box-shadow:
-                0 0 30px rgba(255, 255, 255, 0.1);
-        }
+    height: 40px;
 
+    background-color: #222222;
 
-        /* =========================
-           FENSTER KOPF
-        ========================= */
+    color: white;
 
-        .fenster-kopf {
-            display: flex;
+    border: 1px solid #444444;
 
-            justify-content: space-between;
-            align-items: center;
+    border-radius: 6px;
 
-            margin-bottom: 25px;
-        }
+    cursor: pointer;
+}
 
-        .fenster-titel {
-            font-size: 25px;
-            font-weight: bold;
-        }
+.abmelden-button:hover {
 
+    background-color: #333333;
+}
 
-        /* =========================
-           SCHLIESSEN
-        ========================= */
 
-        .schliessen {
-            background: none;
+/* =========================
+   MODAL HINTERGRUND
+========================= */
 
-            border: none;
+.fenster-hintergrund,
+.karten-hintergrund,
+.spiele-hintergrund,
+.flappy-hintergrund {
 
-            color: white;
+    display: none;
 
-            font-size: 28px;
+    position: fixed;
 
-            cursor: pointer;
-        }
+    top: 0;
 
+    left: 0;
 
-        /* =========================
-           TABS
-        ========================= */
+    width: 100%;
 
-        .tabs {
-            display: flex;
+    height: 100%;
 
-            margin-bottom: 20px;
-        }
+    background-color:
+        rgba(0,0,0,0.85);
 
-        .tab {
-            flex: 1;
+    z-index: 9999;
+}
 
-            padding: 12px;
 
-            background-color: #222222;
+/* =========================
+   LOGIN FENSTER
+========================= */
 
-            color: #aaaaaa;
+.anmelde-fenster {
 
-            border: none;
+    position: absolute;
 
-            cursor: pointer;
+    top: 50%;
 
-            font-size: 15px;
-        }
+    left: 50%;
 
-        .tab.aktiv {
-            background-color: #333333;
+    transform:
+        translate(-50%, -50%);
 
-            color: white;
-        }
+    width: 400px;
 
+    max-width:
+        calc(100vw - 30px);
 
-        /* =========================
-           FORMULAR
-        ========================= */
+    max-height:
+        calc(100vh - 30px);
 
-        .formular {
-            display: none;
-        }
+    overflow-y: auto;
 
-        .formular.aktiv {
-            display: block;
-        }
+    background-color: #111111;
 
-        .formular label {
-            display: block;
+    border: 2px solid #333333;
 
-            margin-bottom: 7px;
+    border-radius: 12px;
 
-            color: #cccccc;
-        }
+    padding: 30px;
 
-        .formular input {
-            width: 100%;
-            height: 45px;
+    box-shadow:
+        0 0 30px
+        rgba(255,255,255,0.1);
+}
 
-            margin-bottom: 18px;
 
-            padding: 0 12px;
+/* =========================
+   FENSTER KOPF
+========================= */
 
-            box-sizing: border-box;
+.fenster-kopf {
 
-            background-color: #222222;
+    display: flex;
 
-            color: white;
+    justify-content:
+        space-between;
 
-            border: 1px solid #444444;
+    align-items: center;
 
-            border-radius: 6px;
+    margin-bottom: 25px;
+}
 
-            outline: none;
+.fenster-titel {
 
-            font-size: 15px;
-        }
+    font-size: 25px;
 
-        .formular input:focus {
-            border-color: #777777;
-        }
+    font-weight: bold;
+}
 
+.schliessen,
+.karten-schliessen,
+.spiele-schliessen,
+.flappy-schliessen {
 
-        /* =========================
-           FORMULAR BUTTON
-        ========================= */
+    background: none;
 
-        .formular-button {
-            width: 100%;
-            height: 45px;
+    border: none;
 
-            background-color: #333333;
+    color: white;
 
-            color: white;
+    font-size: 28px;
 
-            border: 1px solid #555555;
+    cursor: pointer;
+}
 
-            border-radius: 6px;
 
-            cursor: pointer;
+/* =========================
+   TABS
+========================= */
 
-            font-size: 16px;
-            font-weight: bold;
-        }
+.tabs {
 
-        .formular-button:hover {
-            background-color: #444444;
-        }
+    display: flex;
 
+    margin-bottom: 20px;
+}
 
-        /* =========================
-           HINWEIS
-        ========================= */
+.tab {
 
-        .hinweis {
-            margin-top: 15px;
+    flex: 1;
 
-            text-align: center;
+    padding: 12px;
 
-            color: #777777;
+    background-color: #222222;
 
-            font-size: 13px;
-        }
+    color: #aaaaaa;
 
+    border: none;
 
-        /* =========================
-           KARTENFENSTER
-        ========================= */
+    cursor: pointer;
 
-        .karten-hintergrund {
-            display: none;
+    font-size: 15px;
+}
 
-            position: fixed;
+.tab.aktiv {
 
-            top: 0;
-            left: 0;
+    background-color: #333333;
 
-            width: 100%;
-            height: 100%;
+    color: white;
+}
 
-            background-color: rgba(0, 0, 0, 0.8);
 
-            z-index: 1000;
-        }
+/* =========================
+   FORMULAR
+========================= */
 
-        .karten-fenster {
-            position: absolute;
+.formular {
 
-            top: 50%;
-            left: 50%;
+    display: none;
+}
 
-            transform: translate(-50%, -50%);
+.formular.aktiv {
 
-            width: 80%;
-            height: 80%;
+    display: block;
+}
 
-            background-color: #111111;
+.formular label {
 
-            border: 2px solid #333333;
+    display: block;
 
-            border-radius: 12px;
+    margin-bottom: 7px;
 
-            overflow: hidden;
-        }
+    color: #cccccc;
+}
 
-        .karten-kopf {
-            height: 55px;
+.formular input {
 
-            display: flex;
+    width: 100%;
 
-            justify-content: space-between;
-            align-items: center;
+    height: 45px;
 
-            padding: 0 15px;
+    margin-bottom: 18px;
 
-            box-sizing: border-box;
+    padding: 0 12px;
 
-            background-color: #151515;
+    background-color: #222222;
 
-            border-bottom: 1px solid #333333;
-        }
+    color: white;
 
-        .karten-titel {
-            font-size: 20px;
+    border: 1px solid #444444;
 
-            font-weight: bold;
-        }
+    border-radius: 6px;
 
-        .karten-schliessen {
-            background: none;
+    outline: none;
 
-            border: none;
+    font-size: 15px;
+}
 
-            color: white;
+.formular input:focus {
 
-            font-size: 28px;
+    border-color: #777777;
+}
 
-            cursor: pointer;
-        }
 
-        #karte {
-            width: 100%;
+/* =========================
+   FORMULAR BUTTON
+========================= */
 
-            height: calc(100% - 55px);
-        }
+.formular-button {
 
+    width: 100%;
 
-        /* =========================
-           HANDY-ANSICHT
-        ========================= */
+    height: 45px;
 
-        @media (max-width: 600px) {
+    background-color: #333333;
 
-            body {
-                min-width: 0;
+    color: white;
 
-                overflow-x: hidden;
+    border: 1px solid #555555;
 
-                background-position: center center;
-            }
+    border-radius: 6px;
 
+    cursor: pointer;
 
-            /* NSAH */
+    font-size: 16px;
 
-            .logo {
-                position: absolute;
+    font-weight: bold;
+}
 
-                top: 25px;
-                left: 63%;
+.formular-button:hover {
 
-                transform: translateX(-50%);
+    background-color: #444444;
+}
 
-                font-size: 52px;
 
-                white-space: nowrap;
-            }
+/* =========================
+   HINWEIS
+========================= */
 
+.hinweis {
 
-            /* UNTERTITEL */
+    margin-top: 15px;
 
-            .untertitel {
-                position: absolute;
+    text-align: center;
 
-                top: 95px;
-                left: 63%;
+    color: #777777;
 
-                transform: translateX(-50%);
+    font-size: 13px;
+}
 
-                width: 75%;
 
-                font-size: 18px;
+/* =========================
+   KARTEN FENSTER
+========================= */
 
-                line-height: 1.4;
+.karten-fenster {
 
-                text-align: center;
+    position: absolute;
 
-                white-space: normal;
-            }
+    top: 50%;
 
+    left: 50%;
 
-            /* STRICH */
+    transform:
+        translate(-50%, -50%);
 
-            .strich {
-                left: 24%;
+    width: 80%;
 
-                width: 2px;
-            }
+    height: 80%;
 
+    max-width: 1200px;
 
-            /* ANMELDEN */
+    background-color: #111111;
 
-            .anmelden-button {
-                top: 18px;
-                left: 0px;
+    border: 2px solid #333333;
 
-                padding: 8px 11px;
+    border-radius: 12px;
 
-                font-size: 13px;
+    overflow: hidden;
 
-                z-index: 50;
-            }
+    display: flex;
 
+    flex-direction: column;
+}
 
-            /* KARTEN BUTTON */
 
-            .karten-button {
-                top: 58px;
-                left: 5px;
+/* =========================
+   KARTEN KOPF
+========================= */
 
-                padding: 8px 11px;
+.karten-kopf {
 
-                font-size: 13px;
+    height: 55px;
 
-                z-index: 50;
-            }
+    flex-shrink: 0;
 
+    display: flex;
 
-            /* BENUTZER */
+    justify-content:
+        space-between;
 
-            .benutzer-button {
-                top: 18px;
-                left: 12px;
+    align-items: center;
 
-                padding: 10px 14px;
+    padding: 0 15px;
 
-                font-size: 14px;
+    background-color: #151515;
 
-                z-index: 50;
+    border-bottom:
+        1px solid #333333;
+}
 
-                max-width: 150px;
+.karten-titel {
 
-                overflow: hidden;
+    font-size: 20px;
 
-                text-overflow: ellipsis;
+    font-weight: bold;
+}
 
-                white-space: nowrap;
-            }
 
+/* =========================
+   KARTE
+========================= */
 
-            /* BENUTZER-MENÜ */
+#karte {
 
-            .benutzer-menue {
-                top: 65px;
-                left: 12px;
+    width: 100%;
 
-                width: calc(100% - 24px);
+    flex: 1;
 
-                max-width: 260px;
+    min-height: 0;
+}
 
-                z-index: 200;
-            }
 
+/* =========================
+   SPIELE BUTTON
+========================= */
 
-            /* LOGIN-HINTERGRUND */
+.spiele-button {
 
-            .fenster-hintergrund {
-                padding: 15px;
+    width:
+        calc(100% - 30px);
 
-                box-sizing: border-box;
+    height: 50px;
 
-                overflow-y: auto;
+    flex-shrink: 0;
 
-                z-index: 9999;
-            }
+    margin:
+        10px 15px 15px 15px;
 
+    background-color: #222222;
 
-            /* LOGIN-FENSTER */
+    color: white;
 
-            .anmelde-fenster {
-                position: absolute;
+    border: 1px solid #444444;
 
-                top: 50%;
-                left: 50%;
+    border-radius: 8px;
 
-                width: calc(100vw - 30px);
+    font-size: 17px;
 
-                max-width: 380px;
+    font-weight: bold;
 
-                padding: 22px;
+    cursor: pointer;
 
-                transform: translate(-50%, -50%);
+    transition: 0.2s;
+}
 
-                box-sizing: border-box;
+.spiele-button:hover {
 
-                max-height: calc(100vh - 30px);
+    background-color: #333333;
 
-                overflow-y: auto;
-            }
+    transform:
+        translateY(-1px);
+}
 
 
-            /* TITEL */
+/* =========================
+   SPIELE FENSTER
+========================= */
 
-            .fenster-titel {
-                font-size: 21px;
-            }
+.spiele-fenster {
 
+    position: absolute;
 
-            /* TABS */
+    top: 50%;
 
-            .tab {
-                padding: 12px 5px;
+    left: 50%;
 
-                font-size: 14px;
-            }
+    transform:
+        translate(-50%, -50%);
 
+    width: 700px;
 
-            /* EINGABEFELDER */
+    max-width:
+        calc(100vw - 30px);
 
-            .formular input {
-                width: 100%;
+    max-height:
+        calc(100vh - 30px);
 
-                height: 48px;
+    overflow-y: auto;
 
-                font-size: 16px;
-            }
+    background-color: #111111;
 
+    border: 2px solid #333333;
 
-            /* BUTTON */
+    border-radius: 14px;
 
-            .formular-button {
-                height: 48px;
+    padding: 20px;
 
-                font-size: 16px;
-            }
+    box-shadow:
+        0 0 40px
+        rgba(255,255,255,0.08);
+}
 
 
-            /* SCHLIESSEN */
+/* =========================
+   SPIELE KOPF
+========================= */
 
-            .schliessen {
-                font-size: 26px;
-            }
+.spiele-kopf {
 
+    display: flex;
 
-            /* KARTE */
+    justify-content:
+        space-between;
 
-            .karten-fenster {
-                width: 95%;
+    align-items: center;
 
-                height: 85%;
-            }
-        }
+    margin-bottom: 20px;
+}
 
-    </style>
+.spiele-titel {
+
+    font-size: 25px;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   SPIELE AUSWAHL
+========================= */
+
+.spiele-auswahl {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+}
+
+
+/* =========================
+   EINZELNES SPIEL
+========================= */
+
+.spiel {
+
+    min-height: 150px;
+
+    background-color: #1b1b1b;
+
+    border: 1px solid #333333;
+
+    border-radius: 10px;
+
+    padding: 15px;
+
+    cursor: pointer;
+
+    text-align: center;
+
+    transition: 0.2s;
+}
+
+.spiel:hover {
+
+    background-color: #252525;
+
+    border-color: #555555;
+
+    transform:
+        translateY(-2px);
+}
+
+.spiel-icon {
+
+    font-size: 45px;
+
+    margin-bottom: 10px;
+}
+
+.spiel-name {
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    margin-bottom: 7px;
+}
+
+.spiel-info {
+
+    color: #888888;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   FLAPPY BIRD FENSTER
+========================= */
+
+.flappy-fenster {
+
+    position: absolute;
+
+    top: 50%;
+
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    width: 520px;
+
+    max-width:
+        calc(100vw - 20px);
+
+    max-height:
+        calc(100vh - 20px);
+
+    overflow-y: auto;
+
+    background-color: #111111;
+
+    border: 2px solid #333333;
+
+    border-radius: 14px;
+
+    padding: 15px;
+
+    text-align: center;
+}
+
+
+/* =========================
+   FLAPPY KOPF
+========================= */
+
+.flappy-kopf {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    margin-bottom: 10px;
+}
+
+.flappy-titel {
+
+    font-size: 22px;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   FLAPPY CANVAS
+========================= */
+
+#flappyCanvas {
+
+    width: 100%;
+
+    max-width: 480px;
+
+    height: auto;
+
+    display: block;
+
+    margin: 0 auto;
+
+    background-color: #87ceeb;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+}
+
+.flappy-info {
+
+    margin-top: 10px;
+
+    color: #999999;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   HANDY
+========================= */
+
+@media (max-width: 600px) {
+
+
+    /* =====================
+       BILD
+    ===================== */
+
+    .hintergrund-bild {
+
+        width: 70vw;
+
+        height: 30vh;
+
+        min-width: 0;
+
+        min-height: 0;
+
+        top: 58%;
+
+        border-radius: 18px;
+    }
+
+    .hintergrund-bild img {
+
+        border-radius: 18px;
+    }
+
+
+    /* =====================
+       LOGO
+    ===================== */
+
+    .logo {
+
+        top: 25px;
+
+        left: 63%;
+
+        font-size: 52px;
+
+        white-space: nowrap;
+    }
+
+
+    /* =====================
+       UNTERTITEL
+    ===================== */
+
+    .untertitel {
+
+        top: 95px;
+
+        left: 63%;
+
+        width: 75%;
+
+        font-size: 18px;
+
+        line-height: 1.4;
+
+        white-space: normal;
+    }
+
+
+    /* =====================
+       STRICH
+    ===================== */
+
+    .strich {
+
+        left: 24%;
+    }
+
+
+    /* =====================
+       ANMELDEN
+    ===================== */
+
+    .anmelden-button {
+
+        top: 18px;
+
+        left: 0;
+
+        padding:
+            8px 11px;
+
+        font-size: 13px;
+    }
+
+
+    /* =====================
+       KARTE BUTTON
+    ===================== */
+
+    .karten-button {
+
+        top: 58px;
+
+        left: 5px;
+
+        padding:
+            8px 11px;
+
+        font-size: 13px;
+    }
+
+
+    /* =====================
+       BENUTZER
+    ===================== */
+
+    .benutzer-button {
+
+        top: 18px;
+
+        left: 5px;
+
+        padding:
+            9px 11px;
+
+        font-size: 13px;
+
+        max-width: 150px;
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+
+        white-space: nowrap;
+    }
+
+
+    /* =====================
+       BENUTZER MENÜ
+    ===================== */
+
+    .benutzer-menue {
+
+        top: 65px;
+
+        left: 12px;
+
+        width:
+            calc(100% - 24px);
+
+        max-width: 260px;
+    }
+
+
+    /* =====================
+       LOGIN
+    ===================== */
+
+    .anmelde-fenster {
+
+        width:
+            calc(100vw - 30px);
+
+        max-width: 380px;
+
+        padding: 22px;
+    }
+
+
+    .fenster-titel {
+
+        font-size: 21px;
+    }
+
+
+    .formular input {
+
+        height: 48px;
+
+        font-size: 16px;
+    }
+
+
+    .formular-button {
+
+        height: 48px;
+
+        font-size: 16px;
+    }
+
+
+    /* =====================
+       KARTE
+    ===================== */
+
+    .karten-fenster {
+
+        width: 95%;
+
+        height: 85%;
+    }
+
+
+    .karten-titel {
+
+        font-size: 17px;
+    }
+
+
+    /* =====================
+       SPIELE BUTTON
+    ===================== */
+
+    .spiele-button {
+
+        width:
+            calc(100% - 20px);
+
+        height: 48px;
+
+        margin:
+            8px 10px 10px 10px;
+
+        font-size: 15px;
+    }
+
+
+    /* =====================
+       SPIELE FENSTER
+    ===================== */
+
+    .spiele-fenster {
+
+        width:
+            calc(100vw - 20px);
+
+        max-width: none;
+
+        padding: 15px;
+
+        border-radius: 12px;
+    }
+
+
+    .spiele-titel {
+
+        font-size: 21px;
+    }
+
+
+    .spiele-auswahl {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 10px;
+    }
+
+
+    .spiel {
+
+        min-height: 125px;
+
+        padding: 10px;
+    }
+
+
+    .spiel-icon {
+
+        font-size: 36px;
+    }
+
+
+    .spiel-name {
+
+        font-size: 15px;
+    }
+
+
+    .spiel-info {
+
+        font-size: 11px;
+    }
+
+
+    /* =====================
+       FLAPPY
+    ===================== */
+
+    .flappy-fenster {
+
+        width:
+            calc(100vw - 20px);
+
+        padding: 10px;
+    }
+
+
+    .flappy-titel {
+
+        font-size: 19px;
+    }
+
+
+    .flappy-info {
+
+        font-size: 12px;
+    }
+
+}
+
+</style>
 
 </head>
 
@@ -822,936 +1262,2022 @@ body {
 <body>
 
 
-    <!-- =========================
-         NSAH
-    ========================= -->
+<!-- =========================
+     HINTERGRUNDBILD
+========================= -->
 
-    <div class="logo">
-        NSAH
-    </div>
+<div class="hintergrund-bild">
 
-
-    <!-- =========================
-         BEDEUTUNG
-    ========================= -->
-
-    <div class="untertitel">
-        Nützliche Sparsame Alltags Hilfe
-    </div>
-
-
-    <!-- =========================
-         DUNKELGRAUER STRICH
-    ========================= -->
-
-    <div class="strich"></div>
-
-
-    <!-- =========================
-         ANMELDEN BUTTON
-    ========================= -->
-
-    <button
-        class="anmelden-button"
-        id="anmeldenButton"
-        onclick="anmeldenOeffnen()"
+    <img
+        src="Nsah bilder/Screenshot2026-08-22214731(1).png"
+        alt="NSAH Hintergrundbild"
     >
-        Anmelden
-    </button>
+
+</div>
 
 
-    <!-- =========================
-         KARTEN BUTTON
-    ========================= -->
+<!-- =========================
+     LOGO
+========================= -->
 
-    <button
-        class="karten-button"
-        onclick="kartenOeffnen()"
-    >
-        🗺️ Karte
-    </button>
+<div class="logo">
+    NSAH
+</div>
 
 
-    <!-- =========================
-         BENUTZER BUTTON
-    ========================= -->
+<!-- =========================
+     UNTERTITEL
+========================= -->
 
-    <button
-        class="benutzer-button"
-        id="benutzerButton"
-        onclick="benutzerMenueOeffnen()"
-    >
-        👤
-        <span id="benutzerNameOben">
-            Benutzer
-        </span>
-    </button>
+<div class="untertitel">
+    Nützliche Sparsame Alltags Hilfe
+</div>
 
 
-    <!-- =========================
-         BENUTZER MENÜ
-    ========================= -->
+<!-- =========================
+     STRICH
+========================= -->
+
+<div class="strich"></div>
+
+
+<!-- =========================
+     ANMELDEN BUTTON
+========================= -->
+
+<button
+    class="anmelden-button"
+    id="anmeldenButton"
+    onclick="anmeldenOeffnen()"
+>
+    Anmelden
+</button>
+
+
+<!-- =========================
+     KARTEN BUTTON
+========================= -->
+
+<button
+    class="karten-button"
+    onclick="kartenOeffnen()"
+>
+    🗺️ Karte
+</button>
+
+
+<!-- =========================
+     BENUTZER BUTTON
+========================= -->
+
+<button
+    class="benutzer-button"
+    id="benutzerButton"
+    onclick="benutzerMenueOeffnen()"
+>
+    👤
+
+    <span id="benutzerNameOben">
+        Benutzer
+    </span>
+
+</button>
+
+
+<!-- =========================
+     BENUTZER MENÜ
+========================= -->
+
+<div
+    class="benutzer-menue"
+    id="benutzerMenue"
+>
 
     <div
-        class="benutzer-menue"
-        id="benutzerMenue"
+        class="benutzer-name"
+        id="benutzerName"
     >
+    </div>
 
-        <div
-            class="benutzer-name"
-            id="benutzerName"
-        >
+    <div
+        class="benutzer-email"
+        id="benutzerEmail"
+    >
+    </div>
+
+    <button
+        class="abmelden-button"
+        onclick="abmelden()"
+    >
+        Abmelden
+    </button>
+
+</div>
+
+
+<!-- =========================
+     LOGIN FENSTER
+========================= -->
+
+<div
+    class="fenster-hintergrund"
+    id="anmeldeFenster"
+>
+
+    <div class="anmelde-fenster">
+
+
+        <div class="fenster-kopf">
+
+            <div class="fenster-titel">
+                NSAH Konto
+            </div>
+
+            <button
+                class="schliessen"
+                onclick="anmeldenSchliessen()"
+            >
+                ×
+            </button>
+
         </div>
 
-        <div
-            class="benutzer-email"
-            id="benutzerEmail"
-        >
+
+        <!-- TABS -->
+
+        <div class="tabs">
+
+            <button
+                class="tab aktiv"
+                id="anmeldenTab"
+                onclick="anmeldenTabOeffnen()"
+            >
+                Anmelden
+            </button>
+
+            <button
+                class="tab"
+                id="registrierenTab"
+                onclick="registrierenTabOeffnen()"
+            >
+                Registrieren
+            </button>
+
         </div>
+
+
+        <!-- ANMELDEN FORMULAR -->
+
+        <div
+            class="formular aktiv"
+            id="anmeldenForm"
+        >
+
+            <label>
+                E-Mail
+            </label>
+
+            <input
+                type="email"
+                id="loginEmail"
+                placeholder="Deine E-Mail"
+            >
+
+
+            <label>
+                Passwort
+            </label>
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="Dein Passwort"
+            >
+
+
+            <button
+                class="formular-button"
+                onclick="anmelden()"
+            >
+                Anmelden
+            </button>
+
+
+            <div class="hinweis">
+
+                Noch kein Konto?
+
+                Klicke oben auf
+                „Registrieren“.
+
+            </div>
+
+        </div>
+
+
+        <!-- REGISTRIEREN FORMULAR -->
+
+        <div
+            class="formular"
+            id="registrierenForm"
+        >
+
+            <label>
+                Benutzername
+            </label>
+
+            <input
+                type="text"
+                id="registerUsername"
+                placeholder="Dein Benutzername"
+            >
+
+
+            <label>
+                E-Mail
+            </label>
+
+            <input
+                type="email"
+                id="registerEmail"
+                placeholder="Deine E-Mail"
+            >
+
+
+            <label>
+                Passwort
+            </label>
+
+            <input
+                type="password"
+                id="registerPassword"
+                placeholder="Dein Passwort"
+            >
+
+
+            <label>
+                Passwort wiederholen
+            </label>
+
+            <input
+                type="password"
+                id="registerPassword2"
+                placeholder="Passwort wiederholen"
+            >
+
+
+            <button
+                class="formular-button"
+                onclick="registrieren()"
+            >
+                Konto erstellen
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     KARTEN FENSTER
+========================= -->
+
+<div
+    class="karten-hintergrund"
+    id="kartenFenster"
+>
+
+    <div class="karten-fenster">
+
+
+        <div class="karten-kopf">
+
+            <div class="karten-titel">
+                🗺️ NSAH Karte
+            </div>
+
+            <button
+                class="karten-schliessen"
+                onclick="kartenSchliessen()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- KARTE -->
+
+        <div id="karte"></div>
+
+
+        <!-- SPIELE BUTTON -->
 
         <button
-            class="abmelden-button"
-            onclick="abmelden()"
+            class="spiele-button"
+            onclick="spieleOeffnen()"
         >
-            Abmelden
+            🎮 Spiele Spiele
         </button>
 
+
     </div>
 
+</div>
 
-    <!-- =========================
-         ANMELDE FENSTER
-    ========================= -->
 
-    <div
-        class="fenster-hintergrund"
-        id="anmeldeFenster"
-    >
+<!-- =========================
+     SPIELE FENSTER
+========================= -->
 
-        <div class="anmelde-fenster">
+<div
+    class="spiele-hintergrund"
+    id="spieleFenster"
+>
 
-            <div class="fenster-kopf">
+    <div class="spiele-fenster">
 
-                <div class="fenster-titel">
-                    NSAH Konto
-                </div>
 
-                <button
-                    class="schliessen"
-                    onclick="anmeldenSchliessen()"
-                >
-                    ×
-                </button>
+        <div class="spiele-kopf">
 
+            <div class="spiele-titel">
+                🎮 Spiele Spiele
             </div>
 
+            <button
+                class="spiele-schliessen"
+                onclick="spieleSchliessen()"
+            >
+                ×
+            </button>
 
-            <!-- =========================
-                 TABS
-            ========================= -->
-
-            <div class="tabs">
-
-                <button
-                    class="tab aktiv"
-                    id="anmeldenTab"
-                    onclick="anmeldenTabOeffnen()"
-                >
-                    Anmelden
-                </button>
-
-                <button
-                    class="tab"
-                    id="registrierenTab"
-                    onclick="registrierenTabOeffnen()"
-                >
-                    Registrieren
-                </button>
-
-            </div>
+        </div>
 
 
-            <!-- =========================
-                 ANMELDEN FORMULAR
-            ========================= -->
+        <div class="spiele-auswahl">
+
+
+            <!-- SPIEL 1 -->
 
             <div
-                class="formular aktiv"
-                id="anmeldenForm"
+                class="spiel"
+                onclick="flappyOeffnen()"
             >
 
-                <label>
-                    E-Mail
-                </label>
+                <div class="spiel-icon">
+                    🐦
+                </div>
 
-                <input
-                    type="email"
-                    id="loginEmail"
-                    placeholder="Deine E-Mail"
-                >
+                <div class="spiel-name">
+                    Flappy Bird
+                </div>
 
-                <label>
-                    Passwort
-                </label>
-
-                <input
-                    type="password"
-                    id="loginPassword"
-                    placeholder="Dein Passwort"
-                >
-
-                <button
-                    class="formular-button"
-                    onclick="anmelden()"
-                >
-                    Anmelden
-                </button>
-
-                <div class="hinweis">
-                    Noch kein Konto?
-                    Klicke oben auf „Registrieren“.
+                <div class="spiel-info">
+                    Fliege durch die Rohre
                 </div>
 
             </div>
 
 
-            <!-- =========================
-                 REGISTRIEREN FORMULAR
-            ========================= -->
+            <!-- SPIEL 2 -->
 
             <div
-                class="formular"
-                id="registrierenForm"
+                class="spiel"
+                onclick="spielNochNichtFertig('Snake')"
             >
 
-                <label>
-                    Benutzername
-                </label>
+                <div class="spiel-icon">
+                    🐍
+                </div>
 
-                <input
-                    type="text"
-                    id="registerUsername"
-                    placeholder="Dein Benutzername"
-                >
+                <div class="spiel-name">
+                    Snake
+                </div>
 
-                <label>
-                    E-Mail
-                </label>
-
-                <input
-                    type="email"
-                    id="registerEmail"
-                    placeholder="Deine E-Mail"
-                >
-
-                <label>
-                    Passwort
-                </label>
-
-                <input
-                    type="password"
-                    id="registerPassword"
-                    placeholder="Dein Passwort"
-                >
-
-                <label>
-                    Passwort wiederholen
-                </label>
-
-                <input
-                    type="password"
-                    id="registerPassword2"
-                    placeholder="Passwort wiederholen"
-                >
-
-                <button
-                    class="formular-button"
-                    onclick="registrieren()"
-                >
-                    Konto erstellen
-                </button>
+                <div class="spiel-info">
+                    Demnächst
+                </div>
 
             </div>
+
+
+            <!-- SPIEL 3 -->
+
+            <div
+                class="spiel"
+                onclick="spielNochNichtFertig('Memory')"
+            >
+
+                <div class="spiel-icon">
+                    🧠
+                </div>
+
+                <div class="spiel-name">
+                    Memory
+                </div>
+
+                <div class="spiel-info">
+                    Demnächst
+                </div>
+
+            </div>
+
+
+            <!-- SPIEL 4 -->
+
+            <div
+                class="spiel"
+                onclick="spielNochNichtFertig('2048')"
+            >
+
+                <div class="spiel-icon">
+                    🔢
+                </div>
+
+                <div class="spiel-name">
+                    2048
+                </div>
+
+                <div class="spiel-info">
+                    Demnächst
+                </div>
+
+            </div>
+
+
+            <!-- SPIEL 5 -->
+
+            <div
+                class="spiel"
+                onclick="spielNochNichtFertig('Tetris')"
+            >
+
+                <div class="spiel-icon">
+                    🧱
+                </div>
+
+                <div class="spiel-name">
+                    Tetris
+                </div>
+
+                <div class="spiel-info">
+                    Demnächst
+                </div>
+
+            </div>
+
+
+            <!-- SPIEL 6 -->
+
+            <div
+                class="spiel"
+                onclick="spielNochNichtFertig('Reaktionsspiel')"
+            >
+
+                <div class="spiel-icon">
+                    ⚡
+                </div>
+
+                <div class="spiel-name">
+                    Reaktion
+                </div>
+
+                <div class="spiel-info">
+                    Demnächst
+                </div>
+
+            </div>
+
 
         </div>
 
     </div>
 
+</div>
 
-    <!-- =========================
-         KARTENFENSTER
-    ========================= -->
 
-    <div
-        class="karten-hintergrund"
-        id="kartenFenster"
-    >
+<!-- =========================
+     FLAPPY BIRD FENSTER
+========================= -->
 
-        <div class="karten-fenster">
+<div
+    class="flappy-hintergrund"
+    id="flappyFenster"
+>
 
-            <div class="karten-kopf">
+    <div class="flappy-fenster">
 
-                <div class="karten-titel">
-                    🗺️ NSAH Karte
-                </div>
 
-                <button
-                    class="karten-schliessen"
-                    onclick="kartenSchliessen()"
-                >
-                    ×
-                </button>
+        <div class="flappy-kopf">
 
+            <div class="flappy-titel">
+                🐦 Flappy Bird
             </div>
 
-            <div id="karte"></div>
+            <button
+                class="flappy-schliessen"
+                onclick="flappySchliessen()"
+            >
+                ×
+            </button>
 
         </div>
 
+
+        <canvas
+            id="flappyCanvas"
+            width="480"
+            height="600"
+        ></canvas>
+
+
+        <div class="flappy-info">
+
+            Tippe, klicke oder drücke
+            die Leertaste zum Fliegen.
+
+        </div>
+
+
     </div>
 
-
-    <!-- =========================
-         LEAFLET
-    ========================= -->
-
-    <script
-        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    >
-    </script>
+</div>
 
 
-    <script>
+<!-- =========================
+     LEAFLET JAVASCRIPT
+========================= -->
 
-        /* =========================
-           KARTEN VARIABLEN
-        ========================= */
-
-        let karte = null;
-        let standortMarker = null;
-
-
-        /* =========================
-           KARTE ÖFFNEN
-        ========================= */
-
-        function kartenOeffnen() {
-
-            document.getElementById(
-                "kartenFenster"
-            ).style.display = "block";
+<script
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
 
 
-            if (!karte) {
+<script>
 
-                karte = L.map(
-                    "karte",
-                    {
-                        worldCopyJump: false,
+/* =====================================================
+   KARTE
+===================================================== */
 
-                        maxBounds: [
-                            [-90, -180],
-                            [90, 180]
-                        ],
+let karte = null;
 
-                        maxBoundsViscosity: 1.0
-                    }
-                ).setView(
-                    [20, 0],
-                    2
-                );
+let standortMarker = null;
 
 
-                /* =========================
-                   OPENSTREETMAP
-                ========================= */
+/* =========================
+   KARTE ÖFFNEN
+========================= */
 
-                L.tileLayer(
-                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                    {
-                        maxZoom: 19,
+function kartenOeffnen() {
 
-                        noWrap: true,
-
-                        attribution:
-                            "&copy; OpenStreetMap-Mitwirkende"
-                    }
-                ).addTo(karte);
+    document.getElementById(
+        "kartenFenster"
+    ).style.display = "block";
 
 
-                /* =========================
-                   EIGENEN STANDORT
-                ========================= */
+    if (!karte) {
 
-                if (navigator.geolocation) {
+        karte = L.map(
+            "karte",
+            {
 
-                    navigator.geolocation.getCurrentPosition(
+                worldCopyJump: false,
 
-                        function(position) {
+                maxBounds: [
+                    [-90, -180],
+                    [90, 180]
+                ],
 
-                            const lat =
-                                position.coords.latitude;
+                maxBoundsViscosity: 1.0
 
-                            const lon =
-                                position.coords.longitude;
-
-
-                            karte.setView(
-                                [lat, lon],
-                                13
-                            );
-
-
-                            if (standortMarker) {
-
-                                karte.removeLayer(
-                                    standortMarker
-                                );
-                            }
+            }
+        ).setView(
+            [20, 0],
+            2
+        );
 
 
-                            standortMarker =
-                                L.marker(
-                                    [lat, lon]
-                                ).addTo(karte);
+        L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+
+                maxZoom: 19,
+
+                noWrap: true,
+
+                attribution:
+                    "&copy; OpenStreetMap-Mitwirkende"
+
+            }
+        ).addTo(karte);
 
 
-                            standortMarker
-                                .bindPopup(
-                                    "📍 Dein Standort"
-                                )
-                                .openPopup();
+        if (
+            navigator.geolocation
+        ) {
 
-                        },
+            navigator.geolocation.getCurrentPosition(
 
-                        function() {
+                function(position) {
 
-                            console.log(
-                                "Standort konnte nicht ermittelt werden."
-                            );
+                    const lat =
+                        position.coords.latitude;
 
-                        }
+                    const lon =
+                        position.coords.longitude;
+
+
+                    karte.setView(
+                        [lat, lon],
+                        13
                     );
+
+
+                    if (
+                        standortMarker
+                    ) {
+
+                        karte.removeLayer(
+                            standortMarker
+                        );
+
+                    }
+
+
+                    standortMarker =
+                        L.marker(
+                            [lat, lon]
+                        ).addTo(karte);
+
+
+                    standortMarker
+                        .bindPopup(
+                            "📍 Dein Standort"
+                        )
+                        .openPopup();
+
+                },
+
+                function() {
+
+                    console.log(
+                        "Standort konnte nicht ermittelt werden."
+                    );
+
                 }
+
+            );
+
+        }
+
+    }
+
+
+    setTimeout(
+        function() {
+
+            if (karte) {
+
+                karte.invalidateSize();
+
+            }
+
+        },
+        300
+    );
+}
+
+
+/* =========================
+   KARTE SCHLIESSEN
+========================= */
+
+function kartenSchliessen() {
+
+    document.getElementById(
+        "kartenFenster"
+    ).style.display = "none";
+}
+
+
+/* =====================================================
+   SPIELE
+===================================================== */
+
+
+/* =========================
+   SPIELE ÖFFNEN
+========================= */
+
+function spieleOeffnen() {
+
+    document.getElementById(
+        "spieleFenster"
+    ).style.display = "block";
+}
+
+
+/* =========================
+   SPIELE SCHLIESSEN
+========================= */
+
+function spieleSchliessen() {
+
+    document.getElementById(
+        "spieleFenster"
+    ).style.display = "none";
+}
+
+
+/* =========================
+   NOCH NICHT FERTIG
+========================= */
+
+function spielNochNichtFertig(name) {
+
+    alert(
+        name +
+        " kommt bald! 🎮"
+    );
+}
+
+
+/* =====================================================
+   FLAPPY BIRD
+===================================================== */
+
+let flappySpielLaeuft = false;
+
+let flappyAnimation = null;
+
+let flappyBird = null;
+
+let flappyRohre = [];
+
+let flappyPunkte = 0;
+
+let flappyLetztesRohr = 0;
+
+
+/* =========================
+   FLAPPY ÖFFNEN
+========================= */
+
+function flappyOeffnen() {
+
+    document.getElementById(
+        "spieleFenster"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "flappyFenster"
+    ).style.display = "block";
+
+
+    flappyStarten();
+}
+
+
+/* =========================
+   FLAPPY SCHLIESSEN
+========================= */
+
+function flappySchliessen() {
+
+    document.getElementById(
+        "flappyFenster"
+    ).style.display = "none";
+
+
+    flappySpielLaeuft = false;
+
+
+    if (
+        flappyAnimation
+    ) {
+
+        cancelAnimationFrame(
+            flappyAnimation
+        );
+
+    }
+}
+
+
+/* =========================
+   FLAPPY STARTEN
+========================= */
+
+function flappyStarten() {
+
+    const canvas =
+        document.getElementById(
+            "flappyCanvas"
+        );
+
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    flappySpielLaeuft = true;
+
+    flappyPunkte = 0;
+
+    flappyRohre = [];
+
+    flappyLetztesRohr =
+        Date.now();
+
+
+    flappyBird = {
+
+        x: 100,
+
+        y: 250,
+
+        radius: 16,
+
+        geschwindigkeit: 0,
+
+        sprung: -7,
+
+        gravitation: 0.35
+
+    };
+
+
+    function zeichnen() {
+
+        if (
+            !flappySpielLaeuft
+        ) {
+
+            return;
+
+        }
+
+
+        /* =====================
+           HINTERGRUND
+        ===================== */
+
+        ctx.fillStyle =
+            "#87CEEB";
+
+        ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+
+        /* =====================
+           WOLKE
+        ===================== */
+
+        ctx.fillStyle =
+            "rgba(255,255,255,0.8)";
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            90,
+            100,
+            30,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.arc(
+            120,
+            100,
+            40,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.arc(
+            155,
+            105,
+            28,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+
+
+        /* =====================
+           BODEN
+        ===================== */
+
+        ctx.fillStyle =
+            "#75B843";
+
+        ctx.fillRect(
+            0,
+            canvas.height - 50,
+            canvas.width,
+            50
+        );
+
+
+        /* =====================
+           VOGEL PHYSIK
+        ===================== */
+
+        flappyBird.geschwindigkeit +=
+            flappyBird.gravitation;
+
+
+        flappyBird.y +=
+            flappyBird.geschwindigkeit;
+
+
+        /* =====================
+           NEUES ROHR
+        ===================== */
+
+        if (
+            Date.now() -
+            flappyLetztesRohr
+            >
+            1500
+        ) {
+
+            const luecke = 160;
+
+            const maxHoehe = 300;
+
+            const oben =
+                Math.random() *
+                maxHoehe +
+                50;
+
+
+            flappyRohre.push({
+
+                x: canvas.width,
+
+                oben: oben,
+
+                unten:
+                    oben + luecke,
+
+                punkt: false
+
+            });
+
+
+            flappyLetztesRohr =
+                Date.now();
+        }
+
+
+        /* =====================
+           ROHRE
+        ===================== */
+
+        for (
+            let i =
+                flappyRohre.length - 1;
+
+            i >= 0;
+
+            i--
+        ) {
+
+            const rohr =
+                flappyRohre[i];
+
+
+            rohr.x -= 3;
+
+
+            ctx.fillStyle =
+                "#2E8B35";
+
+
+            /* oberes Rohr */
+
+            ctx.fillRect(
+                rohr.x,
+                0,
+                55,
+                rohr.oben
+            );
+
+
+            /* unteres Rohr */
+
+            ctx.fillRect(
+                rohr.x,
+                rohr.unten,
+                55,
+                canvas.height -
+                rohr.unten -
+                50
+            );
+
+
+            /* =================
+               PUNKT
+            ================= */
+
+            if (
+
+                !rohr.punkt &&
+
+                rohr.x + 55 <
+                flappyBird.x
+
+            ) {
+
+                rohr.punkt = true;
+
+                flappyPunkte++;
+
             }
 
 
-            setTimeout(
-                function() {
+            /* =================
+               KOLLISION
+            ================= */
 
-                    if (karte) {
-
-                        karte.invalidateSize();
-                    }
-
-                },
-                200
-            );
-        }
+            const vogelLinks =
+                flappyBird.x -
+                flappyBird.radius;
 
 
-        /* =========================
-           KARTE SCHLIESSEN
-        ========================= */
-
-        function kartenSchliessen() {
-
-            document.getElementById(
-                "kartenFenster"
-            ).style.display = "none";
-        }
+            const vogelRechts =
+                flappyBird.x +
+                flappyBird.radius;
 
 
-        /* =========================
-           ANMELDE FENSTER ÖFFNEN
-        ========================= */
-
-        function anmeldenOeffnen() {
-
-            document.getElementById(
-                "anmeldeFenster"
-            ).style.display = "block";
-        }
+            const vogelOben =
+                flappyBird.y -
+                flappyBird.radius;
 
 
-        /* =========================
-           ANMELDE FENSTER SCHLIESSEN
-        ========================= */
-
-        function anmeldenSchliessen() {
-
-            document.getElementById(
-                "anmeldeFenster"
-            ).style.display = "none";
-        }
-
-
-        /* =========================
-           ANMELDEN TAB
-        ========================= */
-
-        function anmeldenTabOeffnen() {
-
-            document.getElementById(
-                "anmeldenForm"
-            ).classList.add("aktiv");
-
-
-            document.getElementById(
-                "registrierenForm"
-            ).classList.remove("aktiv");
-
-
-            document.getElementById(
-                "anmeldenTab"
-            ).classList.add("aktiv");
-
-
-            document.getElementById(
-                "registrierenTab"
-            ).classList.remove("aktiv");
-        }
-
-
-        /* =========================
-           REGISTRIEREN TAB
-        ========================= */
-
-        function registrierenTabOeffnen() {
-
-            document.getElementById(
-                "registrierenForm"
-            ).classList.add("aktiv");
-
-
-            document.getElementById(
-                "anmeldenForm"
-            ).classList.remove("aktiv");
-
-
-            document.getElementById(
-                "registrierenTab"
-            ).classList.add("aktiv");
-
-
-            document.getElementById(
-                "anmeldenTab"
-            ).classList.remove("aktiv");
-        }
-
-
-        /* =========================
-           REGISTRIEREN
-        ========================= */
-
-        async function registrieren() {
-
-            const username =
-                document.getElementById(
-                    "registerUsername"
-                ).value.trim();
-
-
-            const email =
-                document.getElementById(
-                    "registerEmail"
-                ).value.trim();
-
-
-            const password =
-                document.getElementById(
-                    "registerPassword"
-                ).value;
-
-
-            const password2 =
-                document.getElementById(
-                    "registerPassword2"
-                ).value;
+            const vogelUnten =
+                flappyBird.y +
+                flappyBird.radius;
 
 
             if (
-                !username ||
-                !email ||
-                !password ||
-                !password2
+
+                vogelRechts >
+                rohr.x &&
+
+                vogelLinks <
+                rohr.x + 55 &&
+
+                (
+
+                    vogelOben <
+                    rohr.oben ||
+
+                    vogelUnten >
+                    rohr.unten
+
+                )
+
             ) {
 
-                alert(
-                    "Bitte fülle alle Felder aus."
-                );
+                flappyGameOver();
 
-                return;
             }
 
 
-            if (password !== password2) {
+            /* =================
+               ALTES ROHR
+            ================= */
 
-                alert(
-                    "Die Passwörter stimmen nicht überein."
+            if (
+                rohr.x < -70
+            ) {
+
+                flappyRohre.splice(
+                    i,
+                    1
                 );
 
-                return;
             }
 
-
-            if (password.length < 6) {
-
-                alert(
-                    "Das Passwort muss mindestens 6 Zeichen haben."
-                );
-
-                return;
-            }
-
-
-            try {
-
-                const antwort =
-                    await fetch(
-                        "/api/register",
-                        {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body:
-                                JSON.stringify(
-                                    {
-                                        username: username,
-                                        email: email,
-                                        password: password
-                                    }
-                                )
-                        }
-                    );
-
-
-                const daten =
-                    await antwort.json();
-
-
-                if (daten.success) {
-
-                    alert(
-                        "Konto erfolgreich erstellt!"
-                    );
-
-
-                    benutzerAnzeigen(
-                        daten.username,
-                        daten.email
-                    );
-
-
-                    anmeldenSchliessen();
-
-
-                    document.getElementById(
-                        "registerUsername"
-                    ).value = "";
-
-
-                    document.getElementById(
-                        "registerEmail"
-                    ).value = "";
-
-
-                    document.getElementById(
-                        "registerPassword"
-                    ).value = "";
-
-
-                    document.getElementById(
-                        "registerPassword2"
-                    ).value = "";
-
-                } else {
-
-                    alert(
-                        daten.message
-                    );
-                }
-
-            } catch (fehler) {
-
-                console.error(
-                    fehler
-                );
-
-                alert(
-                    "Der Server konnte nicht erreicht werden."
-                );
-            }
         }
 
 
-        /* =========================
-           ANMELDEN
-        ========================= */
+        /* =====================
+           DECKE / BODEN
+        ===================== */
 
-        async function anmelden() {
+        if (
 
-            const email =
-                document.getElementById(
-                    "loginEmail"
-                ).value.trim();
+            flappyBird.y +
+            flappyBird.radius
+            >
+            canvas.height - 50
 
+            ||
 
-            const password =
-                document.getElementById(
-                    "loginPassword"
-                ).value;
+            flappyBird.y -
+            flappyBird.radius
+            <
+            0
 
+        ) {
 
-            if (!email || !password) {
+            flappyGameOver();
 
-                alert(
-                    "Bitte E-Mail und Passwort eingeben."
-                );
-
-                return;
-            }
-
-
-            try {
-
-                const antwort =
-                    await fetch(
-                        "/api/login",
-                        {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body:
-                                JSON.stringify(
-                                    {
-                                        email: email,
-                                        password: password
-                                    }
-                                )
-                        }
-                    );
-
-
-                const daten =
-                    await antwort.json();
-
-
-                if (daten.success) {
-
-                    benutzerAnzeigen(
-                        daten.username,
-                        daten.email
-                    );
-
-
-                    anmeldenSchliessen();
-
-
-                    document.getElementById(
-                        "loginEmail"
-                    ).value = "";
-
-
-                    document.getElementById(
-                        "loginPassword"
-                    ).value = "";
-
-
-                    alert(
-                        "Willkommen zurück, "
-                        + daten.username
-                        + "!"
-                    );
-
-                } else {
-
-                    alert(
-                        daten.message
-                    );
-                }
-
-            } catch (fehler) {
-
-                console.error(
-                    fehler
-                );
-
-                alert(
-                    "Der Server konnte nicht erreicht werden."
-                );
-            }
         }
 
 
-        /* =========================
-           BENUTZER ANZEIGEN
-        ========================= */
+        /* =====================
+           VOGEL
+        ===================== */
 
-        function benutzerAnzeigen(
-            username,
-            email
+        ctx.fillStyle =
+            "#FFD21F";
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+
+            flappyBird.x,
+
+            flappyBird.y,
+
+            flappyBird.radius,
+
+            0,
+
+            Math.PI * 2
+
+        );
+
+        ctx.fill();
+
+
+        /* =====================
+           AUGE
+        ===================== */
+
+        ctx.fillStyle =
+            "white";
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+
+            flappyBird.x + 6,
+
+            flappyBird.y - 5,
+
+            5,
+
+            0,
+
+            Math.PI * 2
+
+        );
+
+        ctx.fill();
+
+
+        ctx.fillStyle =
+            "black";
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+
+            flappyBird.x + 8,
+
+            flappyBird.y - 5,
+
+            2,
+
+            0,
+
+            Math.PI * 2
+
+        );
+
+        ctx.fill();
+
+
+        /* =====================
+           SCHNABEL
+        ===================== */
+
+        ctx.fillStyle =
+            "#FF8C00";
+
+
+        ctx.fillRect(
+
+            flappyBird.x + 14,
+
+            flappyBird.y - 3,
+
+            12,
+
+            7
+
+        );
+
+
+        /* =====================
+           PUNKTE
+        ===================== */
+
+        ctx.fillStyle =
+            "white";
+
+
+        ctx.font =
+            "bold 35px Arial";
+
+
+        ctx.textAlign =
+            "center";
+
+
+        ctx.fillText(
+
+            flappyPunkte,
+
+            canvas.width / 2,
+
+            55
+
+        );
+
+
+        flappyAnimation =
+            requestAnimationFrame(
+                zeichnen
+            );
+
+    }
+
+
+    zeichnen();
+
+}
+
+
+/* =========================
+   FLAPPY SPRINGEN
+========================= */
+
+function flappySpringen() {
+
+    if (
+
+        !flappySpielLaeuft ||
+
+        !flappyBird
+
+    ) {
+
+        return;
+
+    }
+
+
+    flappyBird.geschwindigkeit =
+        flappyBird.sprung;
+}
+
+
+/* =========================
+   GAME OVER
+========================= */
+
+function flappyGameOver() {
+
+    if (
+        !flappySpielLaeuft
+    ) {
+
+        return;
+
+    }
+
+
+    flappySpielLaeuft =
+        false;
+
+
+    if (
+        flappyAnimation
+    ) {
+
+        cancelAnimationFrame(
+            flappyAnimation
+        );
+
+    }
+
+
+    setTimeout(
+        function() {
+
+            alert(
+
+                "Game Over!\n\n" +
+
+                "Punkte: " +
+                flappyPunkte
+
+            );
+
+
+            flappyStarten();
+
+        },
+        100
+    );
+}
+
+
+/* =========================
+   TASTATUR
+========================= */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.code === "Space"
+        ) {
+
+            event.preventDefault();
+
+            flappySpringen();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   MAUS
+========================= */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        const canvas =
+            document.getElementById(
+                "flappyCanvas"
+            );
+
+
+        if (
+
+            canvas &&
+
+            event.target === canvas
+
+        ) {
+
+            flappySpringen();
+
+        }
+
+    }
+);
+
+
+/* =========================
+   HANDY TOUCH
+========================= */
+
+document.addEventListener(
+    "touchstart",
+    function(event) {
+
+        const canvas =
+            document.getElementById(
+                "flappyCanvas"
+            );
+
+
+        if (
+
+            canvas &&
+
+            event.target === canvas
+
+        ) {
+
+            event.preventDefault();
+
+            flappySpringen();
+
+        }
+
+    },
+    {
+        passive: false
+    }
+);
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+
+/* =========================
+   LOGIN ÖFFNEN
+========================= */
+
+function anmeldenOeffnen() {
+
+    document.getElementById(
+        "anmeldeFenster"
+    ).style.display = "block";
+}
+
+
+/* =========================
+   LOGIN SCHLIESSEN
+========================= */
+
+function anmeldenSchliessen() {
+
+    document.getElementById(
+        "anmeldeFenster"
+    ).style.display = "none";
+}
+
+
+/* =========================
+   LOGIN TAB
+========================= */
+
+function anmeldenTabOeffnen() {
+
+    document.getElementById(
+        "anmeldenForm"
+    ).classList.add("aktiv");
+
+
+    document.getElementById(
+        "registrierenForm"
+    ).classList.remove("aktiv");
+
+
+    document.getElementById(
+        "anmeldenTab"
+    ).classList.add("aktiv");
+
+
+    document.getElementById(
+        "registrierenTab"
+    ).classList.remove("aktiv");
+}
+
+
+/* =========================
+   REGISTRIEREN TAB
+========================= */
+
+function registrierenTabOeffnen() {
+
+    document.getElementById(
+        "registrierenForm"
+    ).classList.add("aktiv");
+
+
+    document.getElementById(
+        "anmeldenForm"
+    ).classList.remove("aktiv");
+
+
+    document.getElementById(
+        "registrierenTab"
+    ).classList.add("aktiv");
+
+
+    document.getElementById(
+        "anmeldenTab"
+    ).classList.remove("aktiv");
+}
+
+
+/* =========================
+   REGISTRIEREN
+========================= */
+
+async function registrieren() {
+
+    const username =
+        document.getElementById(
+            "registerUsername"
+        ).value.trim();
+
+
+    const email =
+        document.getElementById(
+            "registerEmail"
+        ).value.trim();
+
+
+    const password =
+        document.getElementById(
+            "registerPassword"
+        ).value;
+
+
+    const password2 =
+        document.getElementById(
+            "registerPassword2"
+        ).value;
+
+
+    if (
+
+        !username ||
+
+        !email ||
+
+        !password ||
+
+        !password2
+
+    ) {
+
+        alert(
+            "Bitte fülle alle Felder aus."
+        );
+
+        return;
+    }
+
+
+    if (
+        password !== password2
+    ) {
+
+        alert(
+            "Die Passwörter stimmen nicht überein."
+        );
+
+        return;
+    }
+
+
+    if (
+        password.length < 6
+    ) {
+
+        alert(
+            "Das Passwort muss mindestens 6 Zeichen haben."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const antwort =
+            await fetch(
+                "/api/register",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            username:
+                                username,
+
+                            email:
+                                email,
+
+                            password:
+                                password
+
+                        })
+
+                }
+            );
+
+
+        const daten =
+            await antwort.json();
+
+
+        if (
+            daten.success
+        ) {
+
+            alert(
+                "Konto erfolgreich erstellt!"
+            );
+
+
+            benutzerAnzeigen(
+                daten.username,
+                daten.email
+            );
+
+
+            anmeldenSchliessen();
+
+
+            document.getElementById(
+                "registerUsername"
+            ).value = "";
+
+
+            document.getElementById(
+                "registerEmail"
+            ).value = "";
+
+
+            document.getElementById(
+                "registerPassword"
+            ).value = "";
+
+
+            document.getElementById(
+                "registerPassword2"
+            ).value = "";
+
+        }
+
+        else {
+
+            alert(
+                daten.message
+            );
+
+        }
+
+    }
+
+    catch (fehler) {
+
+        console.error(
+            fehler
+        );
+
+
+        alert(
+            "Der Server konnte nicht erreicht werden."
+        );
+
+    }
+
+}
+
+
+/* =========================
+   ANMELDEN
+========================= */
+
+async function anmelden() {
+
+    const email =
+        document.getElementById(
+            "loginEmail"
+        ).value.trim();
+
+
+    const password =
+        document.getElementById(
+            "loginPassword"
+        ).value;
+
+
+    if (
+        !email ||
+        !password
+    ) {
+
+        alert(
+            "Bitte E-Mail und Passwort eingeben."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const antwort =
+            await fetch(
+                "/api/login",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            email:
+                                email,
+
+                            password:
+                                password
+
+                        })
+
+                }
+            );
+
+
+        const daten =
+            await antwort.json();
+
+
+        if (
+            daten.success
+        ) {
+
+            benutzerAnzeigen(
+                daten.username,
+                daten.email
+            );
+
+
+            anmeldenSchliessen();
+
+
+            document.getElementById(
+                "loginEmail"
+            ).value = "";
+
+
+            document.getElementById(
+                "loginPassword"
+            ).value = "";
+
+
+            alert(
+
+                "Willkommen zurück, " +
+
+                daten.username +
+
+                "!"
+
+            );
+
+        }
+
+        else {
+
+            alert(
+                daten.message
+            );
+
+        }
+
+    }
+
+    catch (fehler) {
+
+        console.error(
+            fehler
+        );
+
+
+        alert(
+            "Der Server konnte nicht erreicht werden."
+        );
+
+    }
+
+}
+
+
+/* =========================
+   BENUTZER ANZEIGEN
+========================= */
+
+function benutzerAnzeigen(
+    username,
+    email
+) {
+
+    document.getElementById(
+        "anmeldenButton"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "benutzerButton"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "benutzerNameOben"
+    ).textContent =
+        username;
+
+
+    document.getElementById(
+        "benutzerName"
+    ).textContent =
+        username;
+
+
+    document.getElementById(
+        "benutzerEmail"
+    ).textContent =
+        email;
+}
+
+
+/* =========================
+   BENUTZER MENÜ
+========================= */
+
+function benutzerMenueOeffnen() {
+
+    const menue =
+        document.getElementById(
+            "benutzerMenue"
+        );
+
+
+    if (
+        menue.style.display === "block"
+    ) {
+
+        menue.style.display =
+            "none";
+
+    }
+
+    else {
+
+        menue.style.display =
+            "block";
+
+    }
+
+}
+
+
+/* =========================
+   ABMELDEN
+========================= */
+
+async function abmelden() {
+
+    try {
+
+        const antwort =
+            await fetch(
+                "/api/logout",
+                {
+
+                    method: "POST"
+
+                }
+            );
+
+
+        const daten =
+            await antwort.json();
+
+
+        if (
+            daten.success
         ) {
 
             document.getElementById(
-                "anmeldenButton"
-            ).style.display = "none";
-
-
-            document.getElementById(
                 "benutzerButton"
-            ).style.display = "block";
+            ).style.display =
+                "none";
 
 
             document.getElementById(
-                "benutzerNameOben"
-            ).textContent = username;
+                "anmeldenButton"
+            ).style.display =
+                "block";
 
 
             document.getElementById(
-                "benutzerName"
-            ).textContent = username;
+                "benutzerMenue"
+            ).style.display =
+                "none";
 
 
-            document.getElementById(
-                "benutzerEmail"
-            ).textContent = email;
+            alert(
+                "Du wurdest abgemeldet."
+            );
+
         }
 
+    }
 
-        /* =========================
-           BENUTZER MENÜ ÖFFNEN
-        ========================= */
+    catch (fehler) {
 
-        function benutzerMenueOeffnen() {
-
-            const menue =
-                document.getElementById(
-                    "benutzerMenue"
-                );
+        console.error(
+            fehler
+        );
 
 
-            if (
-                menue.style.display === "block"
-            ) {
+        alert(
+            "Beim Abmelden ist ein Fehler aufgetreten."
+        );
 
-                menue.style.display = "none";
+    }
 
-            } else {
+}
 
-                menue.style.display = "block";
-            }
+
+/* =========================
+   BENUTZER PRÜFEN
+========================= */
+
+async function benutzerPruefen() {
+
+    try {
+
+        const antwort =
+            await fetch(
+                "/api/me"
+            );
+
+
+        const daten =
+            await antwort.json();
+
+
+        if (
+            daten.loggedIn
+        ) {
+
+            benutzerAnzeigen(
+                daten.username,
+                daten.email
+            );
+
         }
 
+    }
 
-        /* =========================
-           ABMELDEN
-        ========================= */
+    catch (fehler) {
 
-        async function abmelden() {
+        console.error(
+            "Benutzerprüfung fehlgeschlagen:",
+            fehler
+        );
 
-            try {
+    }
 
-                const antwort =
-                    await fetch(
-                        "/api/logout",
-                        {
-                            method: "POST"
-                        }
-                    );
+}
 
 
-                const daten =
-                    await antwort.json();
+/* =====================================================
+   START
+===================================================== */
 
+benutzerPruefen();
 
-                if (daten.success) {
-
-                    document.getElementById(
-                        "benutzerButton"
-                    ).style.display = "none";
-
-
-                    document.getElementById(
-                        "anmeldenButton"
-                    ).style.display = "block";
-
-
-                    document.getElementById(
-                        "benutzerMenue"
-                    ).style.display = "none";
-
-
-                    alert(
-                        "Du wurdest abgemeldet."
-                    );
-                }
-
-            } catch (fehler) {
-
-                console.error(
-                    fehler
-                );
-
-                alert(
-                    "Beim Abmelden ist ein Fehler aufgetreten."
-                );
-            }
-        }
-
-
-        /* =========================
-           BEIM SEITENSTART PRÜFEN
-        ========================= */
-
-        async function benutzerPruefen() {
-
-            try {
-
-                const antwort =
-                    await fetch(
-                        "/api/me"
-                    );
-
-
-                const daten =
-                    await antwort.json();
-
-
-                if (daten.loggedIn) {
-
-                    benutzerAnzeigen(
-                        daten.username,
-                        daten.email
-                    );
-                }
-
-            } catch (fehler) {
-
-                console.error(
-                    "Benutzerprüfung fehlgeschlagen:",
-                    fehler
-                );
-            }
-        }
-
-
-        /* =========================
-           START
-        ========================= */
-
-        benutzerPruefen();
-
-    </script>
+</script>
 
 </body>
 
 </html>
+```
+
