@@ -511,69 +511,6 @@ body {
 
 
 /* =====================================================
-   RANGLISTE
-===================================================== */
-
-function ranglisteOeffnen() {
-    const fenster = document.getElementById("ranglisteFenster");
-    if (!fenster) return;
-    fenster.style.display = "block";
-    ranglisteAnzeigen("snake");
-}
-
-function ranglisteSchliessen() {
-    const fenster = document.getElementById("ranglisteFenster");
-    if (fenster) fenster.style.display = "none";
-}
-
-function ranglisteAnzeigen(spiel) {
-    const liste = document.getElementById("ranglisteListe");
-    if (!liste) return;
-
-    document.querySelectorAll(".rangliste-tab").forEach(function(tab) {
-        tab.classList.toggle("active", tab.dataset.game === spiel);
-    });
-
-    const prefix = "nsah_ranking_";
-    const suffix = "_" + spiel;
-    const eintraege = [];
-
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (!key || !key.startsWith(prefix) || !key.endsWith(suffix)) continue;
-        const username = key.slice(prefix.length, -suffix.length);
-        const score = Number(localStorage.getItem(key) || 0);
-        if (username && score > 0) eintraege.push({username, score});
-    }
-
-    if (aktuellerBenutzer) {
-        const score = rekordLesen(spiel);
-        if (score > 0 && !eintraege.some(e => e.username === aktuellerBenutzer)) {
-            eintraege.push({username: aktuellerBenutzer, score});
-        }
-    }
-
-    eintraege.sort((a,b) => b.score - a.score || a.username.localeCompare(b.username));
-    const top = eintraege.slice(0, 10);
-
-    if (!top.length) {
-        liste.innerHTML = '<div class="rangliste-leer">Noch keine Scores vorhanden.</div>';
-        return;
-    }
-
-    liste.innerHTML = top.map(function(e, i) {
-        const platz = i + 1;
-        const medal = platz === 1 ? "🥇" : platz === 2 ? "🥈" : platz === 3 ? "🥉" : platz + ".";
-        return '<div class="rangliste-zeile"><div class="rangliste-platz">' + medal + '</div><div class="rangliste-name">' + escapeHtml(e.username) + '</div><div class="rangliste-score">' + e.score + '</div></div>';
-    }).join("");
-}
-
-function escapeHtml(text) {
-    return String(text).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-}
-
-
-/* =====================================================
    KARTE
 ===================================================== */
 
@@ -700,18 +637,6 @@ function escapeHtml(text) {
     cursor: pointer;
 }
 
-.rangliste-button { width:100%; margin-bottom:14px; padding:12px 16px; background-color:#171717; color:white; border:1px solid #444; border-radius:10px; cursor:pointer; font-size:16px; font-weight:bold; }
-.rangliste-button:hover { background-color:#2c2c2c; }
-.rangliste-tabs { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px; }
-.rangliste-tab { padding:10px 8px; background:#1d1d1d; color:white; border:1px solid #444; border-radius:8px; cursor:pointer; font-weight:bold; }
-.rangliste-tab.active, .rangliste-tab:hover { background:#333; }
-.rangliste-liste { max-height:360px; overflow-y:auto; }
-.rangliste-zeile { display:grid; grid-template-columns:42px 1fr auto; gap:10px; align-items:center; padding:11px 10px; margin-bottom:6px; background:#171717; border:1px solid #303030; border-radius:8px; }
-.rangliste-platz { font-weight:bold; text-align:center; }
-.rangliste-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.rangliste-score { font-weight:bold; }
-.rangliste-leer { text-align:center; padding:25px 10px; color:#aaa; }
-
 .spiele-auswahl {
 
     display: grid;
@@ -744,25 +669,6 @@ function escapeHtml(text) {
 
     background-color: #2c2c2c;
 }
-
-
-/* =====================================================
-   RANGLISTE
-===================================================== */
-<div class="modal-hintergrund" id="ranglisteFenster">
-    <div class="spiele-fenster">
-        <div class="spiele-kopf">
-            <div class="spiele-titel">🏆 Rangliste</div>
-            <button class="spiele-schliessen" onclick="ranglisteSchliessen()">×</button>
-        </div>
-        <div class="rangliste-tabs">
-            <button class="rangliste-tab active" data-game="snake" onclick="ranglisteAnzeigen('snake')">🐍 Snake</button>
-            <button class="rangliste-tab" data-game="tetris" onclick="ranglisteAnzeigen('tetris')">🧱 Tetris</button>
-            <button class="rangliste-tab" data-game="flappy" onclick="ranglisteAnzeigen('flappy')">🐦 Flappy</button>
-        </div>
-        <div id="ranglisteListe" class="rangliste-liste"></div>
-    </div>
-</div>
 
 
 /* =====================================================
@@ -2307,8 +2213,6 @@ function escapeHtml(text) {
 
         </div>
 
-        <button class="rangliste-button" onclick="ranglisteOeffnen()">🏆 Rangliste</button>
-
         <div class="spiele-auswahl">
 
             <button
@@ -2855,15 +2759,30 @@ function rekordSpeichern(
     spiel,
     wert
 ) {
-    if (!aktuellerBenutzer) return;
 
-    const key = "nsah_" + aktuellerBenutzer + "_" + spiel;
-    const alt = rekordLesen(spiel);
+    if (!aktuellerBenutzer) {
+        return;
+    }
+
+    const key =
+        "nsah_" +
+        aktuellerBenutzer +
+        "_" +
+        spiel;
+
+    const alt =
+        rekordLesen(spiel);
 
     if (wert > alt) {
-        localStorage.setItem(key, wert);
-        localStorage.setItem("nsah_ranking_" + aktuellerBenutzer + "_" + spiel, String(wert));
-        updateRekordAnzeige(spiel);
+
+        localStorage.setItem(
+            key,
+            wert
+        );
+
+        updateRekordAnzeige(
+            spiel
+        );
     }
 }
 
