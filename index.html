@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="de">
 
@@ -827,6 +828,54 @@ body {
 /* =====================================================
    TETRIS
 ===================================================== */
+
+.tetris-next-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 8px 0 10px;
+}
+
+.tetris-next-label {
+    color: #aaa;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+}
+
+.tetris-next {
+    display: grid;
+    grid-template-columns: repeat(4, 18px);
+    grid-template-rows: repeat(4, 18px);
+    gap: 2px;
+    min-width: 78px;
+    min-height: 78px;
+    padding: 7px;
+    border: 1px solid #333;
+    border-radius: 10px;
+    background: #090909;
+}
+
+.tetris-next-cell {
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+}
+
+.schiffe-invite {
+    margin: 10px 0;
+    padding: 12px;
+    border: 1px solid #333;
+    border-radius: 12px;
+    background: #101010;
+}
+
+.schiffe-invite button {
+    margin-top: 8px;
+    margin-right: 6px;
+}
 
 .tetris-controls {
 
@@ -2216,6 +2265,11 @@ body {
             </div>
 
 
+            <div class="freunde-bereich schiffe-invite" id="schiffeEinladungenBereich">
+                <h3>📩 Schiffe-versenken-Einladungen</h3>
+                <div id="schiffeEinladungen">Keine neuen Einladungen.</div>
+            </div>
+
             <div class="freunde-bereich">
 
                 <h3>
@@ -2524,6 +2578,11 @@ body {
                 0
             </span>
 
+        </div>
+
+        <div class="tetris-next-wrap">
+            <div class="tetris-next-label">Nächster Block</div>
+            <div id="tetrisNext" class="tetris-next" aria-label="Nächster Tetris-Block"></div>
         </div>
 
         <canvas
@@ -3266,6 +3325,9 @@ let snakeScore = 0;
 let snakeRunning = false;
 
 let snakeTimer = null;
+let snakeSpeed = 170;
+const SNAKE_MIN_SPEED = 55;
+const SNAKE_SPEED_STEP = 12;
 
 
 function snakeStart() {
@@ -3291,6 +3353,7 @@ function snakeStart() {
     };
 
     snakeScore = 0;
+    snakeSpeed = 170;
 
     snakeRunning = true;
 
@@ -3301,7 +3364,7 @@ function snakeStart() {
     snakeTimer =
         setInterval(
             snakeLoop,
-            100
+            snakeSpeed
         );
 }
 
@@ -3403,6 +3466,14 @@ function snakeLoop() {
         );
 
         snakeNeueNahrung();
+
+        snakeSpeed = Math.max(
+            SNAKE_MIN_SPEED,
+            snakeSpeed - SNAKE_SPEED_STEP
+        );
+
+        clearInterval(snakeTimer);
+        snakeTimer = setInterval(snakeLoop, snakeSpeed);
 
     } else {
 
@@ -3665,6 +3736,11 @@ let tetrisScore = 0;
 let tetrisRunning = false;
 
 let tetrisTimer = null;
+let tetrisNextPiece = null;
+const TETRIS_COLORS = [
+    "#00d9ff", "#ff4d6d", "#ffd166", "#7cff6b",
+    "#b57cff", "#ff8c42", "#4d8dff", "#ff5fd2"
+];
 
 
 const TETRIS_SHAPES = [
@@ -3723,6 +3799,7 @@ function tetrisStart() {
     tetrisScore = 0;
 
     tetrisRunning = true;
+    tetrisNextPiece = tetrisNaechstenBlockErzeugen();
 
     tetrisNeueFigur();
 
@@ -3736,46 +3813,61 @@ function tetrisStart() {
 }
 
 
+function tetrisZufaelligeFarbe() {
+    return TETRIS_COLORS[Math.floor(Math.random() * TETRIS_COLORS.length)];
+}
+
+function tetrisNaechstenBlockErzeugen() {
+    const index = Math.floor(Math.random() * TETRIS_SHAPES.length);
+    return {
+        shape: TETRIS_SHAPES[index].map(row => row.slice()),
+        color: tetrisZufaelligeFarbe()
+    };
+}
+
 function tetrisNeueFigur() {
+    if (!tetrisNextPiece) {
+        tetrisNextPiece = tetrisNaechstenBlockErzeugen();
+    }
 
-    const index =
-        Math.floor(
-            Math.random() *
-            TETRIS_SHAPES.length
-        );
+    const next = tetrisNextPiece;
+    tetrisNextPiece = tetrisNaechstenBlockErzeugen();
 
-    const shape =
-        TETRIS_SHAPES[index].map(
-            row =>
-                row.slice()
-        );
+    const shape = next.shape.map(row => row.slice());
 
     tetrisPiece = {
-
         shape: shape,
-
-        x:
-            Math.floor(
-                (
-                    TETRIS_COLS -
-                    shape[0].length
-                ) / 2
-            ),
-
+        color: next.color,
+        x: Math.floor((TETRIS_COLS - shape[0].length) / 2),
         y: 0
-
     };
 
-    if (
-        tetrisKollision(
-            tetrisPiece.x,
-            tetrisPiece.y,
-            tetrisPiece.shape
-        )
-    ) {
+    tetrisNaechstenBlockAnzeigen();
 
+    if (tetrisKollision(tetrisPiece.x, tetrisPiece.y, tetrisPiece.shape)) {
         tetrisGameOver();
+    }
+}
 
+function tetrisNaechstenBlockAnzeigen() {
+    const preview = document.getElementById("tetrisNext");
+    if (!preview || !tetrisNextPiece) return;
+
+    preview.innerHTML = "";
+    const shape = tetrisNextPiece.shape;
+    const offsetX = Math.floor((4 - shape[0].length) / 2);
+    const offsetY = Math.floor((4 - shape.length) / 2);
+
+    for (let y = 0; y < 4; y++) {
+        for (let x = 0; x < 4; x++) {
+            const cell = document.createElement("div");
+            cell.className = "tetris-next-cell";
+            if (shape[y - offsetY] && shape[y - offsetY][x - offsetX]) {
+                cell.style.background = tetrisNextPiece.color;
+                cell.style.boxShadow = "inset 0 0 0 1px rgba(255,255,255,.22)";
+            }
+            preview.appendChild(cell);
+        }
     }
 }
 
@@ -4022,7 +4114,7 @@ function tetrisFestsetzen() {
                     x < TETRIS_COLS
                 ) {
 
-                    tetrisBoard[y][x] = 1;
+                    tetrisBoard[y][x] = tetrisPiece.color;
 
                 }
 
@@ -4121,7 +4213,8 @@ function tetrisZeichnen() {
 
                 tetrisTetrisBlock(
                     col,
-                    row
+                    row,
+                    tetrisBoard[row][col]
                 );
 
             }
@@ -4151,7 +4244,8 @@ function tetrisZeichnen() {
 
                     tetrisTetrisBlock(
                         tetrisPiece.x + col,
-                        tetrisPiece.y + row
+                        tetrisPiece.y + row,
+                        tetrisPiece.color
                     );
 
                 }
@@ -4233,11 +4327,12 @@ function tetrisZeichnen() {
 
 function tetrisTetrisBlock(
     x,
-    y
+    y,
+    color = null
 ) {
 
     tetrisCtx.fillStyle =
-        "#888888";
+        color || "#888888";
 
     tetrisCtx.fillRect(
         x * TETRIS_SIZE + 2,
@@ -4904,6 +4999,9 @@ function freundeOeffnen() {
 
 
     freundeLaden();
+    schiffeEinladungenLaden();
+    clearInterval(schiffeEinladungenTimer);
+    schiffeEinladungenTimer = setInterval(schiffeEinladungenLaden, 5000);
 }
 
 
@@ -4913,6 +5011,8 @@ function freundeSchliessen() {
         "freundeFenster"
     ).style.display =
         "none";
+    clearInterval(schiffeEinladungenTimer);
+    schiffeEinladungenTimer = null;
 }
 
 
@@ -5512,6 +5612,66 @@ let schiffeGegnerSchuesse = new Set();
 let schiffeEigeneTreffer = new Set();
 let schiffeMeinZug = false;
 
+let schiffeEinladungenTimer = null;
+
+async function schiffeEinladungenLaden() {
+    const box = document.getElementById("schiffeEinladungen");
+    if (!box || !aktuellerBenutzer) return;
+
+    try {
+        const antwort = await fetch("/api/game-invites?game=schiffe");
+        if (!antwort.ok) return;
+        const daten = await antwort.json();
+        const invites = Array.isArray(daten.invites) ? daten.invites : [];
+
+        if (!invites.length) {
+            box.textContent = "Keine neuen Einladungen.";
+            return;
+        }
+
+        box.innerHTML = "";
+        invites.forEach(function(invite) {
+            const item = document.createElement("div");
+            item.className = "freund-eintrag";
+            item.innerHTML = `
+                <div><strong>⚓ ${escapeHTML(invite.fromUsername || "Freund")}</strong><br>
+                <span class="freund-email">möchte Schiffe versenken spielen</span></div>
+                <div class="freund-aktionen">
+                    <button onclick="schiffeEinladungAnnehmen('${String(invite.id).replace(/'/g, "\\'")}')">Annehmen</button>
+                    <button onclick="schiffeEinladungAblehnen('${String(invite.id).replace(/'/g, "\\'")}')">Ablehnen</button>
+                </div>`;
+            box.appendChild(item);
+        });
+    } catch (error) {
+        console.debug("Schiffe-Einladungen konnten nicht geladen werden.", error);
+    }
+}
+
+async function schiffeEinladungAnnehmen(inviteId) {
+    try {
+        const antwort = await fetch("/api/game-invites/accept", {
+            method: "POST", headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({inviteId: inviteId})
+        });
+        const daten = await antwort.json();
+        if (!daten.success) { alert(daten.message || "Einladung konnte nicht angenommen werden."); return; }
+        document.getElementById("schiffeFenster").style.display = "block";
+        schiffeOeffnen();
+        if (daten.code) document.getElementById("schiffeCodeInput").value = daten.code;
+        await schiffeEinladungenLaden();
+    } catch (error) { console.error(error); }
+}
+
+async function schiffeEinladungAblehnen(inviteId) {
+    try {
+        await fetch("/api/game-invites/decline", {
+            method: "POST", headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({inviteId: inviteId})
+        });
+        schiffeEinladungenLaden();
+    } catch (error) { console.error(error); }
+}
+
 function schiffeOeffnen() {
     if (!aktuellerBenutzer) {
         alert("Bitte melde dich zuerst an, um Schiffe versenken zu spielen.");
@@ -5772,6 +5932,26 @@ function schiffeSpielErstellen() {
         spieler: [aktuellerBenutzer],
         status: "waiting"
     };
+
+    fetch("/api/game-invites", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            game: "schiffe",
+            toUserId: schiffeAusgewaehlterFreund.id,
+            code: code
+        })
+    }).then(function(antwort) {
+        if (!antwort.ok) throw new Error("Invite API nicht verfügbar");
+        return antwort.json();
+    }).then(function(daten) {
+        if (daten.success) {
+            document.getElementById("schiffeLobbyStatus").textContent =
+                "📩 Einladung an " + schiffeAusgewaehlterFreund.username + " gesendet. Spielcode: " + code;
+        }
+    }).catch(function(error) {
+        console.debug("Schiffe-Einladung konnte nicht serverseitig gesendet werden.", error);
+    });
 
     schiffeEigeneSchiffe = schiffeSetup.map(function (schiff) {
         return {
