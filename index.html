@@ -511,6 +511,79 @@ body {
 
 
 /* =====================================================
+   SPIELER-HIGHSCORES
+   Die vorhandenen Rekorde werden pro Benutzer in localStorage
+   gespeichert. Daraus wird eine Rangliste für dieses Gerät gebaut.
+===================================================== */
+
+const HIGHSCORE_SPIELE = [
+    {key: "flappy", name: "🐦 Flappy Bird"},
+    {key: "snake", name: "🐍 Snake"},
+    {key: "tetris", name: "🧱 Tetris"}
+];
+
+function highscoresLaden() {
+    const liste = document.getElementById("highscoreListe");
+    if (!liste) return;
+
+    const spieler = {};
+
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (!key || !key.startsWith("nsah_") || key.startsWith("nsah_guest_")) continue;
+
+        for (const spiel of HIGHSCORE_SPIELE) {
+            const suffix = "_" + spiel.key;
+            if (!key.endsWith(suffix)) continue;
+
+            const username = key.slice(5, -suffix.length);
+            const wert = Number(localStorage.getItem(key) || 0);
+            if (!username || !Number.isFinite(wert) || wert <= 0) continue;
+
+            if (!spieler[username]) spieler[username] = {};
+            spieler[username][spiel.key] = Math.max(
+                spieler[username][spiel.key] || 0,
+                wert
+            );
+        }
+    }
+
+    liste.innerHTML = HIGHSCORE_SPIELE.map(function(spiel) {
+        const rangliste = Object.entries(spieler)
+            .map(function(entry) {
+                return {name: entry[0], score: Number(entry[1][spiel.key] || 0)};
+            })
+            .filter(function(e) { return e.score > 0; })
+            .sort(function(a, b) {
+                return b.score - a.score || a.name.localeCompare(b.name, "de");
+            })
+            .slice(0, 10);
+
+        const zeilen = rangliste.length
+            ? rangliste.map(function(e, index) {
+                return `<div class="highscore-zeile">
+                    <span class="highscore-platz">${index + 1}.</span>
+                    <span class="highscore-spieler" title="${escapeHtml(e.name)}">${escapeHtml(e.name)}</span>
+                    <span class="highscore-punkte">${e.score}</span>
+                </div>`;
+            }).join("")
+            : `<div class="highscore-zeile"><span class="highscore-spieler">Noch keine Scores</span><span></span><span class="highscore-punkte">0</span></div>`;
+
+        return `<section class="highscore-spiel">
+            <h3 class="highscore-spiel-titel">${spiel.name}</h3>
+            ${zeilen}
+        </section>`;
+    }).join("");
+}
+
+function escapeHtml(text) {
+    return String(text).replace(/[&<>'"]/g, function(char) {
+        return {"&":"&amp;", "<":"&lt;", ">":"&gt;", "'":"&#39;", '"':"&quot;"}[char];
+    });
+}
+
+
+/* =====================================================
    KARTE
 ===================================================== */
 
@@ -593,9 +666,11 @@ body {
 
     transform: translate(-50%,-50%);
 
-    width: 500px;
+    width: min(980px, calc(100vw - 30px));
 
-    max-width: calc(100vw - 30px);
+    max-height: calc(100vh - 30px);
+
+    overflow-y: auto;
 
     background-color: #111111;
 
@@ -637,6 +712,13 @@ body {
     cursor: pointer;
 }
 
+.spiele-inhalt {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr);
+    gap: 22px;
+    align-items: start;
+}
+
 .spiele-auswahl {
 
     display: grid;
@@ -644,6 +726,84 @@ body {
     grid-template-columns: repeat(2,1fr);
 
     gap: 12px;
+}
+
+.highscore-bereich {
+    background: #151515;
+    border: 1px solid #333333;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.highscore-kopf {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.highscore-titel {
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.highscore-aktualisieren {
+    background: #222222;
+    color: white;
+    border: 1px solid #444444;
+    border-radius: 6px;
+    padding: 7px 9px;
+    cursor: pointer;
+}
+
+.highscore-liste {
+    display: grid;
+    gap: 7px;
+}
+
+.highscore-zeile {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: center;
+    padding: 9px 10px;
+    background: #1d1d1d;
+    border: 1px solid #2f2f2f;
+    border-radius: 8px;
+}
+
+.highscore-platz {
+    color: #aaa;
+    font-weight: bold;
+}
+
+.highscore-spieler {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.highscore-punkte {
+    font-weight: bold;
+}
+
+.highscore-spiel {
+    margin-top: 14px;
+}
+
+.highscore-spiel-titel {
+    margin: 0 0 7px;
+    color: #ccc;
+    font-size: 14px;
+}
+
+.highscore-hinweis {
+    margin: 10px 0 0;
+    color: #777;
+    font-size: 12px;
+    line-height: 1.4;
 }
 
 .spiel-auswahl-button {
@@ -1822,14 +1982,23 @@ body {
 
     .spiele-fenster {
 
-        width: calc(100vw - 20px);
-
+        width: calc(100vw - 12px);
+        max-height: calc(100vh - 12px);
         padding: 15px;
+    }
+
+    .spiele-inhalt {
+        grid-template-columns: 1fr;
+        gap: 16px;
     }
 
     .spiele-auswahl {
 
         grid-template-columns: 1fr;
+    }
+
+    .highscore-bereich {
+        padding: 13px;
     }
 
     .spiel-auswahl-button {
@@ -2213,44 +2382,57 @@ body {
 
         </div>
 
-        <div class="spiele-auswahl">
+        <div class="spiele-inhalt">
+            <div class="spiele-auswahl">
 
-            <button
-                class="spiel-auswahl-button"
-                onclick="spielOeffnen('flappy')"
-            >
-                🐦
-                <br>
-                Flappy Bird
-            </button>
+                <button
+                    class="spiel-auswahl-button"
+                    onclick="spielOeffnen('flappy')"
+                >
+                    🐦
+                    <br>
+                    Flappy Bird
+                </button>
 
-            <button
-                class="spiel-auswahl-button"
-                onclick="spielOeffnen('snake')"
-            >
-                🐍
-                <br>
-                Snake
-            </button>
+                <button
+                    class="spiel-auswahl-button"
+                    onclick="spielOeffnen('snake')"
+                >
+                    🐍
+                    <br>
+                    Snake
+                </button>
 
-            <button
-                class="spiel-auswahl-button"
-                onclick="spielOeffnen('tetris')"
-            >
-                🧱
-                <br>
-                Tetris
-            </button>
+                <button
+                    class="spiel-auswahl-button"
+                    onclick="spielOeffnen('tetris')"
+                >
+                    🧱
+                    <br>
+                    Tetris
+                </button>
 
-            <button
-                class="spiel-auswahl-button schiffe-auswahl"
-                onclick="spielOeffnen('schiffe')"
-            >
-                ⚓
-                <br>
-                Schiffe versenken
-            </button>
+                <button
+                    class="spiel-auswahl-button schiffe-auswahl"
+                    onclick="spielOeffnen('schiffe')"
+                >
+                    ⚓
+                    <br>
+                    Schiffe versenken
+                </button>
 
+            </div>
+
+            <aside class="highscore-bereich">
+                <div class="highscore-kopf">
+                    <div class="highscore-titel">🏆 Höchste Highscores</div>
+                    <button class="highscore-aktualisieren" onclick="highscoresLaden()" title="Highscores aktualisieren">↻</button>
+                </div>
+                <div id="highscoreListe" class="highscore-liste"></div>
+                <p class="highscore-hinweis">
+                    Die Liste zeigt die besten gespeicherten Spieler auf diesem Gerät. Für eine echte gemeinsame Rangliste über mehrere Geräte braucht der Server zusätzlich eine Highscore-API.
+                </p>
+            </aside>
         </div>
 
     </div>
@@ -2780,6 +2962,8 @@ function rekordSpeichern(
             wert
         );
 
+        highscoresLaden();
+
         updateRekordAnzeige(
             spiel
         );
@@ -2949,6 +3133,8 @@ function spieleOeffnen() {
         "spieleFenster"
     ).style.display =
         "block";
+
+    highscoresLaden();
 }
 
 
@@ -5759,7 +5945,6 @@ let schiffeEinladungenTimer = null;
 /* ---------- Lobby ---------- */
 
 function schiffeOeffnen() {
-    nsahMusicStart("schiffe");
 
     if (!aktuellerBenutzer) {
         alert("Bitte melde dich zuerst an, um Schiffe versenken zu spielen.");
@@ -6478,146 +6663,6 @@ async function schiffeEinladungAblehnen(inviteId) {
     } catch (error) {
         console.error(error);
     }
-}
-
-/* =====================================================
-   RETRO-MUSIK
-   Hinweis: Die Original-Aufnahmen/Arrangements von Tetris,
-   Flappy Bird usw. werden nicht als fremde Audiodateien
-   eingebettet. Stattdessen erzeugt diese Seite eigene
-   Retro-Melodien direkt im Browser (Web Audio API).
-===================================================== */
-
-let nsahAudioContext = null;
-let nsahMusicTimer = null;
-let nsahMusicGame = null;
-let nsahMusicStep = 0;
-
-const NSAH_MUSIC = {
-    tetris: {
-        tempo: 150,
-        wave: "square",
-        volume: 0.045,
-        notes: [
-            330,330,392,440,392,330,294,330,
-            392,440,494,440,392,330,294,262,
-            330,330,392,440,392,330,294,330,
-            392,294,262,247,262,294,330,0
-        ]
-    },
-    snake: {
-        tempo: 175,
-        wave: "square",
-        volume: 0.035,
-        notes: [
-            262,330,392,330,262,196,220,247,
-            262,330,392,440,392,330,262,220,
-            196,220,262,294,330,294,262,220,
-            196,0,196,220,247,262,220,196
-        ]
-    },
-    flappy: {
-        tempo: 185,
-        wave: "triangle",
-        volume: 0.035,
-        notes: [
-            523,659,784,659,523,440,494,523,
-            659,784,880,784,659,523,494,440,
-            523,587,659,784,659,587,523,494,
-            440,0,392,440,494,523,494,440
-        ]
-    },
-    schiffe: {
-        tempo: 105,
-        wave: "sine",
-        volume: 0.04,
-        notes: [
-            196,0,196,233,262,0,262,294,
-            330,294,262,233,196,0,175,196,
-            220,247,262,247,220,196,175,0,
-            196,233,262,294,330,294,262,0
-        ]
-    }
-};
-
-function nsahAudioInit() {
-    if (!nsahAudioContext) {
-        const Ctx = window.AudioContext || window.webkitAudioContext;
-        if (!Ctx) return null;
-        nsahAudioContext = new Ctx();
-    }
-
-    if (nsahAudioContext.state === "suspended") {
-        nsahAudioContext.resume().catch(function() {});
-    }
-
-    return nsahAudioContext;
-}
-
-function nsahMusicNote(freq, duration, type, volume) {
-    const ctx = nsahAudioInit();
-    if (!ctx || !freq) return;
-
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, ctx.currentTime);
-
-    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(volume, ctx.currentTime + 0.012);
-    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc.start();
-    osc.stop(ctx.currentTime + duration + 0.02);
-}
-
-function nsahMusicTick() {
-    if (!nsahMusicGame || !NSAH_MUSIC[nsahMusicGame]) return;
-
-    const song = NSAH_MUSIC[nsahMusicGame];
-    const note = song.notes[nsahMusicStep % song.notes.length];
-
-    if (note) {
-        nsahMusicNote(
-            note,
-            Math.max(0.07, 60 / song.tempo * 0.78),
-            song.wave,
-            song.volume
-        );
-    }
-
-    nsahMusicStep++;
-}
-
-function nsahMusicStart(game) {
-    const song = NSAH_MUSIC[game];
-    if (!song) return;
-
-    nsahMusicStop();
-    nsahMusicGame = game;
-    nsahMusicStep = 0;
-
-    nsahAudioInit();
-    nsahMusicTick();
-
-    nsahMusicTimer = setInterval(
-        nsahMusicTick,
-        60000 / song.tempo
-    );
-}
-
-function nsahMusicStop() {
-    if (nsahMusicTimer) {
-        clearInterval(nsahMusicTimer);
-        nsahMusicTimer = null;
-    }
-
-    nsahMusicGame = null;
-    nsahMusicStep = 0;
 }
 
 /* =====================================================
