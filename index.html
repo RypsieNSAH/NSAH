@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 
@@ -1301,6 +1302,236 @@ body {
 
 
 /* =====================================================
+   SCHIFFE VERSENKEN
+===================================================== */
+
+.schiffe-auswahl {
+    grid-column: 1 / -1;
+}
+
+.schiffe-fenster {
+    width: min(980px, calc(100vw - 24px));
+    max-width: 980px;
+}
+
+.schiffe-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+    gap: 22px;
+    align-items: start;
+}
+
+.schiffe-board-wrap {
+    min-width: 0;
+}
+
+.schiffe-board-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    color: #cfcfcf;
+    font-size: 14px;
+}
+
+.schiffe-board {
+    width: min(100%, 540px);
+    aspect-ratio: 1;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    border: 1px solid #3d3d3d;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #090909;
+    box-shadow: 0 14px 45px rgba(0,0,0,.35);
+}
+
+.schiffe-cell {
+    position: relative;
+    border: 0;
+    border-right: 1px solid #242424;
+    border-bottom: 1px solid #242424;
+    background: #101010;
+    color: white;
+    cursor: pointer;
+    min-width: 0;
+    transition: background .12s ease, transform .12s ease;
+}
+
+.schiffe-cell:nth-child(10n) {
+    border-right: 0;
+}
+
+.schiffe-cell:nth-last-child(-n+10) {
+    border-bottom: 0;
+}
+
+.schiffe-cell:hover:not(:disabled) {
+    background: #191919;
+}
+
+.schiffe-cell.eigen {
+    background: #1a1a1a;
+}
+
+.schiffe-cell.schiff {
+    background: #2a2a2a;
+    box-shadow: inset 0 0 0 1px #555;
+}
+
+.schiffe-cell.treffer {
+    background: #3b2020;
+}
+
+.schiffe-cell.verfehlt {
+    background: #202020;
+}
+
+.schiffe-cell.verfehlt::after {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #888;
+    position: absolute;
+    inset: 0;
+    margin: auto;
+}
+
+.schiffe-cell.treffer::after {
+    content: "×";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-size: clamp(16px, 3vw, 26px);
+    font-weight: 800;
+}
+
+.schiffe-side {
+    background: #151515;
+    border: 1px solid #2e2e2e;
+    border-radius: 14px;
+    padding: 16px;
+}
+
+.schiffe-status {
+    background: #101010;
+    border: 1px solid #2b2b2b;
+    border-radius: 10px;
+    padding: 12px;
+    color: #d7d7d7;
+    line-height: 1.45;
+    margin-bottom: 14px;
+}
+
+.schiffe-freund-list {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.schiffe-freund {
+    width: 100%;
+    text-align: left;
+    padding: 11px 12px;
+    border: 1px solid #363636;
+    border-radius: 9px;
+    background: #1b1b1b;
+    color: white;
+    cursor: pointer;
+}
+
+.schiffe-freund:hover,
+.schiffe-freund.aktiv {
+    background: #292929;
+    border-color: #666;
+}
+
+.schiffe-code-row {
+    display: flex;
+    gap: 8px;
+    margin: 10px 0 12px;
+}
+
+.schiffe-code-row input {
+    min-width: 0;
+    flex: 1;
+    height: 42px;
+    padding: 0 10px;
+    background: #0f0f0f;
+    color: white;
+    border: 1px solid #3b3b3b;
+    border-radius: 8px;
+    outline: none;
+    text-align: center;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.schiffe-mini {
+    color: #888;
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.schiffe-ships {
+    display: grid;
+    gap: 7px;
+    margin: 12px 0;
+}
+
+.schiffe-ship {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 8px;
+    background: #1c1c1c;
+    border: 1px solid #303030;
+    color: #ddd;
+    font-size: 13px;
+}
+
+.schiffe-ship span:last-child {
+    color: #999;
+}
+
+.schiffe-actions {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.schiffe-actions button {
+    width: 100%;
+}
+
+.schiffe-turn {
+    font-size: 13px;
+    color: #aaa;
+    margin-top: 8px;
+    text-align: center;
+}
+
+@media (max-width: 760px) {
+    .schiffe-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .schiffe-side {
+        order: -1;
+    }
+
+    .schiffe-fenster {
+        max-height: calc(100vh - 10px);
+        overflow-y: auto;
+    }
+}
+
+/* =====================================================
    HIDDEN
 ===================================================== */
 
@@ -1509,15 +1740,6 @@ body {
     .freund-aktionen button {
 
         flex: 1;
-    }
-
-    .uno-hand-karte {
-
-        width: 52px;
-
-        height: 75px;
-
-        font-size: 14px;
     }
 
 }
@@ -1869,21 +2091,12 @@ body {
             </button>
 
             <button
-                class="spiel-auswahl-button"
-                onclick="spielOeffnen('uno')"
+                class="spiel-auswahl-button schiffe-auswahl"
+                onclick="spielOeffnen('schiffe')"
             >
-                🃏
+                ⚓
                 <br>
-                UNO
-            </button>
-
-            <button
-                class="spiel-auswahl-button"
-                onclick="spielOeffnen('mauMau')"
-            >
-                🂡
-                <br>
-                Mau-Mau
+                Schiffe versenken
             </button>
 
         </div>
@@ -2021,6 +2234,128 @@ body {
 
     </div>
 
+</div>
+
+
+<!-- =====================================================
+     SCHIFFE VERSENKEN
+===================================================== -->
+
+<div
+    class="modal-hintergrund"
+    id="schiffeFenster"
+>
+
+    <div class="spiel-fenster schiffe-fenster">
+
+        <div class="spiel-kopf">
+
+            <div class="spiel-name">
+                ⚓ Schiffe versenken
+            </div>
+
+            <button
+                class="spiel-schliessen"
+                onclick="spielSchliessen('schiffe')"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div id="schiffeLobby" class="schiffe-layout">
+
+            <div class="schiffe-board-wrap">
+                <div class="schiffe-board-title">
+                    <strong>Deine Flotte</strong>
+                    <span id="schiffeSetupInfo">0 / 4 Schiffe</span>
+                </div>
+
+                <div id="schiffeSetupBoard" class="schiffe-board"></div>
+            </div>
+
+            <div class="schiffe-side">
+
+                <div class="schiffe-status" id="schiffeLobbyStatus">
+                    Wähle einen Freund aus deiner Freundesliste.
+                </div>
+
+                <div class="schiffe-freund-list" id="schiffeFreundListe">
+                    <div class="schiffe-mini">Freunde werden geladen …</div>
+                </div>
+
+                <div class="schiffe-code-row">
+                    <input
+                        id="schiffeCodeInput"
+                        maxlength="6"
+                        placeholder="SPIELCODE"
+                    >
+                    <button class="game-start" onclick="schiffeBeitreten()">
+                        Beitreten
+                    </button>
+                </div>
+
+                <div class="schiffe-actions">
+                    <button class="game-start" onclick="schiffeSchiffDrehen()">
+                        🔄 Ausrichtung drehen
+                    </button>
+
+                    <button class="game-start" onclick="schiffeFlotteZufaellig()">
+                        ✨ Zufällig platzieren
+                    </button>
+
+                    <button class="game-start" onclick="schiffeSpielErstellen()">
+                        ⚓ Spiel erstellen
+                    </button>
+                </div>
+
+                <div class="schiffe-ships">
+                    <div class="schiffe-ship"><span>Schlachtschiff</span><span>4</span></div>
+                    <div class="schiffe-ship"><span>Kreuzer</span><span>3</span></div>
+                    <div class="schiffe-ship"><span>U-Boot</span><span>2</span></div>
+                    <div class="schiffe-ship"><span>Zerstörer</span><span>1</span></div>
+                </div>
+
+                <div class="schiffe-mini">
+                    Nur Freunde aus deiner Freundesliste können als Gegner ausgewählt werden.
+                </div>
+
+            </div>
+        </div>
+
+        <div id="schiffeSpiel" class="hidden">
+            <div class="schiffe-layout">
+
+                <div class="schiffe-board-wrap">
+                    <div class="schiffe-board-title">
+                        <strong id="schiffeGegnerTitel">Gegnerisches Feld</strong>
+                        <span id="schiffeTurnStatus">Warten …</span>
+                    </div>
+                    <div id="schiffeEnemyBoard" class="schiffe-board"></div>
+                </div>
+
+                <div class="schiffe-side">
+
+                    <div class="schiffe-status" id="schiffeSpielStatus"></div>
+
+                    <div class="schiffe-board-title">
+                        <strong>Deine Flotte</strong>
+                        <span id="schiffeEigenStatus">Bereit</span>
+                    </div>
+
+                    <div id="schiffeOwnBoard" class="schiffe-board"></div>
+
+                    <div class="schiffe-actions">
+                        <button class="game-start" onclick="schiffeSpielVerlassen()">
+                            🚪 Spiel verlassen
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 
@@ -2208,6 +2543,10 @@ body {
                 ⬇️
             </button>
 
+            <button onclick="tetrisDrehen()">
+                🔄
+            </button>
+
             <button onclick="tetrisMove(1)">
                 ➡️
             </button>
@@ -2220,266 +2559,6 @@ body {
         >
             ▶ Spielen
         </button>
-
-    </div>
-
-</div>
-
-
-<!-- =====================================================
-     UNO
-===================================================== -->
-
-<div
-    class="modal-hintergrund"
-    id="unoFenster"
->
-
-    <div class="spiel-fenster">
-
-        <div class="spiel-kopf">
-
-            <div class="spiel-name">
-                🃏 UNO
-            </div>
-
-            <button
-                class="spiel-schliessen"
-                onclick="spielSchliessen('uno')"
-            >
-                ×
-            </button>
-
-        </div>
-
-
-        <div
-            class="multiplayer-lobby"
-            id="unoLobby"
-        >
-
-            <h3>
-                🎮 UNO Multiplayer
-            </h3>
-
-            <button
-                class="game-start"
-                onclick="unoSpielErstellen()"
-            >
-                ➕ Spiel erstellen
-            </button>
-
-            <div class="multiplayer-trenner">
-                oder
-            </div>
-
-            <input
-                class="spielcode-input"
-                id="unoCodeInput"
-                placeholder="Spielcode eingeben"
-                maxlength="6"
-            >
-
-            <button
-                class="game-start"
-                onclick="unoBeitreten()"
-            >
-                🚪 Spiel beitreten
-            </button>
-
-            <div
-                id="unoLobbyStatus"
-                class="lobby-status"
-            >
-                Noch kein Spiel ausgewählt.
-            </div>
-
-        </div>
-
-
-        <div
-            class="uno-spiel hidden"
-            id="unoSpiel"
-        >
-
-            <div class="spielcode-anzeige">
-
-                Spielcode:
-
-                <strong id="unoSpielcode"></strong>
-
-            </div>
-
-            <div
-                id="unoSpieler"
-                class="spieler-liste"
-            ></div>
-
-            <div class="uno-ablage">
-
-                <div>
-                    Ablagestapel
-                </div>
-
-                <div
-                    id="unoAblageKarte"
-                    class="uno-karte"
-                >
-                    🃏
-                </div>
-
-            </div>
-
-            <div
-                id="unoHand"
-                class="uno-hand"
-            ></div>
-
-            <button
-                class="game-start"
-                onclick="unoKarteZiehen()"
-            >
-                🃏 Karte ziehen
-            </button>
-
-            <button
-                class="game-start"
-                onclick="unoSpielVerlassen()"
-            >
-                🚪 Spiel verlassen
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =====================================================
-     MAU MAU
-===================================================== -->
-
-<div
-    class="modal-hintergrund"
-    id="mauMauFenster"
->
-
-    <div class="spiel-fenster">
-
-        <div class="spiel-kopf">
-
-            <div class="spiel-name">
-                🂡 Mau-Mau
-            </div>
-
-            <button
-                class="spiel-schliessen"
-                onclick="spielSchliessen('mauMau')"
-            >
-                ×
-            </button>
-
-        </div>
-
-
-        <div
-            class="multiplayer-lobby"
-            id="mauMauLobby"
-        >
-
-            <h3>
-                🎮 Mau-Mau Multiplayer
-            </h3>
-
-            <button
-                class="game-start"
-                onclick="mauMauSpielErstellen()"
-            >
-                ➕ Spiel erstellen
-            </button>
-
-            <div class="multiplayer-trenner">
-                oder
-            </div>
-
-            <input
-                class="spielcode-input"
-                id="mauMauCodeInput"
-                placeholder="Spielcode eingeben"
-                maxlength="6"
-            >
-
-            <button
-                class="game-start"
-                onclick="mauMauBeitreten()"
-            >
-                🚪 Spiel beitreten
-            </button>
-
-            <div
-                id="mauMauLobbyStatus"
-                class="lobby-status"
-            >
-                Noch kein Spiel ausgewählt.
-            </div>
-
-        </div>
-
-
-        <div
-            class="mau-mau-spiel hidden"
-            id="mauMauSpiel"
-        >
-
-            <div class="spielcode-anzeige">
-
-                Spielcode:
-
-                <strong id="mauMauSpielcode"></strong>
-
-            </div>
-
-            <div
-                id="mauMauSpieler"
-                class="spieler-liste"
-            ></div>
-
-            <div class="uno-ablage">
-
-                <div>
-                    Ablagestapel
-                </div>
-
-                <div
-                    id="mauMauAblage"
-                    class="uno-karte"
-                >
-                    🂠
-                </div>
-
-            </div>
-
-            <div
-                id="mauMauHand"
-                class="uno-hand"
-            ></div>
-
-            <button
-                class="game-start"
-                onclick="mauMauKarteZiehen()"
-            >
-                🂠 Karte ziehen
-            </button>
-
-            <button
-                class="game-start"
-                onclick="mauMauSpielVerlassen()"
-            >
-                🚪 Spiel verlassen
-            </button>
-
-        </div>
 
     </div>
 
@@ -2741,6 +2820,10 @@ function spielOeffnen(
     updateRekordAnzeige(
         spiel
     );
+
+    if (spiel === "schiffe") {
+        schiffeOeffnen();
+    }
 }
 
 
@@ -2764,6 +2847,10 @@ function spielSchliessen(
 
     if (spiel === "tetris") {
         tetrisStop();
+    }
+
+    if (spiel === "schiffe") {
+        schiffeSpielVerlassen();
     }
 
 }
@@ -4258,7 +4345,9 @@ document.addEventListener(
         }
 
         if (
-            event.key === "ArrowUp"
+            event.key === "ArrowUp" ||
+            event.key === "x" ||
+            event.key === "X"
         ) {
 
             event.preventDefault();
@@ -5401,802 +5490,407 @@ function neuenSpielcode() {
 
 
 /* =====================================================
-   UNO
+   SCHIFFE VERSENKEN
 ===================================================== */
 
-let unoSpieler = [];
+const SCHIFFE_GROESSEN = [
+    { name: "Schlachtschiff", size: 4 },
+    { name: "Kreuzer", size: 3 },
+    { name: "U-Boot", size: 2 },
+    { name: "Zerstörer", size: 1 }
+];
 
-let unoHand = [];
+let schiffeFreunde = [];
+let schiffeAusgewaehlterFreund = null;
+let schiffeSetup = [];
+let schiffeSetupIndex = 0;
+let schiffeSetupHorizontal = true;
+let schiffeRaum = null;
+let schiffeEigeneSchiffe = [];
+let schiffeGegnerSchiffe = [];
+let schiffeGegnerSchuesse = new Set();
+let schiffeEigeneTreffer = new Set();
+let schiffeMeinZug = false;
 
-let unoAblage = null;
-
-
-function unoSpielErstellen() {
-
+function schiffeOeffnen() {
     if (!aktuellerBenutzer) {
-
-        alert(
-            "Bitte melde dich zuerst an."
-        );
-
+        alert("Bitte melde dich zuerst an, um Schiffe versenken zu spielen.");
         return;
     }
 
+    schiffeSetup = [];
+    schiffeSetupIndex = 0;
+    schiffeSetupHorizontal = true;
+    schiffeRaum = null;
+    schiffeAusgewaehlterFreund = null;
 
-    const code =
-        neuenSpielcode();
+    document.getElementById("schiffeLobby").classList.remove("hidden");
+    document.getElementById("schiffeSpiel").classList.add("hidden");
+    document.getElementById("schiffeLobbyStatus").textContent =
+        "Wähle einen Freund aus deiner Freundesliste.";
+    document.getElementById("schiffeCodeInput").value = "";
 
-
-    multiplayerRaum = {
-
-        spiel: "uno",
-
-        code: code,
-
-        host:
-            aktuellerBenutzer,
-
-        spieler: [
-            aktuellerBenutzer
-        ]
-
-    };
-
-
-    unoSpieler = [
-        aktuellerBenutzer
-    ];
-
-
-    document.getElementById(
-        "unoSpielcode"
-    ).textContent =
-        code;
-
-
-    document.getElementById(
-        "unoLobbyStatus"
-    ).textContent =
-        "✅ Spiel erstellt. Teile den Spielcode mit deinen Freunden.";
-
-
-    document.getElementById(
-        "unoSpiel"
-    ).classList.remove(
-        "hidden"
-    );
-
-
-    document.getElementById(
-        "unoLobby"
-    ).classList.add(
-        "hidden"
-    );
-
-
-    unoSpielerAnzeigen();
-
-    unoNeueHand();
-
-    unoHandAnzeigen();
-
+    schiffeSetupBoardZeichnen();
+    schiffeFreundeLaden();
 }
 
+async function schiffeFreundeLaden() {
+    const liste = document.getElementById("schiffeFreundListe");
+    liste.innerHTML = '<div class="schiffe-mini">Freunde werden geladen …</div>';
 
-function unoBeitreten() {
+    try {
+        const antwort = await fetch("/api/friends");
+        const daten = await antwort.json();
 
-    if (!aktuellerBenutzer) {
+        if (!daten.success || !Array.isArray(daten.friends)) {
+            throw new Error(daten.message || "Freunde konnten nicht geladen werden.");
+        }
 
-        alert(
-            "Bitte melde dich zuerst an."
-        );
+        schiffeFreunde = daten.friends;
 
+        if (!schiffeFreunde.length) {
+            liste.innerHTML =
+                '<div class="schiffe-mini">Du hast noch keine Freunde. Füge zuerst einen Freund hinzu.</div>';
+            return;
+        }
+
+        liste.innerHTML = "";
+
+        schiffeFreunde.forEach(function (freund) {
+            const button = document.createElement("button");
+            button.className = "schiffe-freund";
+            button.textContent = "👤 " + freund.username;
+
+            button.onclick = function () {
+                schiffeAusgewaehlterFreund = freund;
+
+                document.querySelectorAll(".schiffe-freund").forEach(function (el) {
+                    el.classList.remove("aktiv");
+                });
+
+                button.classList.add("aktiv");
+
+                document.getElementById("schiffeLobbyStatus").textContent =
+                    "Freund ausgewählt: " + freund.username +
+                    ". Platziere deine Flotte.";
+            };
+
+            liste.appendChild(button);
+        });
+    } catch (error) {
+        console.error(error);
+        liste.innerHTML =
+            '<div class="schiffe-mini">Freunde konnten nicht geladen werden.</div>';
+    }
+}
+
+function schiffeZelle(x, y) {
+    return y * 10 + x;
+}
+
+function schiffeKoordinaten(index) {
+    return {
+        x: index % 10,
+        y: Math.floor(index / 10)
+    };
+}
+
+function schiffeSetupKannPlatzieren(cells) {
+    const belegt = new Set();
+
+    schiffeSetup.forEach(function (schiff) {
+        schiff.cells.forEach(function (cell) {
+            belegt.add(cell);
+        });
+    });
+
+    return cells.every(function (cell) {
+        const pos = schiffeKoordinaten(cell);
+        return pos.x >= 0 && pos.x < 10 &&
+               pos.y >= 0 && pos.y < 10 &&
+               !belegt.has(cell);
+    });
+}
+
+function schiffeSetupBoardZeichnen() {
+    const board = document.getElementById("schiffeSetupBoard");
+    board.innerHTML = "";
+
+    const belegte = new Set();
+
+    schiffeSetup.forEach(function (schiff) {
+        schiff.cells.forEach(function (cell) {
+            belegte.add(cell);
+        });
+    });
+
+    for (let i = 0; i < 100; i++) {
+        const button = document.createElement("button");
+        button.className = "schiffe-cell";
+
+        if (belegte.has(i)) {
+            button.classList.add("schiff");
+        }
+
+        const pos = schiffeKoordinaten(i);
+
+        button.onclick = function () {
+            schiffeSetupZelleKlick(pos.x, pos.y);
+        };
+
+        board.appendChild(button);
+    }
+
+    document.getElementById("schiffeSetupInfo").textContent =
+        schiffeSetup.length + " / " + SCHIFFE_GROESSEN.length + " Schiffe";
+}
+
+function schiffeSetupZelleKlick(x, y) {
+    if (schiffeSetupIndex >= SCHIFFE_GROESSEN.length) {
         return;
     }
 
+    const vorlage = SCHIFFE_GROESSEN[schiffeSetupIndex];
+    const cells = [];
 
-    const code =
-        document.getElementById(
-            "unoCodeInput"
-        ).value
-        .trim()
-        .toUpperCase();
+    for (let i = 0; i < vorlage.size; i++) {
+        const cx = schiffeSetupHorizontal ? x + i : x;
+        const cy = schiffeSetupHorizontal ? y : y + i;
 
+        if (cx > 9 || cy > 9) {
+            document.getElementById("schiffeLobbyStatus").textContent =
+                "Das Schiff passt dort nicht vollständig auf das Spielfeld.";
+            return;
+        }
+
+        cells.push(schiffeZelle(cx, cy));
+    }
+
+    if (!schiffeSetupKannPlatzieren(cells)) {
+        document.getElementById("schiffeLobbyStatus").textContent =
+            "Hier liegt bereits ein Schiff.";
+        return;
+    }
+
+    schiffeSetup.push({
+        name: vorlage.name,
+        size: vorlage.size,
+        cells: cells,
+        hits: []
+    });
+
+    schiffeSetupIndex++;
+    schiffeSetupBoardZeichnen();
+
+    document.getElementById("schiffeLobbyStatus").textContent =
+        schiffeSetupIndex < SCHIFFE_GROESSEN.length
+            ? "Als Nächstes: " +
+              SCHIFFE_GROESSEN[schiffeSetupIndex].name +
+              " (" + SCHIFFE_GROESSEN[schiffeSetupIndex].size + ")."
+            : "Flotte komplett. Du kannst das Spiel erstellen.";
+}
+
+function schiffeSchiffDrehen() {
+    schiffeSetupHorizontal = !schiffeSetupHorizontal;
+
+    document.getElementById("schiffeLobbyStatus").textContent =
+        schiffeSetupHorizontal
+            ? "Ausrichtung: horizontal."
+            : "Ausrichtung: vertikal.";
+}
+
+function schiffeFlotteZufaellig() {
+    schiffeSetup = [];
+
+    SCHIFFE_GROESSEN.forEach(function (vorlage) {
+        let gesetzt = false;
+
+        for (let versuch = 0; versuch < 1000 && !gesetzt; versuch++) {
+            const horizontal = Math.random() >= 0.5;
+            const x = Math.floor(Math.random() * 10);
+            const y = Math.floor(Math.random() * 10);
+            const cells = [];
+
+            for (let i = 0; i < vorlage.size; i++) {
+                const cx = horizontal ? x + i : x;
+                const cy = horizontal ? y : y + i;
+
+                if (cx > 9 || cy > 9) {
+                    break;
+                }
+
+                cells.push(schiffeZelle(cx, cy));
+            }
+
+            if (cells.length === vorlage.size && schiffeSetupKannPlatzieren(cells)) {
+                schiffeSetup.push({
+                    name: vorlage.name,
+                    size: vorlage.size,
+                    cells: cells,
+                    hits: []
+                });
+                gesetzt = true;
+            }
+        }
+    });
+
+    if (schiffeSetup.length !== SCHIFFE_GROESSEN.length) {
+        schiffeFlotteZufaellig();
+        return;
+    }
+
+    schiffeSetupIndex = SCHIFFE_GROESSEN.length;
+    schiffeSetupBoardZeichnen();
+
+    document.getElementById("schiffeLobbyStatus").textContent =
+        "Flotte zufällig platziert. Bereit!";
+}
+
+function schiffeSpielErstellen() {
+    if (!aktuellerBenutzer) {
+        alert("Bitte melde dich zuerst an.");
+        return;
+    }
+
+    if (!schiffeAusgewaehlterFreund) {
+        alert("Wähle zuerst einen Freund aus.");
+        return;
+    }
+
+    if (schiffeSetup.length !== SCHIFFE_GROESSEN.length) {
+        alert("Platziere zuerst alle vier Schiffe.");
+        return;
+    }
+
+    const code = neuenSpielcode();
+
+    schiffeRaum = {
+        spiel: "schiffe",
+        code: code,
+        host: aktuellerBenutzer,
+        freund: schiffeAusgewaehlterFreund.id,
+        spieler: [aktuellerBenutzer],
+        status: "waiting"
+    };
+
+    schiffeEigeneSchiffe = schiffeSetup.map(function (schiff) {
+        return {
+            name: schiff.name,
+            size: schiff.size,
+            cells: schiff.cells.slice(),
+            hits: []
+        };
+    });
+
+    document.getElementById("schiffeLobbyStatus").textContent =
+        "Spielcode " + code + " erstellt. Teile ihn mit " +
+        schiffeAusgewaehlterFreund.username + ".";
+
+    document.getElementById("schiffeSpielStatus").textContent =
+        "Warte auf deinen Freund. Das Spiel startet nach dem Beitritt.";
+
+    document.getElementById("schiffeTurnStatus").textContent = "Warten …";
+    document.getElementById("schiffeGegnerTitel").textContent =
+        schiffeAusgewaehlterFreund.username;
+
+    document.getElementById("schiffeLobby").classList.add("hidden");
+    document.getElementById("schiffeSpiel").classList.remove("hidden");
+
+    schiffeEigenesBoardZeichnen();
+    schiffeGegnerBoardZeichnen();
+}
+
+function schiffeBeitreten() {
+    if (!aktuellerBenutzer) {
+        alert("Bitte melde dich zuerst an.");
+        return;
+    }
+
+    const code = document.getElementById("schiffeCodeInput")
+        .value.trim().toUpperCase();
 
     if (code.length !== 6) {
-
-        alert(
-            "Bitte einen gültigen 6-stelligen Spielcode eingeben."
-        );
-
+        alert("Bitte einen gültigen 6-stelligen Spielcode eingeben.");
         return;
     }
 
-
-    /*
-       Aktuell lokale Demo.
-
-       Sobald dein Backend da ist,
-       wird dieser Teil durch einen
-       echten Server-Aufruf ersetzt.
-    */
-
-
-    multiplayerRaum = {
-
-        spiel: "uno",
-
-        code: code,
-
-        host: "Spielhost",
-
-        spieler: [
-            "Spielhost",
-            aktuellerBenutzer
-        ]
-
-    };
-
-
-    unoSpieler =
-        multiplayerRaum.spieler;
-
-
-    document.getElementById(
-        "unoSpielcode"
-    ).textContent =
-        code;
-
-
-    document.getElementById(
-        "unoSpiel"
-    ).classList.remove(
-        "hidden"
+    alert(
+        "Der Spielcode wurde angenommen. Für echtes Online-Multiplayer " +
+        "muss der Spielraum noch an eine serverseitige Battleship-API angebunden werden."
     );
-
-
-    document.getElementById(
-        "unoLobby"
-    ).classList.add(
-        "hidden"
-    );
-
-
-    unoSpielerAnzeigen();
-
-    unoNeueHand();
-
-    unoHandAnzeigen();
-
 }
 
+function schiffeEigenesBoardZeichnen() {
+    const board = document.getElementById("schiffeOwnBoard");
+    board.innerHTML = "";
 
-function unoSpielerAnzeigen() {
+    const eigeneSchiffe = new Set();
 
-    const liste =
-        document.getElementById(
-            "unoSpieler"
-        );
+    schiffeEigeneSchiffe.forEach(function (schiff) {
+        schiff.cells.forEach(function (cell) {
+            eigeneSchiffe.add(cell);
+        });
+    });
 
+    for (let i = 0; i < 100; i++) {
+        const cell = document.createElement("div");
+        cell.className = "schiffe-cell eigen";
 
-    liste.innerHTML = "";
-
-
-    unoSpieler.forEach(
-        function(spieler) {
-
-            const element =
-                document.createElement(
-                    "div"
-                );
-
-
-            element.className =
-                "spieler";
-
-
-            element.textContent =
-                "👤 " +
-                spieler;
-
-
-            liste.appendChild(
-                element
-            );
-
+        if (eigeneSchiffe.has(i)) {
+            cell.classList.add("schiff");
         }
-    );
 
+        board.appendChild(cell);
+    }
 }
 
+function schiffeGegnerBoardZeichnen() {
+    const board = document.getElementById("schiffeEnemyBoard");
+    board.innerHTML = "";
 
-function unoNeueHand() {
-
-    unoHand = [
-
-        "🔴 1",
-        "🔵 3",
-        "🟢 5",
-        "🟡 7",
-        "🔴 9",
-        "🔵 +2",
-        "🟢 8"
-
-    ];
-
-
-    unoAblage =
-        "🟡 4";
-
-
-    document.getElementById(
-        "unoAblageKarte"
-    ).textContent =
-        unoAblage;
-
+    for (let i = 0; i < 100; i++) {
+        const button = document.createElement("button");
+        button.className = "schiffe-cell";
+        button.onclick = function () {
+            schiffeSchuss(i);
+        };
+        board.appendChild(button);
+    }
 }
 
-
-function unoHandAnzeigen() {
-
-    const hand =
-        document.getElementById(
-            "unoHand"
-        );
-
-
-    hand.innerHTML = "";
-
-
-    unoHand.forEach(
-        function(karte, index) {
-
-            const button =
-                document.createElement(
-                    "button"
-                );
-
-
-            button.className =
-                "uno-hand-karte";
-
-
-            button.textContent =
-                karte;
-
-
-            button.onclick =
-                function() {
-
-                    unoKarteSpielen(
-                        index
-                    );
-
-                };
-
-
-            hand.appendChild(
-                button
-            );
-
-        }
-    );
-
-}
-
-
-function unoKarteSpielen(
-    index
-) {
-
-    if (
-        index < 0 ||
-        index >= unoHand.length
-    ) {
-
+function schiffeSchuss(index) {
+    if (!schiffeMeinZug) {
+        document.getElementById("schiffeSpielStatus").textContent =
+            "Du bist gerade nicht am Zug.";
         return;
     }
 
-
-    const karte =
-        unoHand[index];
-
-
-    unoAblage =
-        karte;
-
-
-    unoHand.splice(
-        index,
-        1
-    );
-
-
-    document.getElementById(
-        "unoAblageKarte"
-    ).textContent =
-        unoAblage;
-
-
-    unoHandAnzeigen();
-
-
-    if (
-        unoHand.length === 0
-    ) {
-
-        alert(
-            "🏆 Du hast UNO gewonnen!"
-        );
-
+    if (schiffeGegnerSchuesse.has(index)) {
+        return;
     }
 
+    schiffeGegnerSchuesse.add(index);
+    schiffeGegnerBoardZeichnen();
 }
 
+function schiffeSpielVerlassen() {
+    schiffeRaum = null;
+    schiffeEigeneSchiffe = [];
+    schiffeGegnerSchiffe = [];
+    schiffeGegnerSchuesse = new Set();
+    schiffeEigeneTreffer = new Set();
+    schiffeMeinZug = false;
 
-function unoKarteZiehen() {
+    document.getElementById("schiffeSpiel").classList.add("hidden");
+    document.getElementById("schiffeLobby").classList.remove("hidden");
 
-    const karten = [
+    schiffeSetup = [];
+    schiffeSetupIndex = 0;
+    schiffeSetupBoardZeichnen();
 
-        "🔴 2",
-        "🔴 5",
-        "🔵 2",
-        "🔵 8",
-        "🟢 2",
-        "🟢 6",
-        "🟡 1",
-        "🟡 9"
-
-    ];
-
-
-    const neueKarte =
-        karten[
-            Math.floor(
-                Math.random() *
-                karten.length
-            )
-        ];
-
-
-    unoHand.push(
-        neueKarte
-    );
-
-
-    unoHandAnzeigen();
-
-}
-
-
-function unoSpielVerlassen() {
-
-    multiplayerRaum =
-        null;
-
-    unoSpieler = [];
-
-    unoHand = [];
-
-
-    document.getElementById(
-        "unoSpiel"
-    ).classList.add(
-        "hidden"
-    );
-
-
-    document.getElementById(
-        "unoLobby"
-    ).classList.remove(
-        "hidden"
-    );
-
-
-    document.getElementById(
-        "unoLobbyStatus"
-    ).textContent =
+    document.getElementById("schiffeLobbyStatus").textContent =
         "Du hast das Spiel verlassen.";
-
 }
-
-
-/* =====================================================
-   MAU MAU
-===================================================== */
-
-let mauMauSpieler = [];
-
-let mauMauHand = [];
-
-let mauMauAblage = null;
-
-
-function mauMauSpielErstellen() {
-
-    if (!aktuellerBenutzer) {
-
-        alert(
-            "Bitte melde dich zuerst an."
-        );
-
-        return;
-    }
-
-
-    const code =
-        neuenSpielcode();
-
-
-    multiplayerRaum = {
-
-        spiel: "mauMau",
-
-        code: code,
-
-        host:
-            aktuellerBenutzer,
-
-        spieler: [
-            aktuellerBenutzer
-        ]
-
-    };
-
-
-    mauMauSpieler = [
-        aktuellerBenutzer
-    ];
-
-
-    document.getElementById(
-        "mauMauSpielcode"
-    ).textContent =
-        code;
-
-
-    document.getElementById(
-        "mauMauLobbyStatus"
-    ).textContent =
-        "✅ Spiel erstellt. Teile den Spielcode mit deinen Freunden.";
-
-
-    document.getElementById(
-        "mauMauSpiel"
-    ).classList.remove(
-        "hidden"
-    );
-
-
-    document.getElementById(
-        "mauMauLobby"
-    ).classList.add(
-        "hidden"
-    );
-
-
-    mauMauSpielerAnzeigen();
-
-    mauMauNeueHand();
-
-    mauMauHandAnzeigen();
-
-}
-
-
-function mauMauBeitreten() {
-
-    if (!aktuellerBenutzer) {
-
-        alert(
-            "Bitte melde dich zuerst an."
-        );
-
-        return;
-    }
-
-
-    const code =
-        document.getElementById(
-            "mauMauCodeInput"
-        ).value
-        .trim()
-        .toUpperCase();
-
-
-    if (code.length !== 6) {
-
-        alert(
-            "Bitte einen gültigen 6-stelligen Spielcode eingeben."
-        );
-
-        return;
-    }
-
-
-    /*
-       Aktuell lokale Demo.
-       Später echter Server.
-    */
-
-
-    multiplayerRaum = {
-
-        spiel: "mauMau",
-
-        code: code,
-
-        host: "Spielhost",
-
-        spieler: [
-            "Spielhost",
-            aktuellerBenutzer
-        ]
-
-    };
-
-
-    mauMauSpieler =
-        multiplayerRaum.spieler;
-
-
-    document.getElementById(
-        "mauMauSpielcode"
-    ).textContent =
-        code;
-
-
-    document.getElementById(
-        "mauMauSpiel"
-    ).classList.remove(
-        "hidden"
-    );
-
-
-    document.getElementById(
-        "mauMauLobby"
-    ).classList.add(
-        "hidden"
-    );
-
-
-    mauMauSpielerAnzeigen();
-
-    mauMauNeueHand();
-
-    mauMauHandAnzeigen();
-
-}
-
-
-function mauMauSpielerAnzeigen() {
-
-    const liste =
-        document.getElementById(
-            "mauMauSpieler"
-        );
-
-
-    liste.innerHTML = "";
-
-
-    mauMauSpieler.forEach(
-        function(spieler) {
-
-            const element =
-                document.createElement(
-                    "div"
-                );
-
-
-            element.className =
-                "spieler";
-
-
-            element.textContent =
-                "👤 " +
-                spieler;
-
-
-            liste.appendChild(
-                element
-            );
-
-        }
-    );
-
-}
-
-
-function mauMauNeueHand() {
-
-    mauMauHand = [
-
-        "♥️ 7",
-        "♠️ 9",
-        "♦️ B",
-        "♣️ 8",
-        "♥️ D",
-        "♠️ 10"
-
-    ];
-
-
-    mauMauAblage =
-        "♣️ 5";
-
-
-    document.getElementById(
-        "mauMauAblage"
-    ).textContent =
-        mauMauAblage;
-
-}
-
-
-function mauMauHandAnzeigen() {
-
-    const hand =
-        document.getElementById(
-            "mauMauHand"
-        );
-
-
-    hand.innerHTML = "";
-
-
-    mauMauHand.forEach(
-        function(karte, index) {
-
-            const button =
-                document.createElement(
-                    "button"
-                );
-
-
-            button.className =
-                "uno-hand-karte";
-
-
-            button.textContent =
-                karte;
-
-
-            button.onclick =
-                function() {
-
-                    mauMauKarteSpielen(
-                        index
-                    );
-
-                };
-
-
-            hand.appendChild(
-                button
-            );
-
-        }
-    );
-
-}
-
-
-function mauMauKarteSpielen(
-    index
-) {
-
-    if (
-        index < 0 ||
-        index >= mauMauHand.length
-    ) {
-
-        return;
-    }
-
-
-    const karte =
-        mauMauHand[index];
-
-
-    mauMauAblage =
-        karte;
-
-
-    mauMauHand.splice(
-        index,
-        1
-    );
-
-
-    document.getElementById(
-        "mauMauAblage"
-    ).textContent =
-        mauMauAblage;
-
-
-    mauMauHandAnzeigen();
-
-
-    if (
-        mauMauHand.length === 0
-    ) {
-
-        alert(
-            "🏆 Du hast Mau-Mau gewonnen!"
-        );
-
-    }
-
-}
-
-
-function mauMauKarteZiehen() {
-
-    const karten = [
-
-        "♥️ 2",
-        "♥️ 10",
-        "♠️ 4",
-        "♠️ K",
-        "♦️ 6",
-        "♦️ 9",
-        "♣️ 3",
-        "♣️ D"
-
-    ];
-
-
-    const neueKarte =
-        karten[
-            Math.floor(
-                Math.random() *
-                karten.length
-            )
-        ];
-
-
-    mauMauHand.push(
-        neueKarte
-    );
-
-
-    mauMauHandAnzeigen();
-
-}
-
-
-function mauMauSpielVerlassen() {
-
-    multiplayerRaum =
-        null;
-
-    mauMauSpieler = [];
-
-    mauMauHand = [];
-
-
-    document.getElementById(
-        "mauMauSpiel"
-    ).classList.add(
-        "hidden"
-    );
-
-
-    document.getElementById(
-        "mauMauLobby"
-    ).classList.remove(
-        "hidden"
-    );
-
-
-    document.getElementById(
-        "mauMauLobbyStatus"
-    ).textContent =
-        "Du hast das Spiel verlassen.";
-
-}
-
 
 /* =====================================================
    START
