@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="de">
 
@@ -3009,6 +3008,9 @@ function spielSchliessen(
         schiffeSpielVerlassen();
     }
 
+    // Nach dem Schließen eines Spiels zurück zum Spiele-Menü.
+    spieleOeffnen();
+
 }
 
 
@@ -3421,10 +3423,12 @@ let snakeScore = 0;
 
 let snakeRunning = false;
 
-let snakeTimer = null;
-let snakeSpeed = 170;
-const SNAKE_MIN_SPEED = 55;
-const SNAKE_SPEED_STEP = 12;
+let snakeAnimation = null;
+let snakeLastTime = 0;
+let snakeAccumulator = 0;
+let snakeSpeed = 145;
+const SNAKE_MIN_SPEED = 65;
+const SNAKE_SPEED_STEP = 7;
 
 
 function snakeStart() {
@@ -3432,39 +3436,40 @@ function snakeStart() {
     snakeStop();
 
     snake = [
-
         {x: 10, y: 10},
         {x: 9, y: 10},
         {x: 8, y: 10}
-
     ];
 
-    snakeDirection = {
-        x: 1,
-        y: 0
-    };
-
-    snakeNextDirection = {
-        x: 1,
-        y: 0
-    };
-
+    snakeDirection = { x: 1, y: 0 };
+    snakeNextDirection = { x: 1, y: 0 };
     snakeScore = 0;
-    snakeSpeed = 170;
-
+    snakeSpeed = 145;
+    snakeAccumulator = 0;
+    snakeLastTime = performance.now();
     snakeRunning = true;
 
     snakeNeueNahrung();
-
     snakeZeichnen();
-
-    snakeTimer =
-        setInterval(
-            snakeLoop,
-            snakeSpeed
-        );
+    snakeAnimation = requestAnimationFrame(snakeSmoothLoop);
 }
 
+function snakeSmoothLoop(timestamp) {
+    if (!snakeRunning) return;
+
+    const delta = Math.min(50, timestamp - snakeLastTime);
+    snakeLastTime = timestamp;
+    snakeAccumulator += delta;
+
+    while (snakeAccumulator >= snakeSpeed && snakeRunning) {
+        snakeAccumulator -= snakeSpeed;
+        snakeLoop();
+    }
+
+    if (snakeRunning) {
+        snakeAnimation = requestAnimationFrame(snakeSmoothLoop);
+    }
+}
 
 function snakeNeueNahrung() {
 
@@ -3568,9 +3573,6 @@ function snakeLoop() {
             SNAKE_MIN_SPEED,
             snakeSpeed - SNAKE_SPEED_STEP
         );
-
-        clearInterval(snakeTimer);
-        snakeTimer = setInterval(snakeLoop, snakeSpeed);
 
     } else {
 
@@ -3745,14 +3747,15 @@ function snakeGameOver() {
 
 
 function snakeStop() {
-
     snakeRunning = false;
 
-    clearInterval(
-        snakeTimer
-    );
+    if (snakeAnimation !== null) {
+        cancelAnimationFrame(snakeAnimation);
+        snakeAnimation = null;
+    }
 
-    snakeTimer = null;
+    snakeLastTime = 0;
+    snakeAccumulator = 0;
 }
 
 
@@ -6617,26 +6620,6 @@ function nsahMusicStop() {
     nsahMusicStep = 0;
 }
 
-/* Musik bei Spiel öffnen starten – das passiert durch einen
-   Benutzer-Klick und funktioniert deshalb auch mit Autoplay-Schutz. */
-const nsahOriginalSpielOeffnen = spielOeffnen;
-spielOeffnen = function(spiel) {
-    nsahOriginalSpielOeffnen(spiel);
-
-    if (spiel === "flappy" ||
-        spiel === "snake" ||
-        spiel === "tetris" ||
-        spiel === "schiffe") {
-        nsahMusicStart(spiel);
-    }
-};
-
-const nsahOriginalSpielSchliessen = spielSchliessen;
-spielSchliessen = function(spiel) {
-    nsahMusicStop();
-    nsahOriginalSpielSchliessen(spiel);
-};
-
 /* =====================================================
    START
 ===================================================== */
@@ -6648,3 +6631,4 @@ benutzerPruefen();
 </body>
 
 </html>
+
