@@ -523,267 +523,6 @@ body {
 
 
 /* =====================================================
-   RANGLISTE
-===================================================== */
-
-const RANGLISTEN_SPIELE = ["tetris", "snake", "flappy"];
-
-function ranglisteOeffnen() {
-
-    document.getElementById(
-        "ranglistenFenster"
-    ).style.display = "block";
-
-    ranglisteLaden();
-}
-
-function ranglisteSchliessen() {
-
-    document.getElementById(
-        "ranglistenFenster"
-    ).style.display = "none";
-}
-
-function ranglisteEscaping(text) {
-    return escapeHTML(String(text ?? ""));
-}
-
-function ranglisteLokaleDaten(spiel) {
-
-    const eintraege = [];
-
-    if (aktuellerBenutzer) {
-        eintraege.push({
-            username: aktuellerBenutzer,
-            score: rekordLesen(spiel)
-        });
-    }
-
-    // Fallback für ältere lokale Spielstände dieses Browsers.
-    for (let i = 0; i < localStorage.length; i++) {
-
-        const key = localStorage.key(i) || "";
-        const prefix = "nsah_";
-        const suffix = "_" + spiel;
-
-        if (
-            key.startsWith(prefix) &&
-            key.endsWith(suffix) &&
-            key !== prefix + "guest" + suffix
-        ) {
-
-            const username = key.slice(
-                prefix.length,
-                key.length - suffix.length
-            );
-
-            const score = Number(
-                localStorage.getItem(key) || 0
-            );
-
-            if (username) {
-                eintraege.push({
-                    username: username,
-                    score: score
-                });
-            }
-        }
-    }
-
-    const nachNamen = new Map();
-
-    eintraege.forEach(function(eintrag) {
-
-        const name = String(eintrag.username || "Spieler");
-        const score = Number(eintrag.score || 0);
-
-        if (
-            !nachNamen.has(name) ||
-            score > nachNamen.get(name)
-        ) {
-            nachNamen.set(name, score);
-        }
-    });
-
-    return Array.from(nachNamen.entries())
-        .map(function(eintrag) {
-            return {
-                username: eintrag[0],
-                score: eintrag[1]
-            };
-        })
-        .sort(function(a, b) {
-            return b.score - a.score;
-        })
-        .slice(0, 10);
-}
-
-function ranglisteNormalisieren(daten, spiel) {
-
-    let quelle = null;
-
-    if (daten && daten.leaderboard) {
-        quelle = daten.leaderboard[spiel];
-    }
-
-    if (!quelle && daten && daten.rankings) {
-        quelle = daten.rankings[spiel];
-    }
-
-    if (!Array.isArray(quelle)) {
-        return null;
-    }
-
-    return quelle
-        .map(function(eintrag) {
-
-            const username =
-                eintrag.username ??
-                eintrag.name ??
-                eintrag.player ??
-                "Spieler";
-
-            const score =
-                Number(
-                    eintrag.score ??
-                    eintrag.points ??
-                    eintrag.punkte ??
-                    0
-                );
-
-            return {
-                username: username,
-                score: score
-            };
-        })
-        .filter(function(eintrag) {
-            return Number.isFinite(eintrag.score);
-        })
-        .sort(function(a, b) {
-            return b.score - a.score;
-        })
-        .slice(0, 10);
-}
-
-function ranglisteZeigen(spiel, eintraege) {
-
-    const element =
-        document.getElementById(
-            "rangliste" +
-            spiel.charAt(0).toUpperCase() +
-            spiel.slice(1)
-        );
-
-    if (!element) return;
-
-    if (!eintraege.length) {
-
-        element.innerHTML =
-            '<div class="ranglisten-status">Noch keine Punkte vorhanden.</div>';
-
-        return;
-    }
-
-    element.innerHTML = "";
-
-    eintraege.forEach(function(eintrag, index) {
-
-        const zeile =
-            document.createElement("div");
-
-        zeile.className =
-            "ranglisten-eintrag";
-
-        zeile.innerHTML =
-            '<span class="ranglisten-platz">' +
-            (index + 1) +
-            '.</span>' +
-            '<span class="ranglisten-name">' +
-            ranglisteEscaping(eintrag.username) +
-            '</span>' +
-            '<span class="ranglisten-punkte">' +
-            Number(eintrag.score || 0) +
-            ' Punkte</span>';
-
-        element.appendChild(zeile);
-    });
-}
-
-async function ranglisteLaden() {
-
-    const status =
-        document.getElementById("ranglistenStatus");
-
-    RANGLISTEN_SPIELE.forEach(function(spiel) {
-        ranglisteZeigen(
-            spiel,
-            ranglisteLokaleDaten(spiel)
-        );
-    });
-
-    if (status) {
-        status.textContent =
-            "Globale Rangliste wird geladen …";
-    }
-
-    try {
-
-        const antwort =
-            await fetch("/api/leaderboard", {
-                method: "GET",
-                headers: {
-                    "Accept": "application/json"
-                }
-            });
-
-        if (!antwort.ok) {
-            throw new Error("Leaderboard-API nicht verfügbar.");
-        }
-
-        const daten = await antwort.json();
-        let globaleDatenVorhanden = false;
-
-        RANGLISTEN_SPIELE.forEach(function(spiel) {
-
-            const globale =
-                ranglisteNormalisieren(daten, spiel);
-
-            if (globale) {
-
-                globaleDatenVorhanden = true;
-
-                ranglisteZeigen(
-                    spiel,
-                    globale
-                );
-            }
-        });
-
-        if (status) {
-
-            status.textContent =
-                globaleDatenVorhanden
-                    ? "Globale Rangliste"
-                    : "Noch keine globale Rangliste vorhanden.";
-        }
-
-    } catch (error) {
-
-        console.debug(
-            "Globale Rangliste konnte nicht geladen werden.",
-            error
-        );
-
-        if (status) {
-
-            status.textContent =
-                "Globale Rangliste ist auf dem Server noch nicht eingerichtet.";
-        }
-    }
-}
-
-
-/* =====================================================
    KARTE
 ===================================================== */
 
@@ -3252,6 +2991,270 @@ async function ranglisteLaden() {
 
 
 <script>
+
+/* =====================================================
+   RANGLISTE
+===================================================== */
+
+const RANGLISTEN_SPIELE = ["tetris", "snake", "flappy"];
+
+function ranglisteOeffnen() {
+
+    document.getElementById(
+        "ranglistenFenster"
+    ).style.display = "block";
+
+    ranglisteLaden();
+}
+
+function ranglisteSchliessen() {
+
+    document.getElementById(
+        "ranglistenFenster"
+    ).style.display = "none";
+}
+
+function ranglisteEscaping(text) {
+    return escapeHTML(String(text ?? ""));
+}
+
+function ranglisteLokaleDaten(spiel) {
+
+    const eintraege = [];
+
+    if (aktuellerBenutzer) {
+        eintraege.push({
+            username: aktuellerBenutzer,
+            score: rekordLesen(spiel)
+        });
+    }
+
+    // Fallback für ältere lokale Spielstände dieses Browsers.
+    for (let i = 0; i < localStorage.length; i++) {
+
+        const key = localStorage.key(i) || "";
+        const prefix = "nsah_";
+        const suffix = "_" + spiel;
+
+        if (
+            key.startsWith(prefix) &&
+            key.endsWith(suffix) &&
+            key !== prefix + "guest" + suffix
+        ) {
+
+            const username = key.slice(
+                prefix.length,
+                key.length - suffix.length
+            );
+
+            const score = Number(
+                localStorage.getItem(key) || 0
+            );
+
+            if (username) {
+                eintraege.push({
+                    username: username,
+                    score: score
+                });
+            }
+        }
+    }
+
+    const nachNamen = new Map();
+
+    eintraege.forEach(function(eintrag) {
+
+        const name = String(eintrag.username || "Spieler");
+        const score = Number(eintrag.score || 0);
+
+        if (
+            !nachNamen.has(name) ||
+            score > nachNamen.get(name)
+        ) {
+            nachNamen.set(name, score);
+        }
+    });
+
+    return Array.from(nachNamen.entries())
+        .map(function(eintrag) {
+            return {
+                username: eintrag[0],
+                score: eintrag[1]
+            };
+        })
+        .sort(function(a, b) {
+            return b.score - a.score;
+        })
+        .slice(0, 10);
+}
+
+function ranglisteNormalisieren(daten, spiel) {
+
+    let quelle = null;
+
+    if (daten && daten.leaderboard) {
+        quelle = daten.leaderboard[spiel];
+    }
+
+    if (!quelle && daten && daten.rankings) {
+        quelle = daten.rankings[spiel];
+    }
+
+    if (!Array.isArray(quelle)) {
+        return null;
+    }
+
+    return quelle
+        .map(function(eintrag) {
+
+            const username =
+                eintrag.username ??
+                eintrag.name ??
+                eintrag.player ??
+                "Spieler";
+
+            const score =
+                Number(
+                    eintrag.score ??
+                    eintrag.points ??
+                    eintrag.punkte ??
+                    0
+                );
+
+            return {
+                username: username,
+                score: score
+            };
+        })
+        .filter(function(eintrag) {
+            return Number.isFinite(eintrag.score);
+        })
+        .sort(function(a, b) {
+            return b.score - a.score;
+        })
+        .slice(0, 10);
+}
+
+function ranglisteZeigen(spiel, eintraege) {
+
+    const element =
+        document.getElementById(
+            "rangliste" +
+            spiel.charAt(0).toUpperCase() +
+            spiel.slice(1)
+        );
+
+    if (!element) return;
+
+    if (!eintraege.length) {
+
+        element.innerHTML =
+            '<div class="ranglisten-status">Noch keine Punkte vorhanden.</div>';
+
+        return;
+    }
+
+    element.innerHTML = "";
+
+    eintraege.forEach(function(eintrag, index) {
+
+        const zeile =
+            document.createElement("div");
+
+        zeile.className =
+            "ranglisten-eintrag";
+
+        zeile.innerHTML =
+            '<span class="ranglisten-platz">' +
+            (index + 1) +
+            '.</span>' +
+            '<span class="ranglisten-name">' +
+            ranglisteEscaping(eintrag.username) +
+            '</span>' +
+            '<span class="ranglisten-punkte">' +
+            Number(eintrag.score || 0) +
+            ' Punkte</span>';
+
+        element.appendChild(zeile);
+    });
+}
+
+async function ranglisteLaden() {
+
+    const status =
+        document.getElementById("ranglistenStatus");
+
+    RANGLISTEN_SPIELE.forEach(function(spiel) {
+        ranglisteZeigen(
+            spiel,
+            ranglisteLokaleDaten(spiel)
+        );
+    });
+
+    if (status) {
+        status.textContent =
+            "Globale Rangliste wird geladen …";
+    }
+
+    try {
+
+        const antwort =
+            await fetch("/api/leaderboard", {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
+
+        if (!antwort.ok) {
+            throw new Error("Leaderboard-API nicht verfügbar.");
+        }
+
+        const daten = await antwort.json();
+        let globaleDatenVorhanden = false;
+
+        RANGLISTEN_SPIELE.forEach(function(spiel) {
+
+            const globale =
+                ranglisteNormalisieren(daten, spiel);
+
+            if (globale) {
+
+                globaleDatenVorhanden = true;
+
+                ranglisteZeigen(
+                    spiel,
+                    globale
+                );
+            }
+        });
+
+        if (status) {
+
+            status.textContent =
+                globaleDatenVorhanden
+                    ? "Globale Rangliste"
+                    : "Noch keine globale Rangliste vorhanden.";
+        }
+
+    } catch (error) {
+
+        console.debug(
+            "Globale Rangliste konnte nicht geladen werden.",
+            error
+        );
+
+        if (status) {
+
+            status.textContent =
+                "Globale Rangliste ist auf dem Server noch nicht eingerichtet.";
+        }
+    }
+}
+
+
+
+
 
 /* =====================================================
    BENUTZER
