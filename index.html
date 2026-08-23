@@ -1354,6 +1354,110 @@ body {
    SCHIFFE VERSENKEN
 ===================================================== */
 
+.schiffe-lobby-menu {
+    max-width: 850px;
+    margin: 0 auto;
+}
+.schiffe-lobby-card {
+    background: #151515;
+    border: 1px solid #2d2d2d;
+    border-radius: 18px;
+    padding: 30px;
+    text-align: center;
+}
+.schiffe-lobby-icon {
+    font-size: 42px;
+    margin-bottom: 8px;
+}
+.schiffe-lobby-card h2 {
+    margin: 0 0 8px;
+    font-size: 28px;
+}
+.schiffe-lobby-card > p {
+    color: #999;
+    margin: 0 0 26px;
+}
+.schiffe-lobby-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 20px;
+    align-items: stretch;
+}
+.schiffe-lobby-option {
+    background: #0f0f0f;
+    border: 1px solid #292929;
+    border-radius: 14px;
+    padding: 22px;
+}
+.schiffe-lobby-option h3 {
+    margin: 0 0 8px;
+}
+.schiffe-lobby-option p {
+    color: #888;
+    min-height: 42px;
+    line-height: 1.45;
+}
+.schiffe-lobby-option input {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 8px 0 10px;
+    padding: 12px;
+    text-align: center;
+    letter-spacing: .18em;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+.schiffe-lobby-divider {
+    display: flex;
+    align-items: center;
+    color: #555;
+    font-size: 12px;
+    font-weight: 800;
+}
+.schiffe-lobby-warten {
+    margin-top: 22px;
+    padding-top: 22px;
+    border-top: 1px solid #292929;
+}
+.schiffe-code-box {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 14px 24px;
+    border: 1px solid #343434;
+    border-radius: 12px;
+    background: #0b0b0b;
+}
+.schiffe-code-box span {
+    color: #777;
+    font-size: 11px;
+    letter-spacing: .14em;
+}
+.schiffe-code-box strong {
+    font-size: 30px;
+    letter-spacing: .18em;
+}
+.schiffe-lobby-spieler {
+    margin: 16px auto;
+    max-width: 360px;
+    padding: 12px;
+    border-radius: 10px;
+    background: #0e0e0e;
+    color: #ddd;
+}
+@media (max-width: 700px) {
+    .schiffe-lobby-grid {
+        grid-template-columns: 1fr;
+    }
+    .schiffe-lobby-divider {
+        justify-content: center;
+    }
+    .schiffe-lobby-card {
+        padding: 20px;
+    }
+}
+
+
 .schiffe-auswahl {
     grid-column: 1 / -1;
 }
@@ -2317,67 +2421,60 @@ body {
 
         </div>
 
-        <div id="schiffeLobby" class="schiffe-layout">
+        <div id="schiffeLobby">
+    <div class="schiffe-lobby-menu">
+        <div class="schiffe-lobby-card">
+            <div class="schiffe-lobby-icon">⚓</div>
+            <h2>Schiffe versenken</h2>
+            <p>Erstelle eine private Lobby oder tritt mit einem Lobby-Code bei.</p>
 
-            <div class="schiffe-board-wrap">
-                <div class="schiffe-board-title">
-                    <strong>Deine Flotte</strong>
-                    <span id="schiffeSetupInfo">0 / 4 Schiffe</span>
+            <div class="schiffe-lobby-grid">
+                <div class="schiffe-lobby-option">
+                    <h3>Lobby erstellen</h3>
+                    <p>Du bekommst einen 6-stelligen Code. Teile ihn mit deinem Freund.</p>
+                    <button class="game-start" onclick="schiffeLobbyErstellen()">
+                        ⚓ Lobby erstellen
+                    </button>
                 </div>
 
-                <div id="schiffeSetupBoard" class="schiffe-board"></div>
-            </div>
+                <div class="schiffe-lobby-divider">ODER</div>
 
-            <div class="schiffe-side">
-
-                <div class="schiffe-status" id="schiffeLobbyStatus">
-                    Wähle einen Freund aus deiner Freundesliste.
-                </div>
-
-                <div class="schiffe-freund-list" id="schiffeFreundListe">
-                    <div class="schiffe-mini">Freunde werden geladen …</div>
-                </div>
-
-                <div class="schiffe-code-row">
+                <div class="schiffe-lobby-option">
+                    <h3>Lobby beitreten</h3>
+                    <p>Gib den Code deines Freundes ein.</p>
                     <input
                         id="schiffeCodeInput"
                         maxlength="6"
-                        placeholder="SPIELCODE"
+                        placeholder="ABC123"
+                        autocomplete="off"
+                        oninput="this.value=this.value.toUpperCase()"
                     >
                     <button class="game-start" onclick="schiffeBeitreten()">
-                        Beitreten
+                        🚪 Lobby beitreten
                     </button>
                 </div>
+            </div>
 
-                <div class="schiffe-actions">
-                    <button class="game-start" onclick="schiffeSchiffDrehen()">
-                        🔄 Ausrichtung drehen
-                    </button>
-
-                    <button class="game-start" onclick="schiffeFlotteZufaellig()">
-                        ✨ Zufällig platzieren
-                    </button>
-
-                    <button class="game-start" onclick="schiffeSpielErstellen()">
-                        ⚓ Spiel erstellen
-                    </button>
+            <div id="schiffeLobbyWarten" class="schiffe-lobby-warten hidden">
+                <div class="schiffe-code-box">
+                    <span>DEIN LOBBY-CODE</span>
+                    <strong id="schiffeLobbyCode">------</strong>
                 </div>
-
-                <div class="schiffe-ships">
-                    <div class="schiffe-ship"><span>Schlachtschiff</span><span>4</span></div>
-                    <div class="schiffe-ship"><span>Kreuzer</span><span>3</span></div>
-                    <div class="schiffe-ship"><span>U-Boot</span><span>2</span></div>
-                    <div class="schiffe-ship"><span>Zerstörer</span><span>1</span></div>
+                <div id="schiffeLobbyStatus" class="schiffe-status">
+                    Warte auf deinen Freund …
                 </div>
-
-                <div class="schiffe-mini">
-                    Nur Freunde aus deiner Freundesliste können als Gegner ausgewählt werden.
+                <div id="schiffeLobbySpieler" class="schiffe-lobby-spieler">
+                    👤 Du
                 </div>
-
+                <button id="schiffeStartButton" class="game-start hidden" onclick="schiffeLobbyStarten()">
+                    ▶ Spiel starten
+                </button>
             </div>
         </div>
+    </div>
+</div>
 
-        <div id="schiffeSpiel" class="hidden">
+<div id="schiffeSpiel" class="hidden"> class="hidden">
             <div class="schiffe-layout">
 
                 <div class="schiffe-board-wrap">
@@ -3738,8 +3835,13 @@ let tetrisRunning = false;
 let tetrisTimer = null;
 let tetrisNextPiece = null;
 const TETRIS_COLORS = [
-    "#00d9ff", "#ff4d6d", "#ffd166", "#7cff6b",
-    "#b57cff", "#ff8c42", "#4d8dff", "#ff5fd2"
+    "#00d9ff", // I
+    "#ffd166", // O
+    "#b56cff", // T
+    "#7cff6b", // S
+    "#ff4d6d", // Z
+    "#4d8dff", // J
+    "#ff9f43"  // L
 ];
 
 
@@ -3821,7 +3923,8 @@ function tetrisNaechstenBlockErzeugen() {
     const index = Math.floor(Math.random() * TETRIS_SHAPES.length);
     return {
         shape: TETRIS_SHAPES[index].map(row => row.slice()),
-        color: tetrisZufaelligeFarbe()
+        // Jeder Blocktyp hat immer seine eigene feste Farbe.
+        color: TETRIS_COLORS[index % TETRIS_COLORS.length]
     };
 }
 
@@ -4138,8 +4241,7 @@ function tetrisLinien() {
 
         if (
             tetrisBoard[row].every(
-                feld =>
-                    feld === 1
+                feld => Boolean(feld)
             )
         ) {
 
@@ -5600,12 +5702,15 @@ const SCHIFFE_GROESSEN = [
     { name: "Zerstörer", size: 1 }
 ];
 
-let schiffeFreunde = [];
-let schiffeAusgewaehlterFreund = null;
+let schiffeRaum = null;
+let schiffeLobbyTimer = null;
+let schiffeLobbyIsHost = false;
+let schiffeLobbyCode = null;
+
 let schiffeSetup = [];
 let schiffeSetupIndex = 0;
 let schiffeSetupHorizontal = true;
-let schiffeRaum = null;
+
 let schiffeEigeneSchiffe = [];
 let schiffeGegnerSchiffe = [];
 let schiffeGegnerSchuesse = new Set();
@@ -5614,63 +5719,7 @@ let schiffeMeinZug = false;
 
 let schiffeEinladungenTimer = null;
 
-async function schiffeEinladungenLaden() {
-    const box = document.getElementById("schiffeEinladungen");
-    if (!box || !aktuellerBenutzer) return;
-
-    try {
-        const antwort = await fetch("/api/game-invites?game=schiffe");
-        if (!antwort.ok) return;
-        const daten = await antwort.json();
-        const invites = Array.isArray(daten.invites) ? daten.invites : [];
-
-        if (!invites.length) {
-            box.textContent = "Keine neuen Einladungen.";
-            return;
-        }
-
-        box.innerHTML = "";
-        invites.forEach(function(invite) {
-            const item = document.createElement("div");
-            item.className = "freund-eintrag";
-            item.innerHTML = `
-                <div><strong>⚓ ${escapeHTML(invite.fromUsername || "Freund")}</strong><br>
-                <span class="freund-email">möchte Schiffe versenken spielen</span></div>
-                <div class="freund-aktionen">
-                    <button onclick="schiffeEinladungAnnehmen('${String(invite.id).replace(/'/g, "\\'")}')">Annehmen</button>
-                    <button onclick="schiffeEinladungAblehnen('${String(invite.id).replace(/'/g, "\\'")}')">Ablehnen</button>
-                </div>`;
-            box.appendChild(item);
-        });
-    } catch (error) {
-        console.debug("Schiffe-Einladungen konnten nicht geladen werden.", error);
-    }
-}
-
-async function schiffeEinladungAnnehmen(inviteId) {
-    try {
-        const antwort = await fetch("/api/game-invites/accept", {
-            method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({inviteId: inviteId})
-        });
-        const daten = await antwort.json();
-        if (!daten.success) { alert(daten.message || "Einladung konnte nicht angenommen werden."); return; }
-        document.getElementById("schiffeFenster").style.display = "block";
-        schiffeOeffnen();
-        if (daten.code) document.getElementById("schiffeCodeInput").value = daten.code;
-        await schiffeEinladungenLaden();
-    } catch (error) { console.error(error); }
-}
-
-async function schiffeEinladungAblehnen(inviteId) {
-    try {
-        await fetch("/api/game-invites/decline", {
-            method: "POST", headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({inviteId: inviteId})
-        });
-        schiffeEinladungenLaden();
-    } catch (error) { console.error(error); }
-}
+/* ---------- Lobby ---------- */
 
 function schiffeOeffnen() {
     if (!aktuellerBenutzer) {
@@ -5678,71 +5727,364 @@ function schiffeOeffnen() {
         return;
     }
 
-    schiffeSetup = [];
-    schiffeSetupIndex = 0;
-    schiffeSetupHorizontal = true;
+    schiffeLobbyZuruecksetzen();
+}
+
+function schiffeLobbyZuruecksetzen() {
+    clearInterval(schiffeLobbyTimer);
+    schiffeLobbyTimer = null;
+
     schiffeRaum = null;
-    schiffeAusgewaehlterFreund = null;
+    schiffeLobbyCode = null;
+    schiffeLobbyIsHost = false;
 
     document.getElementById("schiffeLobby").classList.remove("hidden");
     document.getElementById("schiffeSpiel").classList.add("hidden");
+    document.getElementById("schiffeLobbyWarten").classList.add("hidden");
+    document.getElementById("schiffeStartButton").classList.add("hidden");
+    document.getElementById("schiffeLobbyCode").textContent = "------";
     document.getElementById("schiffeLobbyStatus").textContent =
-        "Wähle einen Freund aus deiner Freundesliste.";
+        "Erstelle eine Lobby oder tritt mit einem Code bei.";
+    document.getElementById("schiffeLobbySpieler").textContent = "👤 Du";
     document.getElementById("schiffeCodeInput").value = "";
-
-    schiffeSetupBoardZeichnen();
-    schiffeFreundeLaden();
 }
 
-async function schiffeFreundeLaden() {
-    const liste = document.getElementById("schiffeFreundListe");
-    liste.innerHTML = '<div class="schiffe-mini">Freunde werden geladen …</div>';
+async function schiffeLobbyErstellen() {
+    if (!aktuellerBenutzer) {
+        alert("Bitte melde dich zuerst an.");
+        return;
+    }
 
     try {
-        const antwort = await fetch("/api/friends");
-        const daten = await antwort.json();
-
-        if (!daten.success || !Array.isArray(daten.friends)) {
-            throw new Error(daten.message || "Freunde konnten nicht geladen werden.");
-        }
-
-        schiffeFreunde = daten.friends;
-
-        if (!schiffeFreunde.length) {
-            liste.innerHTML =
-                '<div class="schiffe-mini">Du hast noch keine Freunde. Füge zuerst einen Freund hinzu.</div>';
-            return;
-        }
-
-        liste.innerHTML = "";
-
-        schiffeFreunde.forEach(function (freund) {
-            const button = document.createElement("button");
-            button.className = "schiffe-freund";
-            button.textContent = "👤 " + freund.username;
-
-            button.onclick = function () {
-                schiffeAusgewaehlterFreund = freund;
-
-                document.querySelectorAll(".schiffe-freund").forEach(function (el) {
-                    el.classList.remove("aktiv");
-                });
-
-                button.classList.add("aktiv");
-
-                document.getElementById("schiffeLobbyStatus").textContent =
-                    "Freund ausgewählt: " + freund.username +
-                    ". Platziere deine Flotte.";
-            };
-
-            liste.appendChild(button);
+        const antwort = await fetch("/api/battleship/lobbies", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({game: "schiffe"})
         });
+
+        const daten = await antwort.json();
+        if (!antwort.ok || !daten.success || !daten.code) {
+            throw new Error(daten.message || "Lobby konnte nicht erstellt werden.");
+        }
+
+        schiffeLobbyIsHost = true;
+        schiffeLobbyCode = daten.code.toUpperCase();
+        schiffeRaum = daten.lobby || {code: schiffeLobbyCode, status: "waiting"};
+
+        schiffeLobbyAnzeigen();
+        schiffeLobbyStatusAktualisieren(daten.lobby || {players: [aktuellerBenutzer]});
+        schiffeLobbyPollingStarten();
     } catch (error) {
         console.error(error);
-        liste.innerHTML =
-            '<div class="schiffe-mini">Freunde konnten nicht geladen werden.</div>';
+        alert("Die Lobby konnte nicht erstellt werden. Prüfe, ob die Battleship-Lobby-API vorhanden ist.");
     }
 }
+
+async function schiffeBeitreten() {
+    if (!aktuellerBenutzer) {
+        alert("Bitte melde dich zuerst an.");
+        return;
+    }
+
+    const code = document.getElementById("schiffeCodeInput").value.trim().toUpperCase();
+
+    if (!/^[A-Z0-9]{6}$/.test(code)) {
+        alert("Bitte einen gültigen 6-stelligen Lobby-Code eingeben.");
+        return;
+    }
+
+    try {
+        const antwort = await fetch("/api/battleship/lobbies/join", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({code: code})
+        });
+
+        const daten = await antwort.json();
+        if (!antwort.ok || !daten.success) {
+            throw new Error(daten.message || "Lobby konnte nicht beigetreten werden.");
+        }
+
+        schiffeLobbyIsHost = false;
+        schiffeLobbyCode = code;
+        schiffeRaum = daten.lobby || {code: code, status: "waiting"};
+
+        schiffeLobbyAnzeigen();
+        schiffeLobbyStatusAktualisieren(daten.lobby);
+        schiffeLobbyPollingStarten();
+    } catch (error) {
+        console.error(error);
+        alert(error.message || "Die Lobby konnte nicht betreten werden.");
+    }
+}
+
+function schiffeLobbyAnzeigen() {
+    document.getElementById("schiffeLobbyWarten").classList.remove("hidden");
+    document.getElementById("schiffeLobbyCode").textContent = schiffeLobbyCode;
+    document.getElementById("schiffeCodeInput").value = schiffeLobbyCode || "";
+}
+
+function schiffeLobbyPollingStarten() {
+    clearInterval(schiffeLobbyTimer);
+    schiffeLobbyTimer = setInterval(schiffeLobbyStatusLaden, 1500);
+    schiffeLobbyStatusLaden();
+}
+
+async function schiffeLobbyStatusLaden() {
+    if (!schiffeLobbyCode) return;
+
+    try {
+        const antwort = await fetch(
+            "/api/battleship/lobbies/" + encodeURIComponent(schiffeLobbyCode)
+        );
+
+        if (!antwort.ok) return;
+
+        const daten = await antwort.json();
+        if (!daten.success) return;
+
+        schiffeRaum = daten.lobby;
+        schiffeLobbyStatusAktualisieren(daten.lobby);
+
+        if (daten.lobby.status === "starting" || daten.lobby.status === "placement") {
+            schiffeLobbyInPlatzierungStarten(daten.lobby);
+        }
+    } catch (error) {
+        console.debug("Lobby-Status konnte nicht geladen werden.", error);
+    }
+}
+
+function schiffeLobbyStatusAktualisieren(lobby) {
+    if (!lobby) return;
+
+    const players = Array.isArray(lobby.players) ? lobby.players : [];
+    const count = players.length;
+
+    document.getElementById("schiffeLobbySpieler").innerHTML =
+        players.length
+            ? players.map(function(player, index) {
+                const name =
+                    typeof player === "string"
+                        ? player
+                        : (player.username || "Spieler");
+                return (index === 0 ? "👑 " : "👤 ") + escapeHTML(name);
+            }).join("<br>")
+            : "👤 Du";
+
+    const status = document.getElementById("schiffeLobbyStatus");
+    const startButton = document.getElementById("schiffeStartButton");
+
+    if (count < 2) {
+        status.textContent = schiffeLobbyIsHost
+            ? "Lobby erstellt. Teile den Code mit deinem Freund und warte auf den Beitritt."
+            : "Du bist beigetreten. Warte, bis der Host das Spiel startet.";
+        startButton.classList.add("hidden");
+        return;
+    }
+
+    if (lobby.status === "waiting" && schiffeLobbyIsHost) {
+        status.textContent = "🎮 Dein Freund ist in der Lobby. Du kannst jetzt starten.";
+        startButton.classList.remove("hidden");
+    } else if (lobby.status === "waiting") {
+        status.textContent = "🎮 Du bist mit deinem Freund verbunden. Der Host startet das Spiel.";
+        startButton.classList.add("hidden");
+    }
+}
+
+async function schiffeLobbyStarten() {
+    if (!schiffeLobbyIsHost || !schiffeLobbyCode) return;
+
+    try {
+        const antwort = await fetch(
+            "/api/battleship/lobbies/" +
+            encodeURIComponent(schiffeLobbyCode) +
+            "/start",
+            {
+                method: "POST",
+                headers: {"Content-Type": "application/json"}
+            }
+        );
+
+        const daten = await antwort.json();
+
+        if (!antwort.ok || !daten.success) {
+            throw new Error(daten.message || "Spiel konnte nicht gestartet werden.");
+        }
+
+        schiffeRaum = daten.lobby;
+        schiffeLobbyInPlatzierungStarten(daten.lobby);
+    } catch (error) {
+        console.error(error);
+        alert(error.message || "Das Spiel konnte nicht gestartet werden.");
+    }
+}
+
+function schiffeLobbyInPlatzierungStarten(lobby) {
+    clearInterval(schiffeLobbyTimer);
+    schiffeLobbyTimer = null;
+
+    schiffeRaum = lobby;
+    schiffeSetup = [];
+    schiffeSetupIndex = 0;
+    schiffeSetupHorizontal = true;
+
+    document.getElementById("schiffeLobby").innerHTML = `
+        <div class="schiffe-layout">
+            <div class="schiffe-board-wrap">
+                <div class="schiffe-board-title">
+                    <strong>Deine Flotte aufstellen</strong>
+                    <span id="schiffeSetupInfo">0 / 4 Schiffe</span>
+                </div>
+                <div id="schiffeSetupBoard" class="schiffe-board"></div>
+            </div>
+
+            <div class="schiffe-side">
+                <div class="schiffe-status" id="schiffeLobbyStatus">
+                    Platziere deine Flotte.
+                </div>
+
+                <div class="schiffe-actions">
+                    <button class="game-start" onclick="schiffeSchiffDrehen()">
+                        🔄 Ausrichtung drehen
+                    </button>
+                    <button class="game-start" onclick="schiffeFlotteZufaellig()">
+                        ✨ Zufällig platzieren
+                    </button>
+                    <button id="schiffeBereitButton" class="game-start" onclick="schiffeBereit()">
+                        ✓ Flotte bestätigen
+                    </button>
+                </div>
+
+                <div class="schiffe-ships">
+                    <div class="schiffe-ship"><span>Schlachtschiff</span><span>4</span></div>
+                    <div class="schiffe-ship"><span>Kreuzer</span><span>3</span></div>
+                    <div class="schiffe-ship"><span>U-Boot</span><span>2</span></div>
+                    <div class="schiffe-ship"><span>Zerstörer</span><span>1</span></div>
+                </div>
+
+                <div class="schiffe-mini">
+                    Lobby: <strong>${escapeHTML(schiffeLobbyCode || "")}</strong><br>
+                    Dein Gegner bleibt verborgen, bis beide bereit sind.
+                </div>
+            </div>
+        </div>`;
+
+    schiffeSetupBoardZeichnen();
+}
+
+async function schiffeBereit() {
+    if (schiffeSetup.length !== SCHIFFE_GROESSEN.length) {
+        alert("Platziere zuerst alle vier Schiffe.");
+        return;
+    }
+
+    const fleet = schiffeSetup.map(function(schiff) {
+        return {
+            name: schiff.name,
+            size: schiff.size,
+            cells: schiff.cells.slice()
+        };
+    });
+
+    try {
+        const antwort = await fetch(
+            "/api/battleship/lobbies/" +
+            encodeURIComponent(schiffeLobbyCode) +
+            "/ready",
+            {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({ships: fleet})
+            }
+        );
+
+        const daten = await antwort.json();
+
+        if (!antwort.ok || !daten.success) {
+            throw new Error(daten.message || "Flotte konnte nicht bestätigt werden.");
+        }
+
+        schiffeRaum = daten.lobby;
+        document.getElementById("schiffeLobbyStatus").textContent =
+            "✓ Deine Flotte ist bereit. Warte auf deinen Freund …";
+
+        const button = document.getElementById("schiffeBereitButton");
+        if (button) {
+            button.disabled = true;
+            button.textContent = "✓ Bereit";
+        }
+
+        schiffeBereitPollingStarten();
+    } catch (error) {
+        console.error(error);
+        alert(error.message || "Die Flotte konnte nicht bestätigt werden.");
+    }
+}
+
+function schiffeBereitPollingStarten() {
+    clearInterval(schiffeLobbyTimer);
+    schiffeLobbyTimer = setInterval(async function() {
+        try {
+            const antwort = await fetch(
+                "/api/battleship/lobbies/" + encodeURIComponent(schiffeLobbyCode)
+            );
+            if (!antwort.ok) return;
+
+            const daten = await antwort.json();
+            if (!daten.success) return;
+
+            schiffeRaum = daten.lobby;
+
+            if (daten.lobby.status === "active") {
+                schiffeSpielAktivieren(daten.lobby);
+            }
+        } catch (error) {
+            console.debug(error);
+        }
+    }, 1500);
+}
+
+function schiffeSpielAktivieren(lobby) {
+    clearInterval(schiffeLobbyTimer);
+    schiffeLobbyTimer = null;
+
+    schiffeEigeneSchiffe = schiffeSetup.map(function(schiff) {
+        return {
+            name: schiff.name,
+            size: schiff.size,
+            cells: schiff.cells.slice(),
+            hits: []
+        };
+    });
+
+    document.getElementById("schiffeLobby").classList.add("hidden");
+    document.getElementById("schiffeSpiel").classList.remove("hidden");
+
+    document.getElementById("schiffeSpielStatus").textContent =
+        "Spiel gestartet. Warte auf die ersten Züge.";
+
+    document.getElementById("schiffeTurnStatus").textContent =
+        lobby.currentTurn === aktuellerBenutzer ? "Du bist am Zug" : "Gegner ist am Zug";
+
+    const gegner = Array.isArray(lobby.players)
+        ? lobby.players.find(function(p) {
+            const name = typeof p === "string" ? p : p.username;
+            return name && name !== aktuellerBenutzer;
+        })
+        : null;
+
+    document.getElementById("schiffeGegnerTitel").textContent =
+        typeof gegner === "string"
+            ? gegner
+            : (gegner && gegner.username) || "Gegner";
+
+    schiffeMeinZug = lobby.currentTurn === aktuellerBenutzer;
+
+    schiffeEigenesBoardZeichnen();
+    schiffeGegnerBoardZeichnen();
+}
+
+/* ---------- Flottenplatzierung ---------- */
 
 function schiffeZelle(x, y) {
     return y * 10 + x;
@@ -5758,13 +6100,13 @@ function schiffeKoordinaten(index) {
 function schiffeSetupKannPlatzieren(cells) {
     const belegt = new Set();
 
-    schiffeSetup.forEach(function (schiff) {
-        schiff.cells.forEach(function (cell) {
+    schiffeSetup.forEach(function(schiff) {
+        schiff.cells.forEach(function(cell) {
             belegt.add(cell);
         });
     });
 
-    return cells.every(function (cell) {
+    return cells.every(function(cell) {
         const pos = schiffeKoordinaten(cell);
         return pos.x >= 0 && pos.x < 10 &&
                pos.y >= 0 && pos.y < 10 &&
@@ -5774,12 +6116,13 @@ function schiffeSetupKannPlatzieren(cells) {
 
 function schiffeSetupBoardZeichnen() {
     const board = document.getElementById("schiffeSetupBoard");
+    if (!board) return;
+
     board.innerHTML = "";
 
     const belegte = new Set();
-
-    schiffeSetup.forEach(function (schiff) {
-        schiff.cells.forEach(function (cell) {
+    schiffeSetup.forEach(function(schiff) {
+        schiff.cells.forEach(function(cell) {
             belegte.add(cell);
         });
     });
@@ -5793,22 +6136,22 @@ function schiffeSetupBoardZeichnen() {
         }
 
         const pos = schiffeKoordinaten(i);
-
-        button.onclick = function () {
+        button.onclick = function() {
             schiffeSetupZelleKlick(pos.x, pos.y);
         };
 
         board.appendChild(button);
     }
 
-    document.getElementById("schiffeSetupInfo").textContent =
-        schiffeSetup.length + " / " + SCHIFFE_GROESSEN.length + " Schiffe";
+    const info = document.getElementById("schiffeSetupInfo");
+    if (info) {
+        info.textContent =
+            schiffeSetup.length + " / " + SCHIFFE_GROESSEN.length + " Schiffe";
+    }
 }
 
 function schiffeSetupZelleKlick(x, y) {
-    if (schiffeSetupIndex >= SCHIFFE_GROESSEN.length) {
-        return;
-    }
+    if (schiffeSetupIndex >= SCHIFFE_GROESSEN.length) return;
 
     const vorlage = SCHIFFE_GROESSEN[schiffeSetupIndex];
     const cells = [];
@@ -5847,22 +6190,24 @@ function schiffeSetupZelleKlick(x, y) {
             ? "Als Nächstes: " +
               SCHIFFE_GROESSEN[schiffeSetupIndex].name +
               " (" + SCHIFFE_GROESSEN[schiffeSetupIndex].size + ")."
-            : "Flotte komplett. Du kannst das Spiel erstellen.";
+            : "Flotte komplett. Bestätige deine Flotte.";
 }
 
 function schiffeSchiffDrehen() {
     schiffeSetupHorizontal = !schiffeSetupHorizontal;
 
-    document.getElementById("schiffeLobbyStatus").textContent =
-        schiffeSetupHorizontal
+    const status = document.getElementById("schiffeLobbyStatus");
+    if (status) {
+        status.textContent = schiffeSetupHorizontal
             ? "Ausrichtung: horizontal."
             : "Ausrichtung: vertikal.";
+    }
 }
 
 function schiffeFlotteZufaellig() {
     schiffeSetup = [];
 
-    SCHIFFE_GROESSEN.forEach(function (vorlage) {
+    SCHIFFE_GROESSEN.forEach(function(vorlage) {
         let gesetzt = false;
 
         for (let versuch = 0; versuch < 1000 && !gesetzt; versuch++) {
@@ -5875,14 +6220,14 @@ function schiffeFlotteZufaellig() {
                 const cx = horizontal ? x + i : x;
                 const cy = horizontal ? y : y + i;
 
-                if (cx > 9 || cy > 9) {
-                    break;
-                }
-
+                if (cx > 9 || cy > 9) break;
                 cells.push(schiffeZelle(cx, cy));
             }
 
-            if (cells.length === vorlage.size && schiffeSetupKannPlatzieren(cells)) {
+            if (
+                cells.length === vorlage.size &&
+                schiffeSetupKannPlatzieren(cells)
+            ) {
                 schiffeSetup.push({
                     name: vorlage.name,
                     size: vorlage.size,
@@ -5903,102 +6248,10 @@ function schiffeFlotteZufaellig() {
     schiffeSetupBoardZeichnen();
 
     document.getElementById("schiffeLobbyStatus").textContent =
-        "Flotte zufällig platziert. Bereit!";
+        "Flotte zufällig platziert. Bestätige deine Flotte.";
 }
 
-function schiffeSpielErstellen() {
-    if (!aktuellerBenutzer) {
-        alert("Bitte melde dich zuerst an.");
-        return;
-    }
-
-    if (!schiffeAusgewaehlterFreund) {
-        alert("Wähle zuerst einen Freund aus.");
-        return;
-    }
-
-    if (schiffeSetup.length !== SCHIFFE_GROESSEN.length) {
-        alert("Platziere zuerst alle vier Schiffe.");
-        return;
-    }
-
-    const code = neuenSpielcode();
-
-    schiffeRaum = {
-        spiel: "schiffe",
-        code: code,
-        host: aktuellerBenutzer,
-        freund: schiffeAusgewaehlterFreund.id,
-        spieler: [aktuellerBenutzer],
-        status: "waiting"
-    };
-
-    fetch("/api/game-invites", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            game: "schiffe",
-            toUserId: schiffeAusgewaehlterFreund.id,
-            code: code
-        })
-    }).then(function(antwort) {
-        if (!antwort.ok) throw new Error("Invite API nicht verfügbar");
-        return antwort.json();
-    }).then(function(daten) {
-        if (daten.success) {
-            document.getElementById("schiffeLobbyStatus").textContent =
-                "📩 Einladung an " + schiffeAusgewaehlterFreund.username + " gesendet. Spielcode: " + code;
-        }
-    }).catch(function(error) {
-        console.debug("Schiffe-Einladung konnte nicht serverseitig gesendet werden.", error);
-    });
-
-    schiffeEigeneSchiffe = schiffeSetup.map(function (schiff) {
-        return {
-            name: schiff.name,
-            size: schiff.size,
-            cells: schiff.cells.slice(),
-            hits: []
-        };
-    });
-
-    document.getElementById("schiffeLobbyStatus").textContent =
-        "Spielcode " + code + " erstellt. Teile ihn mit " +
-        schiffeAusgewaehlterFreund.username + ".";
-
-    document.getElementById("schiffeSpielStatus").textContent =
-        "Warte auf deinen Freund. Das Spiel startet nach dem Beitritt.";
-
-    document.getElementById("schiffeTurnStatus").textContent = "Warten …";
-    document.getElementById("schiffeGegnerTitel").textContent =
-        schiffeAusgewaehlterFreund.username;
-
-    document.getElementById("schiffeLobby").classList.add("hidden");
-    document.getElementById("schiffeSpiel").classList.remove("hidden");
-
-    schiffeEigenesBoardZeichnen();
-    schiffeGegnerBoardZeichnen();
-}
-
-function schiffeBeitreten() {
-    if (!aktuellerBenutzer) {
-        alert("Bitte melde dich zuerst an.");
-        return;
-    }
-
-    const code = document.getElementById("schiffeCodeInput")
-        .value.trim().toUpperCase();
-
-    if (code.length !== 6) {
-        alert("Bitte einen gültigen 6-stelligen Spielcode eingeben.");
-        return;
-    }
-
-    alert(
-        "Der Spielcode wurde angenommen. Für echtes Online-Multiplayer " +
-        "muss der Spielraum noch an eine serverseitige Battleship-API angebunden werden."
-    );
-}
+/* ---------- Spielbrett ---------- */
 
 function schiffeEigenesBoardZeichnen() {
     const board = document.getElementById("schiffeOwnBoard");
@@ -6006,8 +6259,8 @@ function schiffeEigenesBoardZeichnen() {
 
     const eigeneSchiffe = new Set();
 
-    schiffeEigeneSchiffe.forEach(function (schiff) {
-        schiff.cells.forEach(function (cell) {
+    schiffeEigeneSchiffe.forEach(function(schiff) {
+        schiff.cells.forEach(function(cell) {
             eigeneSchiffe.add(cell);
         });
     });
@@ -6031,45 +6284,161 @@ function schiffeGegnerBoardZeichnen() {
     for (let i = 0; i < 100; i++) {
         const button = document.createElement("button");
         button.className = "schiffe-cell";
-        button.onclick = function () {
+        button.disabled = !schiffeMeinZug;
+        button.onclick = function() {
             schiffeSchuss(i);
         };
         board.appendChild(button);
     }
 }
 
-function schiffeSchuss(index) {
+async function schiffeSchuss(index) {
     if (!schiffeMeinZug) {
         document.getElementById("schiffeSpielStatus").textContent =
             "Du bist gerade nicht am Zug.";
         return;
     }
 
-    if (schiffeGegnerSchuesse.has(index)) {
-        return;
-    }
+    if (schiffeGegnerSchuesse.has(index)) return;
 
     schiffeGegnerSchuesse.add(index);
-    schiffeGegnerBoardZeichnen();
+
+    try {
+        const antwort = await fetch(
+            "/api/battleship/lobbies/" +
+            encodeURIComponent(schiffeLobbyCode) +
+            "/shoot",
+            {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({cell: index})
+            }
+        );
+
+        const daten = await antwort.json();
+
+        if (!antwort.ok || !daten.success) {
+            schiffeGegnerSchuesse.delete(index);
+            throw new Error(daten.message || "Schuss konnte nicht ausgeführt werden.");
+        }
+
+        schiffeMeinZug = false;
+        document.getElementById("schiffeTurnStatus").textContent =
+            "Gegner ist am Zug";
+        schiffeGegnerBoardZeichnen();
+    } catch (error) {
+        console.error(error);
+        alert(error.message || "Schuss fehlgeschlagen.");
+    }
 }
 
 function schiffeSpielVerlassen() {
+    clearInterval(schiffeLobbyTimer);
+    schiffeLobbyTimer = null;
+
+    if (schiffeLobbyCode) {
+        fetch(
+            "/api/battleship/lobbies/" +
+            encodeURIComponent(schiffeLobbyCode) +
+            "/leave",
+            {method: "POST"}
+        ).catch(function() {});
+    }
+
     schiffeRaum = null;
+    schiffeLobbyCode = null;
+    schiffeLobbyIsHost = false;
     schiffeEigeneSchiffe = [];
     schiffeGegnerSchiffe = [];
     schiffeGegnerSchuesse = new Set();
     schiffeEigeneTreffer = new Set();
     schiffeMeinZug = false;
 
-    document.getElementById("schiffeSpiel").classList.add("hidden");
-    document.getElementById("schiffeLobby").classList.remove("hidden");
+    schiffeLobbyZuruecksetzen();
+}
 
-    schiffeSetup = [];
-    schiffeSetupIndex = 0;
-    schiffeSetupBoardZeichnen();
+/* ---------- Einladungen im Freunde-Fenster bleiben erhalten ---------- */
 
-    document.getElementById("schiffeLobbyStatus").textContent =
-        "Du hast das Spiel verlassen.";
+async function schiffeEinladungenLaden() {
+    const box = document.getElementById("schiffeEinladungen");
+    if (!box || !aktuellerBenutzer) return;
+
+    try {
+        const antwort = await fetch("/api/game-invites?game=schiffe");
+        if (!antwort.ok) return;
+
+        const daten = await antwort.json();
+        const invites = Array.isArray(daten.invites) ? daten.invites : [];
+
+        if (!invites.length) {
+            box.textContent = "Keine neuen Einladungen.";
+            return;
+        }
+
+        box.innerHTML = "";
+        invites.forEach(function(invite) {
+            const item = document.createElement("div");
+            item.className = "freund-eintrag";
+            item.innerHTML = `
+                <div>
+                    <strong>⚓ ${escapeHTML(invite.fromUsername || "Freund")}</strong><br>
+                    <span class="freund-email">möchte Schiffe versenken spielen</span>
+                </div>
+                <div class="freund-aktionen">
+                    <button onclick="schiffeEinladungAnnehmen('${String(invite.id).replace(/'/g, "\\'")}')">
+                        Annehmen
+                    </button>
+                    <button onclick="schiffeEinladungAblehnen('${String(invite.id).replace(/'/g, "\\'")}')">
+                        Ablehnen
+                    </button>
+                </div>`;
+            box.appendChild(item);
+        });
+    } catch (error) {
+        console.debug("Schiffe-Einladungen konnten nicht geladen werden.", error);
+    }
+}
+
+async function schiffeEinladungAnnehmen(inviteId) {
+    try {
+        const antwort = await fetch("/api/game-invites/accept", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({inviteId: inviteId})
+        });
+
+        const daten = await antwort.json();
+
+        if (!daten.success) {
+            alert(daten.message || "Einladung konnte nicht angenommen werden.");
+            return;
+        }
+
+        document.getElementById("schiffeFenster").style.display = "block";
+        schiffeOeffnen();
+
+        if (daten.code) {
+            document.getElementById("schiffeCodeInput").value = daten.code;
+            await schiffeBeitreten();
+        }
+
+        await schiffeEinladungenLaden();
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function schiffeEinladungAblehnen(inviteId) {
+    try {
+        await fetch("/api/game-invites/decline", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({inviteId: inviteId})
+        });
+        schiffeEinladungenLaden();
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 /* =====================================================
