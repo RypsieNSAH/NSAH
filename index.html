@@ -4053,7 +4053,17 @@ function tetrisTick() {
 
         tetrisLinien();
 
+        /*
+         * Striktes Game-Over:
+         * Nach dem Ablegen wird geprüft, ob im Spawn-Bereich kein
+         * neuer Stein mehr Platz hat. Sobald das der Fall ist,
+         * ist die Runde beendet und es muss neu gestartet werden.
+         */
         tetrisNeueFigur();
+
+        if (!tetrisRunning) {
+            return;
+        }
 
     }
 
@@ -4112,7 +4122,17 @@ function tetrisDrop() {
 
         tetrisLinien();
 
+        /*
+         * Striktes Game-Over:
+         * Nach dem Ablegen wird geprüft, ob im Spawn-Bereich kein
+         * neuer Stein mehr Platz hat. Sobald das der Fall ist,
+         * ist die Runde beendet und es muss neu gestartet werden.
+         */
         tetrisNeueFigur();
+
+        if (!tetrisRunning) {
+            return;
+        }
 
     }
 
@@ -4447,6 +4467,10 @@ function tetrisTetrisBlock(
 
 function tetrisGameOver() {
 
+    if (!tetrisRunning) {
+        return;
+    }
+
     tetrisRunning = false;
 
     clearInterval(
@@ -4458,27 +4482,37 @@ function tetrisGameOver() {
     tetrisZeichnen();
 
     tetrisCtx.fillStyle =
+        "rgba(0,0,0,0.78)";
+
+    tetrisCtx.fillRect(
+        0,
+        0,
+        tetrisCanvas.width,
+        tetrisCanvas.height
+    );
+
+    tetrisCtx.fillStyle =
         "white";
 
     tetrisCtx.font =
-        "bold 28px Arial";
+        "bold 30px Arial";
 
     tetrisCtx.textAlign =
         "center";
 
     tetrisCtx.fillText(
-        "Game Over",
+        "GAME OVER",
         tetrisCanvas.width / 2,
-        tetrisCanvas.height / 2
+        tetrisCanvas.height / 2 - 8
     );
 
     tetrisCtx.font =
         "15px Arial";
 
     tetrisCtx.fillText(
-        "Drücke Spielen für eine neue Runde",
+        "Kein Platz mehr – drücke „Spielen“ für Neustart",
         tetrisCanvas.width / 2,
-        tetrisCanvas.height / 2 + 30
+        tetrisCanvas.height / 2 + 28
     );
 
     tetrisCtx.textAlign =
@@ -5722,6 +5756,8 @@ let schiffeEinladungenTimer = null;
 /* ---------- Lobby ---------- */
 
 function schiffeOeffnen() {
+    nsahMusicStart("schiffe");
+
     if (!aktuellerBenutzer) {
         alert("Bitte melde dich zuerst an, um Schiffe versenken zu spielen.");
         return;
@@ -6440,6 +6476,166 @@ async function schiffeEinladungAblehnen(inviteId) {
         console.error(error);
     }
 }
+
+/* =====================================================
+   RETRO-MUSIK
+   Hinweis: Die Original-Aufnahmen/Arrangements von Tetris,
+   Flappy Bird usw. werden nicht als fremde Audiodateien
+   eingebettet. Stattdessen erzeugt diese Seite eigene
+   Retro-Melodien direkt im Browser (Web Audio API).
+===================================================== */
+
+let nsahAudioContext = null;
+let nsahMusicTimer = null;
+let nsahMusicGame = null;
+let nsahMusicStep = 0;
+
+const NSAH_MUSIC = {
+    tetris: {
+        tempo: 150,
+        wave: "square",
+        volume: 0.045,
+        notes: [
+            330,330,392,440,392,330,294,330,
+            392,440,494,440,392,330,294,262,
+            330,330,392,440,392,330,294,330,
+            392,294,262,247,262,294,330,0
+        ]
+    },
+    snake: {
+        tempo: 175,
+        wave: "square",
+        volume: 0.035,
+        notes: [
+            262,330,392,330,262,196,220,247,
+            262,330,392,440,392,330,262,220,
+            196,220,262,294,330,294,262,220,
+            196,0,196,220,247,262,220,196
+        ]
+    },
+    flappy: {
+        tempo: 185,
+        wave: "triangle",
+        volume: 0.035,
+        notes: [
+            523,659,784,659,523,440,494,523,
+            659,784,880,784,659,523,494,440,
+            523,587,659,784,659,587,523,494,
+            440,0,392,440,494,523,494,440
+        ]
+    },
+    schiffe: {
+        tempo: 105,
+        wave: "sine",
+        volume: 0.04,
+        notes: [
+            196,0,196,233,262,0,262,294,
+            330,294,262,233,196,0,175,196,
+            220,247,262,247,220,196,175,0,
+            196,233,262,294,330,294,262,0
+        ]
+    }
+};
+
+function nsahAudioInit() {
+    if (!nsahAudioContext) {
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return null;
+        nsahAudioContext = new Ctx();
+    }
+
+    if (nsahAudioContext.state === "suspended") {
+        nsahAudioContext.resume().catch(function() {});
+    }
+
+    return nsahAudioContext;
+}
+
+function nsahMusicNote(freq, duration, type, volume) {
+    const ctx = nsahAudioInit();
+    if (!ctx || !freq) return;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(volume, ctx.currentTime + 0.012);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start();
+    osc.stop(ctx.currentTime + duration + 0.02);
+}
+
+function nsahMusicTick() {
+    if (!nsahMusicGame || !NSAH_MUSIC[nsahMusicGame]) return;
+
+    const song = NSAH_MUSIC[nsahMusicGame];
+    const note = song.notes[nsahMusicStep % song.notes.length];
+
+    if (note) {
+        nsahMusicNote(
+            note,
+            Math.max(0.07, 60 / song.tempo * 0.78),
+            song.wave,
+            song.volume
+        );
+    }
+
+    nsahMusicStep++;
+}
+
+function nsahMusicStart(game) {
+    const song = NSAH_MUSIC[game];
+    if (!song) return;
+
+    nsahMusicStop();
+    nsahMusicGame = game;
+    nsahMusicStep = 0;
+
+    nsahAudioInit();
+    nsahMusicTick();
+
+    nsahMusicTimer = setInterval(
+        nsahMusicTick,
+        60000 / song.tempo
+    );
+}
+
+function nsahMusicStop() {
+    if (nsahMusicTimer) {
+        clearInterval(nsahMusicTimer);
+        nsahMusicTimer = null;
+    }
+
+    nsahMusicGame = null;
+    nsahMusicStep = 0;
+}
+
+/* Musik bei Spiel öffnen starten – das passiert durch einen
+   Benutzer-Klick und funktioniert deshalb auch mit Autoplay-Schutz. */
+const nsahOriginalSpielOeffnen = spielOeffnen;
+spielOeffnen = function(spiel) {
+    nsahOriginalSpielOeffnen(spiel);
+
+    if (spiel === "flappy" ||
+        spiel === "snake" ||
+        spiel === "tetris" ||
+        spiel === "schiffe") {
+        nsahMusicStart(spiel);
+    }
+};
+
+const nsahOriginalSpielSchliessen = spielSchliessen;
+spielSchliessen = function(spiel) {
+    nsahMusicStop();
+    nsahOriginalSpielSchliessen(spiel);
+};
 
 /* =====================================================
    START
