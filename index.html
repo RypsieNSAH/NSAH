@@ -90,6 +90,7 @@ body {
 .anmelden-button,
 .karten-button,
 .spiele-button,
+.ranglisten-button,
 .freunde-button,
 .benutzer-button,
 .benutzer-menue {
@@ -170,6 +171,7 @@ body {
 .anmelden-button,
 .karten-button,
 .spiele-button,
+.ranglisten-button,
 .freunde-button,
 .benutzer-button {
 
@@ -193,6 +195,7 @@ body {
 .anmelden-button:hover,
 .karten-button:hover,
 .spiele-button:hover,
+.ranglisten-button:hover,
 .freunde-button:hover,
 .benutzer-button:hover {
 
@@ -228,6 +231,13 @@ body {
     left: 25px;
 }
 
+.ranglisten-button {
+
+    position: fixed;
+
+    top: 190px;
+    left: 25px;
+}
 
 .freunde-button {
 
@@ -1686,6 +1696,1567 @@ body {
 }
 
 /* =====================================================
+   RANGLISTE
+===================================================== */
+
+.ranglisten-fenster {
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 620px;
+    max-width: calc(100vw - 30px);
+    max-height: calc(100vh - 30px);
+
+    overflow-y: auto;
+
+    background-color: #111111;
+
+    border: 2px solid #333333;
+
+    border-radius: 14px;
+
+    padding: 25px;
+}
+
+.ranglisten-kopf {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 8px;
+}
+
+.ranglisten-titel {
+
+    font-size: 25px;
+
+    font-weight: bold;
+}
+
+.ranglisten-schliessen {
+
+    background: none;
+
+    border: none;
+
+    color: white;
+
+    font-size: 28px;
+
+    cursor: pointer;
+}
+
+.ranglisten-hinweis {
+
+    color: #888888;
+
+    font-size: 13px;
+
+    margin-bottom: 18px;
+}
+
+.ranglisten-spiele {
+
+    display: grid;
+
+    gap: 14px;
+}
+
+.ranglisten-spiel {
+
+    background: #191919;
+
+    border: 1px solid #333333;
+
+    border-radius: 10px;
+
+    padding: 14px;
+}
+
+.ranglisten-spiel h3 {
+
+    margin: 0 0 10px;
+
+    font-size: 18px;
+}
+
+.ranglisten-liste {
+
+    display: grid;
+
+    gap: 6px;
+}
+
+.ranglisten-eintrag {
+
+    display: grid;
+
+    grid-template-columns: 42px 1fr auto;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 9px 10px;
+
+    background: #222222;
+
+    border: 1px solid #303030;
+
+    border-radius: 7px;
+}
+
+.ranglisten-platz {
+
+    color: #999999;
+
+    font-weight: bold;
+
+    text-align: center;
+}
+
+.ranglisten-name {
+
+    font-weight: bold;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+.ranglisten-punkte {
+
+    color: #dddddd;
+
+    font-weight: bold;
+}
+
+.ranglisten-status {
+
+    margin-top: 15px;
+
+    min-height: 18px;
+
+    color: #777777;
+
+    font-size: 12px;
+
+    text-align: center;
+}
+
+
+/* =====================================================
+   HIDDEN
+===================================================== */
+
+.hidden {
+
+    display: none !important;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width:600px) {
+
+    .hintergrund-bild {
+
+        left: calc(50% + 40px);
+
+        width: 65vw;
+
+        height: 35vh;
+
+        border-radius: 18px;
+    }
+
+    .logo {
+
+        top: 25px;
+
+        left: 63%;
+
+        transform: translateX(-50%);
+
+        font-size: 52px;
+
+        white-space: nowrap;
+    }
+
+    .untertitel {
+
+        top: 95px;
+
+        left: 63%;
+
+        transform: translateX(-50%);
+
+        width: 75%;
+
+        font-size: 18px;
+
+        line-height: 1.4;
+
+        text-align: center;
+
+        white-space: normal;
+    }
+
+    .strich {
+
+        left: 24%;
+    }
+
+    .anmelden-button {
+
+        top: 18px;
+
+        left: 5px;
+
+        padding: 8px 10px;
+
+        font-size: 13px;
+    }
+
+    .karten-button {
+
+        top: 58px;
+
+        left: 5px;
+
+        padding: 8px 11px;
+
+        font-size: 13px;
+    }
+
+    .spiele-button {
+
+        top: 98px;
+
+        left: 5px;
+
+        padding: 8px 11px;
+
+        font-size: 13px;
+    }
+
+    .ranglisten-button {
+
+        top: 138px;
+
+        left: 0px;
+
+        padding: 8px 9px;
+
+        font-size: 13px;
+    }
+
+    .freunde-button {
+
+        top: 178px;
+
+        left: 5px;
+
+        padding: 8px 7px;
+
+        font-size: 13px;
+    }
+
+    .benutzer-button {
+
+        top: 18px;
+
+        left: 5px;
+
+        padding: 9px 12px;
+
+        font-size: 13px;
+    }
+
+    .ranglisten-fenster {
+
+        width: calc(100vw - 20px);
+
+        max-height: calc(100vh - 20px);
+
+        padding: 15px;
+    }
+
+    .anmelde-fenster {
+
+        width: calc(100vw - 30px);
+
+        max-height: calc(100vh - 30px);
+
+        overflow-y: auto;
+
+        padding: 20px;
+    }
+
+    .karten-fenster {
+
+        width: 95%;
+
+        height: 85%;
+    }
+
+    .spiele-fenster {
+
+        width: calc(100vw - 20px);
+
+        padding: 15px;
+    }
+
+    .spiele-auswahl {
+
+        grid-template-columns: 1fr;
+    }
+
+    .spiel-auswahl-button {
+
+        min-height: 75px;
+    }
+
+    .spiel-fenster {
+
+        width: calc(100vw - 12px);
+
+        max-height: calc(100vh - 12px);
+
+        padding: 12px;
+    }
+
+    .spiel-name {
+
+        font-size: 20px;
+    }
+
+    .game-canvas {
+
+        max-width: 100%;
+
+        height: auto;
+    }
+
+    .freunde-fenster {
+
+        width: calc(100vw - 20px);
+
+        max-height: calc(100vh - 20px);
+
+        padding: 15px;
+    }
+
+    .freund-input-zeile {
+
+        flex-direction: column;
+    }
+
+    .freund-input-zeile button {
+
+        width: 100%;
+    }
+
+    .freund-eintrag {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .freund-aktionen {
+
+        width: 100%;
+    }
+
+    .freund-aktionen button {
+
+        flex: 1;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HINTERGRUNDBILD
+===================================================== -->
+
+<div class="hintergrund-bild"></div>
+
+
+<!-- =====================================================
+     LOGO
+===================================================== -->
+
+<div class="logo">
+    NSAH
+</div>
+
+<div class="untertitel">
+    Nützliche Sparsame Alltags Hilfe
+</div>
+
+<div class="strich"></div>
+
+
+<!-- =====================================================
+     BUTTONS
+===================================================== -->
+
+<button
+    class="anmelden-button"
+    id="anmeldenButton"
+    onclick="anmeldenOeffnen()"
+>
+    Anmelden
+</button>
+
+<button
+    class="karten-button"
+    onclick="kartenOeffnen()"
+>
+    🗺️ Karte
+</button>
+
+<button
+    class="spiele-button"
+    onclick="spieleOeffnen()"
+>
+    🎮 Spiele
+</button>
+
+<button
+    class="ranglisten-button"
+    onclick="ranglisteOeffnen()"
+>
+    🏆 Rangliste
+</button>
+
+<button
+    class="freunde-button"
+    onclick="freundeOeffnen()"
+>
+    👥 Freunde
+</button>
+
+<button
+    class="benutzer-button"
+    id="benutzerButton"
+    onclick="benutzerMenueOeffnen()"
+>
+    👤
+    <span id="benutzerNameOben">
+        Benutzer
+    </span>
+</button>
+
+
+<!-- =====================================================
+     BENUTZER MENÜ
+===================================================== -->
+
+<div
+    class="benutzer-menue"
+    id="benutzerMenue"
+>
+
+    <div
+        class="benutzer-name"
+        id="benutzerName"
+    ></div>
+
+    <div
+        class="benutzer-email"
+        id="benutzerEmail"
+    ></div>
+
+    <button
+        class="abmelden-button"
+        onclick="abmelden()"
+    >
+        Abmelden
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+     LOGIN
+===================================================== -->
+
+<div
+    class="modal-hintergrund"
+    id="anmeldeFenster"
+>
+
+    <div class="anmelde-fenster">
+
+        <div class="fenster-kopf">
+
+            <div class="fenster-titel">
+                NSAH Konto
+            </div>
+
+            <button
+                class="schliessen"
+                onclick="anmeldenSchliessen()"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="tabs">
+
+            <button
+                class="tab aktiv"
+                id="anmeldenTab"
+                onclick="anmeldenTabOeffnen()"
+            >
+                Anmelden
+            </button>
+
+            <button
+                class="tab"
+                id="registrierenTab"
+                onclick="registrierenTabOeffnen()"
+            >
+                Registrieren
+            </button>
+
+        </div>
+
+
+        <!-- LOGIN -->
+
+        <div
+            class="formular aktiv"
+            id="anmeldenForm"
+        >
+
+            <label>
+                E-Mail
+            </label>
+
+            <input
+                type="email"
+                id="loginEmail"
+                placeholder="Deine E-Mail"
+            >
+
+            <label>
+                Passwort
+            </label>
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="Dein Passwort"
+            >
+
+            <button
+                class="formular-button"
+                onclick="anmelden()"
+            >
+                Anmelden
+            </button>
+
+            <div class="hinweis">
+
+                Noch kein Konto?
+
+                Klicke oben auf
+                „Registrieren“.
+
+            </div>
+
+        </div>
+
+
+        <!-- REGISTRIERUNG -->
+
+        <div
+            class="formular"
+            id="registrierenForm"
+        >
+
+            <label>
+                Benutzername
+            </label>
+
+            <input
+                type="text"
+                id="registerUsername"
+                placeholder="Dein Benutzername"
+            >
+
+            <label>
+                E-Mail
+            </label>
+
+            <input
+                type="email"
+                id="registerEmail"
+                placeholder="Deine E-Mail"
+            >
+
+            <label>
+                Passwort
+            </label>
+
+            <input
+                type="password"
+                id="registerPassword"
+                placeholder="Dein Passwort"
+            >
+
+            <label>
+                Passwort wiederholen
+            </label>
+
+            <input
+                type="password"
+                id="registerPassword2"
+                placeholder="Passwort wiederholen"
+            >
+
+            <button
+                class="formular-button"
+                onclick="registrieren()"
+            >
+                Konto erstellen
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     KARTE
+===================================================== -->
+
+<div
+    class="modal-hintergrund"
+    id="kartenFenster"
+>
+
+    <div class="karten-fenster">
+
+        <div class="karten-kopf">
+
+            <div class="karten-titel">
+                🗺️ NSAH Karte
+            </div>
+
+            <button
+                class="karten-schliessen"
+                onclick="kartenSchliessen()"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div id="karte"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SPIELE
+===================================================== -->
+
+<div
+    class="modal-hintergrund"
+    id="spieleFenster"
+>
+
+    <div class="spiele-fenster">
+
+        <div class="spiele-kopf">
+
+            <div class="spiele-titel">
+                🎮 Spiele
+            </div>
+
+            <button
+                class="spiele-schliessen"
+                onclick="spieleSchliessen()"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="spiele-auswahl">
+
+            <button
+                class="spiel-auswahl-button"
+                onclick="spielOeffnen('flappy')"
+            >
+                🐦
+                <br>
+                Flappy Bird
+            </button>
+
+            <button
+                class="spiel-auswahl-button"
+                onclick="spielOeffnen('snake')"
+            >
+                🐍
+                <br>
+                Snake
+            </button>
+
+            <button
+                class="spiel-auswahl-button"
+                onclick="spielOeffnen('tetris')"
+            >
+                🧱
+                <br>
+                Tetris
+            </button>
+
+            <button
+                class="spiel-auswahl-button schiffe-auswahl"
+                onclick="spielOeffnen('schiffe')"
+            >
+                ⚓
+                <br>
+                Schiffe versenken
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     RANGLISTE
+===================================================== -->
+
+<div
+    class="modal-hintergrund"
+    id="ranglistenFenster"
+>
+
+    <div class="ranglisten-fenster">
+
+        <div class="ranglisten-kopf">
+
+            <div class="ranglisten-titel">
+                🏆 Rangliste
+            </div>
+
+            <button
+                class="ranglisten-schliessen"
+                onclick="ranglisteSchliessen()"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="ranglisten-hinweis">
+            Die höchsten Punkte aller Spieler pro Spiel.
+        </div>
+
+        <div class="ranglisten-spiele">
+
+            <section class="ranglisten-spiel">
+                <h3>🧱 Tetris</h3>
+                <div id="ranglisteTetris" class="ranglisten-liste">
+                    Wird geladen …
+                </div>
+            </section>
+
+            <section class="ranglisten-spiel">
+                <h3>🐍 Snake</h3>
+                <div id="ranglisteSnake" class="ranglisten-liste">
+                    Wird geladen …
+                </div>
+            </section>
+
+            <section class="ranglisten-spiel">
+                <h3>🐦 Flappy Bird</h3>
+                <div id="ranglisteFlappy" class="ranglisten-liste">
+                    Wird geladen …
+                </div>
+            </section>
+
+        </div>
+
+        <div class="ranglisten-status" id="ranglistenStatus"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     FREUNDE
+===================================================== -->
+
+<div
+    class="modal-hintergrund"
+    id="freundeFenster"
+>
+
+    <div class="freunde-fenster">
+
+        <div class="freunde-kopf">
+
+            <div class="freunde-titel">
+                👥 Freunde
+            </div>
+
+            <button
+                class="freunde-schliessen"
+                onclick="freundeSchliessen()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div
+            id="freundeNichtAngemeldet"
+            class="freunde-hinweis"
+        >
+
+            Du musst angemeldet sein,
+            um Freunde zu verwenden.
+
+        </div>
+
+
+        <div
+            id="freundeInhalt"
+            class="hidden"
+        >
+
+            <div class="freundescode-box">
+
+                <div class="freundescode-titel">
+                    Dein Freundescode
+                </div>
+
+                <div
+                    id="meinFreundescode"
+                    class="mein-freundescode"
+                >
+                    Wird geladen...
+                </div>
+
+                <div class="freundescode-info">
+
+                    Gib diesen Code an andere Personen
+                    weiter, damit sie dich hinzufügen können.
+
+                </div>
+
+            </div>
+
+
+            <div class="freund-hinzufuegen">
+
+                <div class="freundescode-titel">
+                    Freund hinzufügen
+                </div>
+
+                <div class="freund-input-zeile">
+
+                    <input
+                        type="text"
+                        id="freundescodeInput"
+                        placeholder="z.B. NSAH-7K4P2X"
+                        maxlength="11"
+                    >
+
+                    <button
+                        onclick="freundHinzufuegen()"
+                    >
+                        Hinzufügen
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="freundschaftsanfragenBereich"
+                class="freunde-bereich"
+            >
+
+                <h3>
+                    📩 Freundschaftsanfragen
+                </h3>
+
+                <div
+                    id="freundschaftsanfragen"
+                >
+                    Keine neuen Anfragen.
+                </div>
+
+            </div>
+
+
+            <div class="freunde-bereich schiffe-invite" id="schiffeEinladungenBereich">
+                <h3>📩 Schiffe-versenken-Einladungen</h3>
+                <div id="schiffeEinladungen">Keine neuen Einladungen.</div>
+            </div>
+
+            <div class="freunde-bereich">
+
+                <h3>
+                    👥 Meine Freunde
+                </h3>
+
+                <div
+                    id="freundeliste"
+                >
+                    Du hast noch keine Freunde.
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SCHIFFE VERSENKEN
+===================================================== -->
+
+<div
+    class="modal-hintergrund"
+    id="schiffeFenster"
+>
+
+    <div class="spiel-fenster schiffe-fenster">
+
+        <div class="spiel-kopf">
+
+            <div class="spiel-name">
+                ⚓ Schiffe versenken
+            </div>
+
+            <button
+                class="spiel-schliessen"
+                onclick="spielSchliessen('schiffe')"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div id="schiffeLobby">
+    <div class="schiffe-lobby-menu">
+        <div class="schiffe-lobby-card">
+            <div class="schiffe-lobby-icon">⚓</div>
+            <h2>Schiffe versenken</h2>
+            <p>Erstelle eine private Lobby oder tritt mit einem Lobby-Code bei.</p>
+
+            <div class="schiffe-lobby-grid">
+                <div class="schiffe-lobby-option">
+                    <h3>Lobby erstellen</h3>
+                    <p>Du bekommst einen 6-stelligen Code. Teile ihn mit deinem Freund.</p>
+                    <button class="game-start" onclick="schiffeLobbyErstellen()">
+                        ⚓ Lobby erstellen
+                    </button>
+                </div>
+
+                <div class="schiffe-lobby-divider">ODER</div>
+
+                <div class="schiffe-lobby-option">
+                    <h3>Lobby beitreten</h3>
+                    <p>Gib den Code deines Freundes ein.</p>
+                    <input
+                        id="schiffeCodeInput"
+                        maxlength="6"
+                        placeholder="ABC123"
+                        autocomplete="off"
+                        oninput="this.value=this.value.toUpperCase()"
+                    >
+                    <button class="game-start" onclick="schiffeBeitreten()">
+                        🚪 Lobby beitreten
+                    </button>
+                </div>
+            </div>
+
+            <div id="schiffeLobbyWarten" class="schiffe-lobby-warten hidden">
+                <div class="schiffe-code-box">
+                    <span>DEIN LOBBY-CODE</span>
+                    <strong id="schiffeLobbyCode">------</strong>
+                </div>
+                <div id="schiffeLobbyStatus" class="schiffe-status">
+                    Warte auf deinen Freund …
+                </div>
+                <div id="schiffeLobbySpieler" class="schiffe-lobby-spieler">
+                    👤 Du
+                </div>
+                <button id="schiffeStartButton" class="game-start hidden" onclick="schiffeLobbyStarten()">
+                    ▶ Spiel starten
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="schiffeSpiel" class="hidden"> class="hidden">
+            <div class="schiffe-layout">
+
+                <div class="schiffe-board-wrap">
+                    <div class="schiffe-board-title">
+                        <strong id="schiffeGegnerTitel">Gegnerisches Feld</strong>
+                        <span id="schiffeTurnStatus">Warten …</span>
+                    </div>
+                    <div id="schiffeEnemyBoard" class="schiffe-board"></div>
+                </div>
+
+                <div class="schiffe-side">
+
+                    <div class="schiffe-status" id="schiffeSpielStatus"></div>
+
+                    <div class="schiffe-board-title">
+                        <strong>Deine Flotte</strong>
+                        <span id="schiffeEigenStatus">Bereit</span>
+                    </div>
+
+                    <div id="schiffeOwnBoard" class="schiffe-board"></div>
+
+                    <div class="schiffe-actions">
+                        <button class="game-start" onclick="schiffeSpielVerlassen()">
+                            🚪 Spiel verlassen
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- =====================================================
+     FLAPPY BIRD
+===================================================== -->
+
+<div
+    class="modal-hintergrund"
+    id="flappyFenster"
+>
+
+    <div class="spiel-fenster">
+
+        <div class="spiel-kopf">
+
+            <div class="spiel-name">
+                🐦 Flappy Bird
+            </div>
+
+            <button
+                class="spiel-schliessen"
+                onclick="spielSchliessen('flappy')"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="rekord">
+
+            Rekord:
+            <span id="flappyRekord">
+                0
+            </span>
+
+        </div>
+
+        <canvas
+            id="flappyCanvas"
+            class="game-canvas"
+            width="400"
+            height="500"
+        ></canvas>
+
+        <button
+            class="game-start"
+            onclick="flappyStart()"
+        >
+            ▶ Spielen
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SNAKE
+===================================================== -->
+
+<div
+    class="modal-hintergrund"
+    id="snakeFenster"
+>
+
+    <div class="spiel-fenster">
+
+        <div class="spiel-kopf">
+
+            <div class="spiel-name">
+                🐍 Snake
+            </div>
+
+            <button
+                class="spiel-schliessen"
+                onclick="spielSchliessen('snake')"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="rekord">
+
+            Rekord:
+            <span id="snakeRekord">
+                0
+            </span>
+
+        </div>
+
+        <canvas
+            id="snakeCanvas"
+            class="game-canvas"
+            width="400"
+            height="400"
+        ></canvas>
+
+        <div class="snake-controls">
+
+            <button class="snake-empty"></button>
+
+            <button onclick="snakeRichtung('up')">
+                ⬆️
+            </button>
+
+            <button class="snake-empty"></button>
+
+            <button onclick="snakeRichtung('left')">
+                ⬅️
+            </button>
+
+            <button onclick="snakeRichtung('down')">
+                ⬇️
+            </button>
+
+            <button onclick="snakeRichtung('right')">
+                ➡️
+            </button>
+
+        </div>
+
+        <button
+            class="game-start"
+            onclick="snakeStart()"
+        >
+            ▶ Spielen
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     TETRIS
+===================================================== -->
+
+<div
+    class="modal-hintergrund"
+    id="tetrisFenster"
+>
+
+    <div class="spiel-fenster">
+
+        <div class="spiel-kopf">
+
+            <div class="spiel-name">
+                🧱 Tetris
+            </div>
+
+            <button
+                class="spiel-schliessen"
+                onclick="spielSchliessen('tetris')"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="rekord">
+
+            Rekord:
+            <span id="tetrisRekord">
+                0
+            </span>
+
+        </div>
+
+        <div class="tetris-next-wrap">
+            <div class="tetris-next-label">Nächster Block</div>
+            <div id="tetrisNext" class="tetris-next" aria-label="Nächster Tetris-Block"></div>
+        </div>
+
+        <canvas
+            id="tetrisCanvas"
+            class="game-canvas"
+            width="240"
+            height="480"
+        ></canvas>
+
+        <div class="tetris-controls">
+
+            <button onclick="tetrisMove(-1)">
+                ⬅️
+            </button>
+
+            <button onclick="tetrisDrop()">
+                ⬇️
+            </button>
+
+            <button onclick="tetrisDrehen()">
+                🔄
+            </button>
+
+            <button onclick="tetrisMove(1)">
+                ➡️
+            </button>
+
+        </div>
+
+        <button
+            class="game-start"
+            onclick="tetrisStart()"
+        >
+            ▶ Spielen
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     LEAFLET
+===================================================== -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
+<script>
+
+/* =====================================================
+   RANGLISTE
+===================================================== */
+
+const RANGLISTEN_SPIELE = ["tetris", "snake", "flappy"];
+
+function ranglisteOeffnen() {
+
+    document.getElementById(
+        "ranglistenFenster"
+    ).style.display = "block";
+
+    ranglisteLaden();
+}
+
+function ranglisteSchliessen() {
+
+    document.getElementById(
+        "ranglistenFenster"
+    ).style.display = "none";
+}
+
+function ranglisteEscaping(text) {
+    return escapeHTML(String(text ?? ""));
+}
+
+function ranglisteLokaleDaten(spiel) {
+
+    const eintraege = [];
+
+    if (aktuellerBenutzer) {
+        eintraege.push({
+            username: aktuellerBenutzer,
+            score: rekordLesen(spiel)
+        });
+    }
+
+    // Fallback für ältere lokale Spielstände dieses Browsers.
+    for (let i = 0; i < localStorage.length; i++) {
+
+        const key = localStorage.key(i) || "";
+        const prefix = "nsah_";
+        const suffix = "_" + spiel;
+
+        if (
+            key.startsWith(prefix) &&
+            key.endsWith(suffix) &&
+            key !== prefix + "guest" + suffix
+        ) {
+
+            const username = key.slice(
+                prefix.length,
+                key.length - suffix.length
+            );
+
+            const score = Number(
+                localStorage.getItem(key) || 0
+            );
+
+            if (username) {
+                eintraege.push({
+                    username: username,
+                    score: score
+                });
+            }
+        }
+    }
+
+    const nachNamen = new Map();
+
+    eintraege.forEach(function(eintrag) {
+
+        const name = String(eintrag.username || "Spieler");
+        const score = Number(eintrag.score || 0);
+
+        if (
+            !nachNamen.has(name) ||
+            score > nachNamen.get(name)
+        ) {
+            nachNamen.set(name, score);
+        }
+    });
+
+    return Array.from(nachNamen.entries())
+        .map(function(eintrag) {
+            return {
+                username: eintrag[0],
+                score: eintrag[1]
+            };
+        })
+        .sort(function(a, b) {
+            return b.score - a.score;
+        })
+        .slice(0, 10);
+}
+
+function ranglisteNormalisieren(daten, spiel) {
+
+    let quelle = null;
+
+    if (daten && daten.leaderboard) {
+        quelle = daten.leaderboard[spiel];
+    }
+
+    if (!quelle && daten && daten.rankings) {
+        quelle = daten.rankings[spiel];
+    }
+
+    if (!Array.isArray(quelle)) {
+        return null;
+    }
+
+    return quelle
+        .map(function(eintrag) {
+
+            const username =
+                eintrag.username ??
+                eintrag.name ??
+                eintrag.player ??
+                "Spieler";
+
+            const score =
+                Number(
+                    eintrag.score ??
+                    eintrag.points ??
+                    eintrag.punkte ??
+                    0
+                );
+
+            return {
+                username: username,
+                score: score
+            };
+        })
+        .filter(function(eintrag) {
+            return Number.isFinite(eintrag.score);
+        })
+        .sort(function(a, b) {
+            return b.score - a.score;
+        })
+        .slice(0, 10);
+}
+
+function ranglisteZeigen(spiel, eintraege) {
+
+    const element =
+        document.getElementById(
+            "rangliste" +
+            spiel.charAt(0).toUpperCase() +
+            spiel.slice(1)
+        );
+
+    if (!element) return;
+
+    if (!eintraege.length) {
+
+        element.innerHTML =
+            '<div class="ranglisten-status">Noch keine Punkte vorhanden.</div>';
+
+        return;
+    }
+
+    element.innerHTML = "";
+
+    eintraege.forEach(function(eintrag, index) {
+
+        const zeile =
+            document.createElement("div");
+
+        zeile.className =
+            "ranglisten-eintrag";
+
+        zeile.innerHTML =
+            '<span class="ranglisten-platz">' +
+            (index + 1) +
+            '.</span>' +
+            '<span class="ranglisten-name">' +
+            ranglisteEscaping(eintrag.username) +
+            '</span>' +
+            '<span class="ranglisten-punkte">' +
+            Number(eintrag.score || 0) +
+            ' Punkte</span>';
+
+        element.appendChild(zeile);
+    });
+}
+
+async function ranglisteLaden() {
+
+    const status =
+        document.getElementById("ranglistenStatus");
+
+    RANGLISTEN_SPIELE.forEach(function(spiel) {
+        ranglisteZeigen(
+            spiel,
+            ranglisteLokaleDaten(spiel)
+        );
+    });
+
+    if (status) {
+        status.textContent =
+            "Globale Rangliste wird geladen …";
+    }
+
+    try {
+
+        const antwort =
+            await fetch("/api/leaderboard", {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
+
+        if (!antwort.ok) {
+            throw new Error("Leaderboard-API nicht verfügbar.");
+        }
+
+        const daten = await antwort.json();
+        let globaleDatenVorhanden = false;
+
+        RANGLISTEN_SPIELE.forEach(function(spiel) {
+
+            const globale =
+                ranglisteNormalisieren(daten, spiel);
+
+            if (globale) {
+
+                globaleDatenVorhanden = true;
+
+                ranglisteZeigen(
+                    spiel,
+                    globale
+                );
+            }
+        });
+
+        if (status) {
+
+            status.textContent =
+                globaleDatenVorhanden
+                    ? "Globale Rangliste"
+                    : "Noch keine globale Rangliste vorhanden.";
+        }
+
+    } catch (error) {
+
+        console.debug(
+            "Globale Rangliste konnte nicht geladen werden.",
+            error
+        );
+
+        if (status) {
+
+            status.textContent =
+                "Globale Rangliste ist auf dem Server noch nicht eingerichtet.";
+        }
+    }
+}
+
+
+
+
+
+/* =====================================================
    BENUTZER
 ===================================================== */
 
@@ -1734,6 +3305,18 @@ function rekordSpeichern(
             wert
         );
 
+        // Optional: globalen Punktestand an den Server melden.
+        // Falls die API noch nicht vorhanden ist, bleibt das Spiel trotzdem funktionsfähig.
+        fetch("/api/leaderboard", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                game: spiel,
+                score: wert
+            })
+        }).catch(function() {});
 
         updateRekordAnzeige(
             spiel
