@@ -89,8 +89,6 @@ body {
 .strich,
 .anmelden-button,
 .karten-button,
-.spiele-button,
-.ranglisten-button,
 .freunde-button,
 .benutzer-button,
 .benutzer-menue {
@@ -170,9 +168,8 @@ body {
 
 .anmelden-button,
 .karten-button,
-.spiele-button,
-.ranglisten-button,
 .freunde-button,
+.gaming-button,
 .benutzer-button {
 
     padding: 12px 20px;
@@ -197,6 +194,7 @@ body {
 .spiele-button:hover,
 .ranglisten-button:hover,
 .freunde-button:hover,
+.gaming-button:hover,
 .benutzer-button:hover {
 
     background-color: #333333;
@@ -223,7 +221,8 @@ body {
     left: 25px;
 }
 
-.spiele-button {
+
+.freunde-button {
 
     position: fixed;
 
@@ -231,20 +230,10 @@ body {
     left: 25px;
 }
 
-.ranglisten-button {
-
+.gaming-button {
     position: fixed;
-
-    top: 190px;
     left: 25px;
-}
-
-.freunde-button {
-
-    position: fixed;
-
-    top: 245px;
-    left: 25px;
+    bottom: 25px;
 }
 
 .benutzer-button {
@@ -265,6 +254,147 @@ body {
     white-space: nowrap;
 }
 
+
+/* =====================================================
+   GAMING MENÜ
+===================================================== */
+
+.gaming-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    min-height: 100dvh;
+    background:
+        radial-gradient(circle at top, #1d1d1d 0%, #0b0b0b 45%, #000000 100%);
+    z-index: 12000;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.gaming-overlay.aktiv {
+    display: block;
+}
+
+.gaming-inhalt {
+    width: min(900px, calc(100% - 32px));
+    min-height: 100%;
+    margin: 0 auto;
+    padding: 35px 0 45px;
+    box-sizing: border-box;
+}
+
+.gaming-kopf {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 35px;
+}
+
+.gaming-titel {
+    color: white;
+    font-size: clamp(32px, 6vw, 52px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.gaming-untertitel {
+    margin-top: 6px;
+    color: #999999;
+    font-size: 16px;
+}
+
+.gaming-schliessen {
+    width: 52px;
+    height: 52px;
+    flex: 0 0 auto;
+    background: #191919;
+    color: white;
+    border: 1px solid #3d3d3d;
+    border-radius: 12px;
+    font-size: 34px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.gaming-schliessen:hover {
+    background: #2b2b2b;
+}
+
+.gaming-spiele {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.gaming-spiel {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-height: 120px;
+    padding: 22px;
+    background: #111111;
+    color: white;
+    border: 1px solid #303030;
+    border-radius: 16px;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.gaming-spiel:hover {
+    background: #1b1b1b;
+    border-color: #505050;
+    transform: translateY(-2px);
+}
+
+.gaming-spiel-icon {
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    flex: 0 0 auto;
+    background: #202020;
+    border-radius: 14px;
+    font-size: 30px;
+}
+
+.gaming-spiel strong {
+    display: block;
+    font-size: 20px;
+    margin-bottom: 6px;
+}
+
+.gaming-spiel small {
+    display: block;
+    color: #929292;
+    font-size: 13px;
+    line-height: 1.35;
+}
+
+@media (max-width: 650px) {
+    .gaming-inhalt {
+        width: min(100% - 20px, 900px);
+        padding-top: 20px;
+    }
+
+    .gaming-spiele {
+        grid-template-columns: 1fr;
+    }
+
+    .gaming-spiel {
+        min-height: 100px;
+    }
+
+    .gaming-button {
+        bottom: 12px;
+        left: 5px;
+        padding: 8px 11px;
+        font-size: 13px;
+    }
+}
 
 /* =====================================================
    BENUTZER MENÜ
@@ -1941,31 +2071,10 @@ body {
         font-size: 13px;
     }
 
-    .spiele-button {
-
-        top: 98px;
-
-        left: 5px;
-
-        padding: 8px 11px;
-
-        font-size: 13px;
-    }
-
-    .ranglisten-button {
-
-        top: 138px;
-
-        left: 0px;
-
-        padding: 8px 9px;
-
-        font-size: 13px;
-    }
 
     .freunde-button {
 
-        top: 178px;
+        top: 98px;
 
         left: 5px;
 
@@ -2138,24 +2247,17 @@ body {
 </button>
 
 <button
-    class="spiele-button"
-    onclick="spieleOeffnen()"
->
-    🎮 Spiele
-</button>
-
-<button
-    class="ranglisten-button"
-    onclick="ranglisteOeffnen()"
->
-    🏆 Rangliste
-</button>
-
-<button
     class="freunde-button"
     onclick="freundeOeffnen()"
 >
     👥 Freunde
+</button>
+
+<button
+    class="gaming-button"
+    onclick="gamingOeffnen()"
+>
+    🎮 Gaming
 </button>
 
 <button
@@ -2169,6 +2271,53 @@ body {
     </span>
 </button>
 
+
+<!-- =====================================================
+     GAMING MENÜ
+===================================================== -->
+<div
+    class="gaming-overlay"
+    id="gamingFenster"
+    aria-hidden="true"
+>
+    <div class="gaming-inhalt">
+        <div class="gaming-kopf">
+            <div>
+                <div class="gaming-titel">🎮 Gaming</div>
+                <div class="gaming-untertitel">
+                    Wähle ein Spiel aus
+                </div>
+            </div>
+
+            <button
+                class="gaming-schliessen"
+                onclick="gamingSchliessen()"
+                aria-label="Gaming-Menü schließen"
+            >
+                ×
+            </button>
+        </div>
+
+        <div class="gaming-spiele">
+            <button class="gaming-spiel gaming-sonderbutton" onclick="spieleOeffnen(); gamingSchliessen();">
+                <span class="gaming-spiel-icon">🎮</span>
+                <span>
+                    <strong>Spiele</strong>
+                    <small>Alle Spiele öffnen</small>
+                </span>
+            </button>
+
+            <button class="gaming-spiel gaming-sonderbutton" onclick="ranglisteOeffnen(); gamingSchliessen();">
+                <span class="gaming-spiel-icon">🏆</span>
+                <span>
+                    <strong>Rangliste</strong>
+                    <small>Die besten Punktzahlen ansehen</small>
+                </span>
+            </button>
+
+        </div>
+    </div>
+</div>
 
 <!-- =====================================================
      BENUTZER MENÜ
@@ -3478,6 +3627,55 @@ function kartenSchliessen() {
 
 
 /* =====================================================
+   GAMING MENÜ
+===================================================== */
+
+function gamingOeffnen() {
+    const fenster = document.getElementById("gamingFenster");
+
+    if (!fenster) {
+        return;
+    }
+
+    fenster.classList.add("aktiv");
+    fenster.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+}
+
+function gamingSchliessen() {
+    const fenster = document.getElementById("gamingFenster");
+
+    if (!fenster) {
+        return;
+    }
+
+    fenster.classList.remove("aktiv");
+    fenster.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+}
+
+function gamingSpielOeffnen(spiel) {
+    gamingSchliessen();
+    spielOeffnen(spiel);
+}
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+        if (event.key === "Escape") {
+            const fenster = document.getElementById("gamingFenster");
+
+            if (
+                fenster &&
+                fenster.classList.contains("aktiv")
+            ) {
+                gamingSchliessen();
+            }
+        }
+    }
+);
+
+/* =====================================================
    SPIELE
 ===================================================== */
 
@@ -3966,8 +4164,9 @@ let snakeAnimation = null;
 let snakeLastTime = 0;
 let snakeAccumulator = 0;
 let snakeSpeed = 145;
-const SNAKE_MIN_SPEED = 65;
-const SNAKE_SPEED_STEP = 7;
+// Höhere Millisekunden = langsamere Schlange.
+const SNAKE_MIN_SPEED = 105;
+const SNAKE_SPEED_STEP = 2;
 
 
 function snakeStart() {
@@ -5088,7 +5287,7 @@ document.addEventListener(
         }
 
         if (
-            event.key === "ArrowLeft"
+            (event.key === "ArrowLeft" || event.key.toLowerCase() === "a")
         ) {
 
             event.preventDefault();
@@ -5098,7 +5297,7 @@ document.addEventListener(
         }
 
         if (
-            event.key === "ArrowRight"
+            (event.key === "ArrowRight" || event.key.toLowerCase() === "d")
         ) {
 
             event.preventDefault();
@@ -5108,7 +5307,7 @@ document.addEventListener(
         }
 
         if (
-            event.key === "ArrowDown"
+            (event.key === "ArrowDown" || event.key.toLowerCase() === "s")
         ) {
 
             event.preventDefault();
@@ -5119,6 +5318,7 @@ document.addEventListener(
 
         if (
             event.key === "ArrowUp" ||
+            event.key.toLowerCase() === "w" ||
             event.key === "x" ||
             event.key === "X"
         ) {
