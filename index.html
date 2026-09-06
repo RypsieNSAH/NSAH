@@ -50,63 +50,62 @@ body {
 
 
 /* =====================================================
-   HINTERGRUNDBILD
+   BILDER
+   Hier kannst du beliebig viele Bilder per URL eintragen.
+   Beispiel:
+   { url: "https://example.com/bild.jpg", titel: "Mein Bild" }
 ===================================================== */
 
-.hintergrund-bild {
+const BILDER = [
+    {
+        url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+        titel: "Beispielbild 1"
+    },
+    {
+        url: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=80",
+        titel: "Beispielbild 2"
+    }
 
-    position: fixed;
+    // Weitere Bilder einfach hier ergänzen:
+    // ,
+    // { url: "https://deine-url.de/bild3.jpg", titel: "Bild 3" }
+];
 
-    left: 65%;
-    top: 50%;
-
-    transform: translate(-50%, -50%);
-
-    width: 20vw;
-    height: 20vh;
-
-    background-image:
-        url("Nsah%20bilder/42068048-spritpreise-in-sachsen-OlBG.jpg");
-
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    border-radius: 25px;
-
-    z-index: 0;
-
-    pointer-events: none;
-}
 
 /* =====================================================
-   HINTERGRUNDBILD 1
+   BILDER-GALERIE
 ===================================================== */
 
-.hintergrund-bild {
+.bilder-galerie {
+    position: relative;
+    z-index: 2;
+    width: min(1100px, calc(100vw - 220px));
+    margin: 190px auto 40px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px;
+}
 
-    position: fixed;
+.bild-karte {
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid #333333;
+    background: #111111;
+    box-shadow: 0 8px 30px rgba(0,0,0,.35);
+}
 
-    left: 40%;
-    top: 50%;
+.bild-karte img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+}
 
-    transform: translate(-50%, -50%);
-
-    width: 20vw;
-    height: 20vh;
-
-    image:
-        url("Nsah%20bilder/2022-00-Symbolbild-BY-Omnibusverkehr-Franken-GmbH-OVF-Bus-MAN__c__DB-AG-Andreas-Varnhorn.jpg");
-
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-
-    border-radius: 25px;
-
-    z-index: 0;
-
-    pointer-events: none;
+.bild-karte .bild-titel {
+    padding: 10px 12px;
+    color: #dddddd;
+    font-size: 14px;
 }
 
 
@@ -679,6 +678,589 @@ body {
     color: #777777;
 
     font-size: 13px;
+}
+
+
+
+/* =====================================================
+   BILDER-GALERIE
+===================================================== */
+
+function bilderGalerieRendern() {
+    const galerie = document.getElementById("bilderGalerie");
+
+    if (!galerie) {
+        return;
+    }
+
+    galerie.innerHTML = "";
+
+    BILDER.forEach(function(bild, index) {
+        if (!bild || !bild.url) {
+            return;
+        }
+
+        const karte = document.createElement("article");
+        karte.className = "bild-karte";
+
+        const img = document.createElement("img");
+        img.src = bild.url;
+        img.alt = bild.titel || "Bild " + (index + 1);
+        img.loading = "lazy";
+
+        img.onerror = function() {
+            karte.innerHTML =
+                '<div style="padding:16px;color:#999999;">Bild konnte nicht geladen werden.</div>';
+        };
+
+        karte.appendChild(img);
+
+        if (bild.titel) {
+            const titel = document.createElement("div");
+            titel.className = "bild-titel";
+            titel.textContent = bild.titel;
+            karte.appendChild(titel);
+        }
+
+        galerie.appendChild(karte);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", bilderGalerieRendern);
+
+
+/* =====================================================
+   KARTEN-SEITENLEISTE
+===================================================== */
+
+function kartenBereichZeigen(id, button) {
+    document.querySelectorAll(".karten-bereich").forEach(function(bereich) {
+        bereich.classList.remove("aktiv");
+    });
+
+    const ziel = document.getElementById(id);
+
+    if (ziel) {
+        ziel.classList.add("aktiv");
+    }
+
+    document.querySelectorAll(".karten-menu-button").forEach(function(btn) {
+        btn.classList.remove("aktiv");
+    });
+
+    if (button) {
+        button.classList.add("aktiv");
+    }
+
+    if (id === "karteBereich" && karte) {
+        setTimeout(function() {
+            karte.invalidateSize();
+        }, 100);
+    }
+}
+
+function kartenBereichAktivieren(id) {
+    const button = Array.from(
+        document.querySelectorAll(".karten-menu-button")
+    ).find(function(btn) {
+        return btn.getAttribute("onclick") &&
+            btn.getAttribute("onclick").includes("'" + id + "'");
+    });
+
+    kartenBereichZeigen(id, button);
+}
+
+
+/* =====================================================
+   TANKSTELLENPREISE
+   Tankerkönig API-Key hier eintragen:
+   https://creativecommons.tankerkoenig.de/
+===================================================== */
+
+const TANKERKOENIG_API_KEY = "DEIN_TANKERKOENIG_API_KEY";
+
+let tankstellenMarker = [];
+
+function tankstellenPreiseLaden() {
+    kartenBereichAktivieren("tankstellenBereich");
+
+    const status = document.getElementById("tankstellenStatus");
+    const liste = document.getElementById("tankstellenListe");
+
+    if (!status || !liste) {
+        return;
+    }
+
+    if (
+        !TANKERKOENIG_API_KEY ||
+        TANKERKOENIG_API_KEY === "DEIN_TANKERKOENIG_API_KEY"
+    ) {
+        status.innerHTML =
+            "Bitte trage oben im Code bei <b>TANKERKOENIG_API_KEY</b> deinen Tankerkönig-API-Key ein.";
+        liste.innerHTML = "";
+        return;
+    }
+
+    status.textContent = "📍 Standort wird ermittelt...";
+    liste.innerHTML = "";
+
+    if (!navigator.geolocation) {
+        status.textContent =
+            "Dein Browser unterstützt keine Standortermittlung.";
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            status.textContent =
+                "⛽ Suche die 5 nächsten Tankstellen...";
+
+            const url =
+                "https://creativecommons.tankerkoenig.de/json/list.php" +
+                "?lat=" + encodeURIComponent(lat) +
+                "&lng=" + encodeURIComponent(lon) +
+                "&rad=5" +
+                "&sort=price" +
+                "&type=all" +
+                "&apikey=" + encodeURIComponent(TANKERKOENIG_API_KEY);
+
+            fetch(url)
+                .then(function(response) {
+                    if (!response.ok) {
+                        throw new Error("HTTP " + response.status);
+                    }
+                    return response.json();
+                })
+                .then(function(data) {
+                    if (!data.ok || !Array.isArray(data.stations)) {
+                        throw new Error(
+                            data.message || "Keine Tankstellendaten erhalten."
+                        );
+                    }
+
+                    const stationen = data.stations
+                        .filter(function(station) {
+                            return station && station.isOpen !== false;
+                        })
+                        .sort(function(a, b) {
+                            const da = Number(a.dist || 999);
+                            const db = Number(b.dist || 999);
+                            return da - db;
+                        })
+                        .slice(0, 5);
+
+                    tankstellenAnzeigen(stationen, lat, lon);
+
+                    status.textContent =
+                        stationen.length
+                            ? "📍 5 nächstgelegene Tankstellen bzw. alle verfügbaren Treffer."
+                            : "Keine Tankstellen gefunden.";
+                })
+                .catch(function(error) {
+                    console.error(error);
+                    status.textContent =
+                        "Tankstellen konnten nicht geladen werden. Prüfe API-Key und Internetverbindung.";
+                });
+        },
+        function() {
+            status.textContent =
+                "Standort konnte nicht ermittelt werden. Erlaube dem Browser den Standortzugriff.";
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 300000
+        }
+    );
+}
+
+function tankstellenAnzeigen(stationen, eigeneLat, eigeneLon) {
+    const liste = document.getElementById("tankstellenListe");
+
+    if (!liste) {
+        return;
+    }
+
+    liste.innerHTML = "";
+
+    tankstellenMarker.forEach(function(marker) {
+        if (karte) {
+            karte.removeLayer(marker);
+        }
+    });
+    tankstellenMarker = [];
+
+    const kraftstoffFelder = [
+        ["e10", "E10"],
+        ["e5", "Super E5"],
+        ["diesel", "Diesel"]
+    ];
+
+    stationen.forEach(function(station, index) {
+        const box = document.createElement("article");
+        box.className = "tankstelle-karte";
+
+        const name = station.name || "Tankstelle";
+        const adresse = [
+            station.street || "",
+            station.houseNumber || "",
+            station.postCode || "",
+            station.place || ""
+        ].filter(Boolean).join(" ");
+
+        const distanz =
+            station.dist != null
+                ? Number(station.dist).toFixed(1) + " km"
+                : "Entfernung unbekannt";
+
+        const titelZeile = document.createElement("div");
+        titelZeile.className = "tankstelle-zeile";
+
+        const nameEl = document.createElement("div");
+        nameEl.className = "tankstelle-name";
+        nameEl.textContent = (index + 1) + ". " + name;
+
+        const distEl = document.createElement("div");
+        distEl.textContent = distanz;
+        distEl.style.color = "#aaaaaa";
+        distEl.style.fontSize = "12px";
+
+        titelZeile.appendChild(nameEl);
+        titelZeile.appendChild(distEl);
+        box.appendChild(titelZeile);
+
+        const adresseEl = document.createElement("div");
+        adresseEl.className = "tankstelle-adresse";
+        adresseEl.textContent = adresse || "Adresse nicht verfügbar";
+        box.appendChild(adresseEl);
+
+        const preise = document.createElement("div");
+        preise.className = "tankstelle-preise";
+
+        let guenstigsterPreis = Infinity;
+
+        kraftstoffFelder.forEach(function([feld, label]) {
+            const wert = Number(station[feld]);
+
+            if (Number.isFinite(wert) && wert > 0) {
+                guenstigsterPreis = Math.min(guenstigsterPreis, wert);
+            }
+        });
+
+        kraftstoffFelder.forEach(function([feld, label]) {
+            const wert = Number(station[feld]);
+            const chip = document.createElement("div");
+            chip.className = "preis-chip";
+
+            if (Number.isFinite(wert) && wert > 0) {
+                chip.textContent =
+                    label + ": " + wert.toFixed(2) + " €";
+
+                if (wert === guenstigsterPreis) {
+                    chip.classList.add("preis-guenstig");
+                    chip.textContent += " · günstig";
+                }
+            } else {
+                chip.textContent = label + ": –";
+            }
+
+            preise.appendChild(chip);
+        });
+
+        box.appendChild(preise);
+
+        const aktionen = document.createElement("div");
+        aktionen.className = "tankstelle-aktionen";
+
+        const routeButton = document.createElement("button");
+        routeButton.className = "kleiner-button";
+        routeButton.textContent = "🧭 Route hierhin";
+        routeButton.onclick = function() {
+            routeZurTankstelle(
+                eigeneLat,
+                eigeneLon,
+                Number(station.lat),
+                Number(station.lng),
+                name
+            );
+        };
+
+        const mapsButton = document.createElement("button");
+        mapsButton.className = "kleiner-button";
+        mapsButton.textContent = "📍 Karte";
+        mapsButton.onclick = function() {
+            if (
+                Number.isFinite(Number(station.lat)) &&
+                Number.isFinite(Number(station.lng))
+            ) {
+                kartenBereichAktivieren("karteBereich");
+
+                if (karte) {
+                    karte.setView(
+                        [Number(station.lat), Number(station.lng)],
+                        15
+                    );
+
+                    L.marker([
+                        Number(station.lat),
+                        Number(station.lng)
+                    ])
+                        .addTo(karte)
+                        .bindPopup(
+                            "<b>" +
+                            escapeHtml(name) +
+                            "</b><br>" +
+                            escapeHtml(adresse)
+                        )
+                        .openPopup();
+                }
+            }
+        };
+
+        aktionen.appendChild(routeButton);
+        aktionen.appendChild(mapsButton);
+        box.appendChild(aktionen);
+
+        liste.appendChild(box);
+
+        if (
+            karte &&
+            Number.isFinite(Number(station.lat)) &&
+            Number.isFinite(Number(station.lng))
+        ) {
+            const marker = L.marker([
+                Number(station.lat),
+                Number(station.lng)
+            ]).addTo(karte);
+
+            marker.bindPopup(
+                "<b>" +
+                escapeHtml(name) +
+                "</b><br>" +
+                escapeHtml(adresse)
+            );
+
+            tankstellenMarker.push(marker);
+        }
+    });
+}
+
+function routeZurTankstelle(startLat, startLon, zielLat, zielLon, name) {
+    kartenBereichAktivieren("routeBereich");
+
+    const status = document.getElementById("routeStatus");
+
+    if (status) {
+        status.textContent =
+            "Route zur " + name + " wird berechnet...";
+    }
+
+    routeMitKoordinatenBerechnen(
+        startLat,
+        startLon,
+        zielLat,
+        zielLon,
+        name
+    );
+}
+
+
+/* =====================================================
+   ROUTEN
+   Geocoding: Nominatim / OpenStreetMap
+   Routing: OSRM
+===================================================== */
+
+let routenLinie = null;
+let routenStartMarker = null;
+let routenZielMarker = null;
+
+function routePlanerOeffnen() {
+    kartenBereichAktivieren("routeBereich");
+}
+
+function routeBerechnen() {
+    const start = document.getElementById("routenStart").value.trim();
+    const ziel = document.getElementById("routenZiel").value.trim();
+    const status = document.getElementById("routeStatus");
+
+    if (!start || !ziel) {
+        status.textContent = "Bitte Start und Ziel eingeben.";
+        return;
+    }
+
+    status.textContent = "📍 Orte werden gesucht...";
+
+    Promise.all([
+        ortSuchen(start),
+        ortSuchen(ziel)
+    ])
+        .then(function(ergebnisse) {
+            if (!ergebnisse[0] || !ergebnisse[1]) {
+                throw new Error("Start oder Ziel wurde nicht gefunden.");
+            }
+
+            routeMitKoordinatenBerechnen(
+                Number(ergebnisse[0].lat),
+                Number(ergebnisse[0].lon),
+                Number(ergebnisse[1].lat),
+                Number(ergebnisse[1].lon),
+                ergebnisse[1].display_name
+            );
+        })
+        .catch(function(error) {
+            console.error(error);
+            status.textContent =
+                "Route konnte nicht berechnet werden: " +
+                error.message;
+        });
+}
+
+function ortSuchen(ort) {
+    return fetch(
+        "https://nominatim.openstreetmap.org/search" +
+        "?format=jsonv2&limit=1&q=" +
+        encodeURIComponent(ort),
+        {
+            headers: {
+                "Accept": "application/json"
+            }
+        }
+    )
+        .then(function(response) {
+            if (!response.ok) {
+                throw new Error("Geocoding fehlgeschlagen.");
+            }
+            return response.json();
+        })
+        .then(function(data) {
+            return data && data.length ? data[0] : null;
+        });
+}
+
+function routeMitKoordinatenBerechnen(
+    startLat,
+    startLon,
+    zielLat,
+    zielLon,
+    zielName
+) {
+    const status = document.getElementById("routeStatus");
+    const details = document.getElementById("routeDetails");
+
+    if (!Number.isFinite(startLat) ||
+        !Number.isFinite(startLon) ||
+        !Number.isFinite(zielLat) ||
+        !Number.isFinite(zielLon)) {
+        status.textContent = "Ungültige Koordinaten.";
+        return;
+    }
+
+    status.textContent = "🧭 Route wird berechnet...";
+
+    const url =
+        "https://router.project-osrm.org/route/v1/driving/" +
+        startLon + "," + startLat +
+        ";" +
+        zielLon + "," + zielLat +
+        "?overview=full&geometries=geojson&steps=true";
+
+    fetch(url)
+        .then(function(response) {
+            if (!response.ok) {
+                throw new Error("Routing fehlgeschlagen.");
+            }
+            return response.json();
+        })
+        .then(function(data) {
+            if (
+                !data ||
+                data.code !== "Ok" ||
+                !data.routes ||
+                !data.routes.length
+            ) {
+                throw new Error("Keine Route gefunden.");
+            }
+
+            const route = data.routes[0];
+
+            if (routenLinie && karte) {
+                karte.removeLayer(routenLinie);
+            }
+
+            if (routenStartMarker && karte) {
+                karte.removeLayer(routenStartMarker);
+            }
+
+            if (routenZielMarker && karte) {
+                karte.removeLayer(routenZielMarker);
+            }
+
+            if (karte) {
+                routenLinie = L.geoJSON(route.geometry).addTo(karte);
+
+                routenStartMarker = L.marker([
+                    startLat,
+                    startLon
+                ])
+                    .addTo(karte)
+                    .bindPopup("Start");
+
+                routenZielMarker = L.marker([
+                    zielLat,
+                    zielLon
+                ])
+                    .addTo(karte)
+                    .bindPopup("Ziel");
+
+                karte.fitBounds(routenLinie.getBounds(), {
+                    padding: [30, 30]
+                });
+            }
+
+            const kilometer =
+                (Number(route.distance) / 1000).toFixed(1);
+
+            const minuten =
+                Math.round(Number(route.duration) / 60);
+
+            status.textContent =
+                "✅ Route gefunden.";
+
+            if (details) {
+                details.innerHTML =
+                    "<b>Ziel:</b> " +
+                    escapeHtml(zielName || "Ziel") +
+                    "<br>" +
+                    "<b>Entfernung:</b> " +
+                    kilometer +
+                    " km<br>" +
+                    "<b>Fahrzeit:</b> ca. " +
+                    minuten +
+                    " Minuten<br><br>" +
+                    "Die Route ist auf der Karte eingezeichnet.";
+            }
+
+            kartenBereichAktivieren("karteBereich");
+        })
+        .catch(function(error) {
+            console.error(error);
+            status.textContent =
+                "Route konnte nicht berechnet werden: " +
+                error.message;
+        });
+}
+
+function escapeHtml(text) {
+    return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 
@@ -2029,18 +2611,233 @@ body {
    MOBILE
 ===================================================== */
 
-@media (max-width:600px) {
 
-    .hintergrund-bild {
+/* =====================================================
+   KARTEN-SEITENLEISTE
+===================================================== */
 
-        left: calc(50% + 40px);
+.karten-inhalt {
+    display: flex;
+    width: 100%;
+    height: calc(100% - 55px);
+    min-height: 0;
+}
 
-        width: 65vw;
+.karten-seitenleiste {
+    width: 190px;
+    flex: 0 0 190px;
+    padding: 12px;
+    background: #151515;
+    border-right: 1px solid #333333;
+    overflow-y: auto;
+}
 
-        height: 35vh;
+.karten-menu-button {
+    display: block;
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 11px 10px;
+    border: 1px solid #383838;
+    border-radius: 8px;
+    background: #222222;
+    color: #ffffff;
+    text-align: left;
+    cursor: pointer;
+    font-weight: bold;
+}
 
-        border-radius: 18px;
+.karten-menu-button:hover,
+.karten-menu-button.aktiv {
+    background: #333333;
+}
+
+.karten-menu-hinweis {
+    margin-top: 18px;
+    color: #888888;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.karten-bereiche {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+}
+
+.karten-bereich {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.karten-bereich.aktiv {
+    display: block;
+}
+
+.karten-bereich #karte {
+    height: 100%;
+}
+
+.karten-bereich-kopf {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 18px;
+    border-bottom: 1px solid #333333;
+}
+
+.karten-bereich-kopf h2 {
+    margin: 0 0 5px;
+}
+
+.karten-bereich-kopf p {
+    margin: 0;
+    color: #999999;
+    font-size: 13px;
+}
+
+.kleiner-button {
+    border: 1px solid #444444;
+    border-radius: 7px;
+    background: #252525;
+    color: #ffffff;
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.karten-status {
+    padding: 14px 18px;
+    color: #999999;
+    font-size: 13px;
+}
+
+.tankstellen-liste {
+    display: grid;
+    gap: 10px;
+    padding: 0 18px 18px;
+}
+
+.tankstelle-karte {
+    padding: 14px;
+    border: 1px solid #333333;
+    border-radius: 10px;
+    background: #1a1a1a;
+}
+
+.tankstelle-zeile {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+}
+
+.tankstelle-name {
+    font-weight: bold;
+}
+
+.tankstelle-adresse {
+    margin-top: 4px;
+    color: #888888;
+    font-size: 12px;
+}
+
+.tankstelle-preise {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 10px;
+}
+
+.preis-chip {
+    padding: 6px 8px;
+    border-radius: 7px;
+    background: #252525;
+    border: 1px solid #3b3b3b;
+    font-size: 12px;
+}
+
+.preis-guenstig {
+    border-color: #777777;
+    font-weight: bold;
+}
+
+.tankstelle-aktionen {
+    margin-top: 10px;
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.routen-formular {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 8px;
+    padding: 18px;
+}
+
+.routen-formular input {
+    min-width: 0;
+    height: 42px;
+    padding: 0 10px;
+    background: #222222;
+    color: #ffffff;
+    border: 1px solid #444444;
+    border-radius: 7px;
+    outline: none;
+}
+
+.formular-button {
+    border: 1px solid #444444;
+    border-radius: 7px;
+    background: #292929;
+    color: #ffffff;
+    padding: 0 13px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.route-details {
+    padding: 0 18px 18px;
+    color: #cccccc;
+    line-height: 1.5;
+}
+
+.route-details a {
+    color: #ffffff;
+}
+
+@media (max-width: 800px) {
+    .karten-seitenleiste {
+        width: 145px;
+        flex-basis: 145px;
+        padding: 8px;
     }
+
+    .karten-menu-button {
+        font-size: 12px;
+        padding: 9px 7px;
+    }
+
+    .routen-formular {
+        grid-template-columns: 1fr;
+    }
+
+    .formular-button {
+        height: 42px;
+    }
+}
+
+
+.bilder-galerie {
+    width: calc(100vw - 25px);
+    margin-top: 165px;
+    padding: 10px;
+    grid-template-columns: 1fr;
+}
+
+@media (max-width:600px) {
 
     .logo {
 
@@ -2239,7 +3036,7 @@ body {
      HINTERGRUNDBILD
 ===================================================== -->
 
-<div class="hintergrund-bild"></div>
+<div id="bilderGalerie" class="bilder-galerie"></div>
 
 
 <!-- =====================================================
@@ -2558,7 +3355,58 @@ body {
 
         </div>
 
-        <div id="karte"></div>
+        <div class="karten-inhalt">
+            <aside class="karten-seitenleiste">
+                <button class="karten-menu-button aktiv" onclick="kartenBereichZeigen('karteBereich', this)">
+                    🗺️ Karte
+                </button>
+                <button class="karten-menu-button" onclick="tankstellenPreiseLaden()">
+                    ⛽ Tankstellenpreise
+                </button>
+                <button class="karten-menu-button" onclick="routePlanerOeffnen()">
+                    🧭 Routen
+                </button>
+                <div class="karten-menu-hinweis">
+                    Die Tankstellen-Suche verwendet deinen aktuellen Standort.
+                </div>
+            </aside>
+
+            <main class="karten-bereiche">
+                <section id="karteBereich" class="karten-bereich aktiv">
+                    <div id="karte"></div>
+                </section>
+
+                <section id="tankstellenBereich" class="karten-bereich">
+                    <div class="karten-bereich-kopf">
+                        <div>
+                            <h2>⛽ Tankstellenpreise</h2>
+                            <p>Die 5 nächstgelegenen Tankstellen mit verfügbaren Preisen.</p>
+                        </div>
+                        <button class="kleiner-button" onclick="tankstellenPreiseLaden()">↻ Aktualisieren</button>
+                    </div>
+                    <div id="tankstellenStatus" class="karten-status">Noch keine Suche gestartet.</div>
+                    <div id="tankstellenListe" class="tankstellen-liste"></div>
+                </section>
+
+                <section id="routeBereich" class="karten-bereich">
+                    <div class="karten-bereich-kopf">
+                        <div>
+                            <h2>🧭 Routen</h2>
+                            <p>Start und Ziel eingeben. Die Route wird auf der Karte angezeigt.</p>
+                        </div>
+                    </div>
+
+                    <div class="routen-formular">
+                        <input id="routenStart" type="text" placeholder="Start, z. B. Frankfurt am Main">
+                        <input id="routenZiel" type="text" placeholder="Ziel, z. B. Wiesbaden">
+                        <button class="formular-button" onclick="routeBerechnen()">Route berechnen</button>
+                    </div>
+
+                    <div id="routeStatus" class="karten-status"></div>
+                    <div id="routeDetails" class="route-details"></div>
+                </section>
+            </main>
+        </div>
 
     </div>
 
