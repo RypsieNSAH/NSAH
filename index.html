@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -82,6 +83,12 @@ small,.muted { color:var(--muted) }
 .badge { display:inline-block; padding:5px 9px; border-radius:7px; background:#203854; color:#8ce6ff; font-size:12px }
 hr { border:0; border-top:1px solid var(--border); margin:18px 0 }
 .hidden { display:none!important }
+.home-shortcuts { margin:18px 0 28px; }
+.shortcut { text-align:left; display:flex; flex-direction:column; gap:8px; min-height:130px; }
+.shortcut span { font-size:28px; color:var(--blue); }
+.shortcut b { font-size:17px; }
+.shortcut small { color:var(--muted); }
+#page-shop .card:hover { border-color:var(--blue); }
 .lobby-head { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap }
 .lobby-grid { display:grid; grid-template-columns:minmax(0,1fr) 270px; gap:16px; margin-top:18px }
 #playground {
@@ -168,6 +175,7 @@ hr { border:0; border-top:1px solid var(--border); margin:18px 0 }
     <button class="nav" data-page="lobbies">▦ Lobbys</button>
     <button class="nav" data-page="profile">◉ Profil & Skin</button>
     <button class="nav" data-page="friends">♧ Freunde</button>
+    <button class="nav" data-page="shop">🛍 Shop</button>
   </aside>
 
   <main class="main">
@@ -180,9 +188,17 @@ hr { border:0; border-top:1px solid var(--border); margin:18px 0 }
         <div class="row">
           <button class="primary" onclick="newLobby()">＋ Lobby erstellen</button>
           <button onclick="showPage('lobbies')">Lobbys entdecken</button>
-          <button onclick="showPage('profile')">Skin anpassen</button>
+          <button onclick="showPage('profile')">Profil / Skin</button>
+          <button onclick="showPage('friends')">Freunde</button>
+          <button onclick="showPage('shop')">Shop</button>
         </div>
       </div>
+      <div class="grid home-shortcuts">
+          <button class="card shortcut" onclick="showPage('lobbies')"><span>▦</span><b>Lobbys</b><small>Spiele finden oder erstellen</small></button>
+          <button class="card shortcut" onclick="showPage('profile')"><span>◉</span><b>Profil / Skin</b><small>Gestalte deinen Würfel</small></button>
+          <button class="card shortcut" onclick="showPage('friends')"><span>♧</span><b>Freunde</b><small>Freundesliste verwalten</small></button>
+          <button class="card shortcut" onclick="showPage('shop')"><span>🛍</span><b>Shop</b><small>Neue Würfelfarben freischalten</small></button>
+        </div>
       <div class="section-title"><h2>Deine Spiele</h2><span class="muted">3 Spiele</span></div>
       <div class="grid" id="homeGames"></div>
       <div class="section-title"><h2>Deine Lobby</h2></div>
@@ -246,8 +262,15 @@ hr { border:0; border-top:1px solid var(--border); margin:18px 0 }
         <hr>
         <h3>Deine Freundesliste</h3>
         <div id="friendList"></div>
-        <p class="muted">Freunde sind in diesem Prototyp lokal gespeichert. Einladungen an andere PCs benötigen einen Online-Server.</p>
+        <p class="muted">Freundesliste wird mit dem Server synchronisiert, sobald dieser erreichbar ist.</p>
       </div>
+    </section>
+
+    <section class="page" id="page-shop">
+      <div class="section-title"><h2>Cube World Shop</h2><span class="badge">Demo-Shop</span></div>
+      <div class="card" style="margin-bottom:16px"><p>Deine Coins: <b id="coinBalance">100</b> 🪙</p>
+      <p class="muted">Coins und freigeschaltete Skins werden mit dem Server synchronisiert, wenn er erreichbar ist.</p></div>
+      <div class="grid" id="shopItems"></div>
     </section>
 
     <section class="page" id="page-room">
@@ -323,6 +346,48 @@ hr { border:0; border-top:1px solid var(--border); margin:18px 0 }
 
 <script>
 const $ = id => document.getElementById(id);
+const API_BASE = "";
+let playerId = localStorage.getItem("cw2_player_id");
+if (!playerId) { playerId = (crypto.randomUUID ? crypto.randomUUID() : "cw-"+Math.random().toString(36).slice(2)+Date.now()); localStorage.setItem("cw2_player_id",playerId); }
+let coins = 100, ownedItems = ["default"];
+const SHOP_ITEMS = [
+ {id:"mint",name:"Mint-Würfel",emoji:"🟩",price:30,color:"#61e6a7"},
+ {id:"sunset",name:"Sunset-Würfel",emoji:"🟧",price:45,color:"#ff7b36"},
+ {id:"violet",name:"Violet-Würfel",emoji:"🟪",price:50,color:"#9c70ff"},
+ {id:"pink",name:"Neon-Pink",emoji:"💗",price:60,color:"#ff70cb"},
+ {id:"gold",name:"Gold-Würfel",emoji:"🟨",price:80,color:"#f2ec6d"}
+];
+async function apiRequest(path,options={}) {
+ const r=await fetch(API_BASE+path,{...options,headers:{"Content-Type":"application/json",...(options.headers||{})}});
+ if(!r.ok) throw new Error(await r.text()||"Serverfehler");
+ return r.status===204?null:r.json();
+}
+function syncStateToServer() {
+ apiRequest("/api/state/"+encodeURIComponent(playerId),{method:"PUT",body:JSON.stringify({name,avatarData,skin,friends,coins,ownedItems})})
+ .then(()=>{$("topStatus").textContent="Mit Server verbunden";})
+ .catch(()=>{$("topStatus").textContent="Offline-Modus";});
+}
+async function loadServerState() {
+ try {
+  const st=await apiRequest("/api/state/"+encodeURIComponent(playerId));
+  if(st&&st.name){name=st.name;avatarData=st.avatarData||"";skin={...DEFAULT_SKIN,...(st.skin||{})};friends=Array.isArray(st.friends)?st.friends:friends;coins=Number.isFinite(st.coins)?st.coins:100;ownedItems=Array.isArray(st.ownedItems)?st.ownedItems:["default"];}
+  $("topStatus").textContent="Mit Server verbunden";
+ } catch(e) {$("topStatus").textContent="Offline-Modus";}
+ try { localStorage.setItem("cw2_name",name);localStorage.setItem("cw2_avatar",avatarData);localStorage.setItem("cw2_skin",JSON.stringify(skin));localStorage.setItem("cw2_friends",JSON.stringify(friends)); } catch(e){}
+ updateHeader();renderSkin();renderFriends();renderShop();
+}
+function renderShop() {
+ if(!$("shopItems"))return;
+ $("coinBalance").textContent=coins;
+ $("shopItems").innerHTML=SHOP_ITEMS.map(it=>{const own=ownedItems.includes(it.id);return `<div class="card"><div style="font-size:42px">${it.emoji}</div><h3>${it.name}</h3><p>Farbe für deinen Würfel-Avatar.</p><span class="badge">${own?"Bereits gekauft":it.price+" 🪙"}</span><button class="${own?"":"primary"}" style="width:100%;margin-top:12px" ${own?"disabled":""} onclick="buyShopItem('${it.id}')">${own?"Im Besitz":"Kaufen"}</button></div>`}).join("");
+}
+async function buyShopItem(id) {
+ const it=SHOP_ITEMS.find(x=>x.id===id);if(!it)return;
+ if(ownedItems.includes(id))return toast("Diesen Skin besitzt du bereits.");
+ try {const result=await apiRequest("/api/shop/buy",{method:"POST",body:JSON.stringify({playerId,itemId:id})});coins=result.coins;ownedItems=result.ownedItems;}
+ catch(e){if(coins<it.price)return toast("Nicht genug Coins.");coins-=it.price;ownedItems.push(id);toast("Offline: Kauf nur lokal gespeichert.");}
+ skin.color=it.color;persist();renderSkin();renderShop();syncStateToServer();toast(it.name+" freigeschaltet!");
+}
 const GAME_DATA = [
  {id:"mensch",name:"Mensch ärgere dich nicht",emoji:"🎲",desc:"Der Brettspiel-Klassiker.",min:2,max:4},
  {id:"uno",name:"UNO",emoji:"🃏",desc:"Farbkarten ablegen und als Erster alle Karten loswerden.",min:2,max:10},
@@ -361,6 +426,7 @@ function persist() {
   localStorage.setItem("cw2_skin",JSON.stringify(skin));
   localStorage.setItem("cw2_friends",JSON.stringify(friends));
  } catch(e) {}
+ syncStateToServer();
 }
 function escapeHTML(s) {
  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -377,7 +443,7 @@ function showPage(page) {
  document.querySelectorAll(".nav").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
  if(page==="lobbies") renderLobbies();
  if(page==="friends") renderFriends();
- if(page==="profile") renderSkin();
+ if(page==="profile") renderSkin();\n  if(page==="shop") renderShop();
  if(page==="room" && currentLobby) renderRoom();
 }
 document.querySelectorAll(".nav").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
@@ -391,8 +457,8 @@ function avatarHTML(s=skin) {
 }
 function updateHeader() {
  $("topName").textContent=name;
- $("topAvatar").innerHTML=avatarHTML();
- $("avatarPreview").innerHTML=avatarHTML();
+ $("topAvatar").innerHTML=avatarData ? `<img src="${avatarData}" alt="Profilbild" style="width:40px;height:40px;object-fit:cover;border-radius:10px">` : avatarHTML();
+ $("avatarPreview").innerHTML=avatarData ? `<img src="${avatarData}" alt="Profilbild" style="width:100px;height:100px;object-fit:cover;border-radius:16px">` : avatarHTML();
 }
 function renderSkin() {
  $("nameInput").value=name;
@@ -775,4 +841,3 @@ init();
 </script>
 </body>
 </html>
-
