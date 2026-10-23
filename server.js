@@ -1,1153 +1,840 @@
-const express = require("express");
-const path = require("path");
-const bcrypt = require("bcryptjs");
-const session = require("express-session");
-const Database = require("better-sqlite3");
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cube World</title>
+<style>
+:root {
+  --bg:#0a0d18; --panel:#131a2c; --panel2:#1b2540;
+  --blue:#38c9ff; --purple:#9c70ff; --text:#f3f6ff;
+  --muted:#a6b2cc; --border:#293956;
+}
+* { box-sizing:border-box }
+body {
+  margin:0; background:var(--bg); color:var(--text);
+  font:15px Arial,sans-serif;
+}
+button,input,select { font:inherit }
+button {
+  color:white; background:#202d49; border:1px solid var(--border);
+  border-radius:10px; padding:11px 14px; cursor:pointer;
+  transition:.15s;
+}
+button:hover { border-color:var(--blue); background:#263c61 }
+button.primary {
+  background:linear-gradient(100deg,#087ff5,#18c5e8);
+  border:0; font-weight:bold;
+}
+button.danger { border-color:#a94a64; color:#ff9bae }
+button:disabled { opacity:.4; cursor:not-allowed }
+input,select {
+  color:white; background:#0b1222; border:1px solid var(--border);
+  border-radius:9px; padding:11px; width:100%; min-width:0;
+}
+label { display:block; color:var(--muted); font-size:13px; margin:12px 0 6px }
+h1,h2,h3,p { margin-top:0 }
+h2 { font-size:23px }
+small,.muted { color:var(--muted) }
+.topbar {
+  height:72px; display:flex; align-items:center; justify-content:space-between;
+  padding:0 24px; border-bottom:1px solid var(--border);
+  background:#0c1120; gap:12px;
+}
+.logo { font-size:24px; font-weight:900; letter-spacing:2px; color:var(--blue) }
+.user { display:flex; align-items:center; gap:10px }
+.mini-avatar {
+  width:40px; height:40px; border-radius:10px; display:grid;
+  place-items:center; background:#273657; font-size:23px;
+}
+.layout { display:grid; grid-template-columns:220px minmax(0,1fr); min-height:calc(100vh - 72px) }
+.sidebar {
+  padding:18px 12px; border-right:1px solid var(--border);
+  background:#0d1323;
+}
+.nav {
+  display:flex; width:100%; text-align:left; margin-bottom:8px;
+  background:transparent; border-color:transparent; gap:10px;
+}
+.nav.active { background:#1b2c49; border-color:#2a5e8b; color:var(--blue) }
+.main { padding:26px; min-width:0; max-width:1500px; width:100%; margin:auto }
+.page { display:none }
+.page.active { display:block }
+.hero {
+  padding:35px; border:1px solid #274a76; border-radius:20px;
+  background:radial-gradient(ellipse at 90% 0%,#174a76,transparent 55%),
+  linear-gradient(130deg,#141c35,#101427); margin-bottom:24px;
+}
+.hero h1 { font-size:clamp(30px,4vw,48px); margin-bottom:10px }
+.hero p { color:#bdcce6; max-width:600px; line-height:1.6 }
+.row { display:flex; align-items:center; gap:10px; flex-wrap:wrap }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px }
+.card {
+  background:var(--panel); border:1px solid var(--border);
+  border-radius:15px; padding:19px; min-width:0;
+}
+.card h3 { margin-bottom:9px }
+.card p { color:var(--muted); line-height:1.5 }
+.card .row button { flex:1 }
+.section-title { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:25px 0 15px }
+.badge { display:inline-block; padding:5px 9px; border-radius:7px; background:#203854; color:#8ce6ff; font-size:12px }
+hr { border:0; border-top:1px solid var(--border); margin:18px 0 }
+.hidden { display:none!important }
+.home-shortcuts { margin:18px 0 28px; }
+.shortcut { text-align:left; display:flex; flex-direction:column; gap:8px; min-height:130px; }
+.shortcut span { font-size:28px; color:var(--blue); }
+.shortcut b { font-size:17px; }
+.shortcut small { color:var(--muted); }
+#page-shop .card:hover { border-color:var(--blue); }
+.lobby-head { display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap }
+.lobby-grid { display:grid; grid-template-columns:minmax(0,1fr) 270px; gap:16px; margin-top:18px }
+#playground {
+  width:100%; height:300px; display:block; border-radius:14px;
+  border:1px solid #304c72; background:#111b31;
+}
+.players { display:flex; flex-direction:column; gap:8px }
+.player {
+  padding:10px; background:#0e1628; border:1px solid var(--border);
+  border-radius:9px; display:flex; justify-content:space-between; gap:8px;
+  align-items:center;
+}
+.player-name { overflow-wrap:anywhere }
+.game-choice { cursor:pointer }
+.game-choice.selected { border-color:var(--blue); box-shadow:0 0 0 1px var(--blue) }
+.skin-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px }
+.skin-option { padding:9px 3px; text-align:center; min-width:0 }
+.skin-option.selected { border-color:var(--blue); background:#163c5a }
+.skin-symbol { font-size:25px; display:block; margin-bottom:6px }
+.color-row { display:flex; flex-wrap:wrap; gap:10px }
+.color-choice {
+  width:32px; height:32px; padding:0; border-radius:50%;
+  border:2px solid #ffffff44;
+}
+.color-choice.selected { outline:3px solid var(--blue); outline-offset:2px }
+.modal-wrap {
+  position:fixed; inset:0; z-index:10; background:#000b;
+  display:flex; align-items:center; justify-content:center; padding:18px;
+}
+.modal {
+  background:#111a2e; border:1px solid #385578; border-radius:18px;
+  padding:25px; width:min(480px,100%); max-height:90vh; overflow:auto;
+}
+#toast {
+  position:fixed; z-index:20; bottom:20px; left:50%;
+  transform:translateX(-50%); background:#233b59;
+  border:1px solid var(--blue); padding:13px 20px; border-radius:10px;
+  display:none; max-width:90vw;
+}
+#gameArea {
+  background:#0c1427; border:1px solid var(--border);
+  padding:20px; border-radius:15px; margin-top:16px;
+}
+.board {
+  display:grid; grid-template-columns:repeat(11,minmax(22px,1fr));
+  gap:3px; max-width:520px; margin:18px auto;
+}
+.cell {
+  aspect-ratio:1; display:grid; place-items:center;
+  background:#263754; border-radius:5px; font-size:clamp(12px,2vw,22px);
+}
+.cell.path { background:#174c70 }
+.cell.home { background:#253a62 }
+.cell .piece { filter:drop-shadow(0 2px 2px #000) }
+#unoHand { display:flex; flex-wrap:wrap; justify-content:center; gap:8px }
+.unocard {
+  width:66px; height:96px; font-weight:bold; font-size:22px;
+  border:3px solid white; border-radius:9px; text-shadow:0 1px 3px #000;
+}
+#log { max-height:160px; overflow:auto; color:var(--muted); line-height:1.7 }
+@media(max-width:800px) {
+ .layout { grid-template-columns:1fr }
+ .sidebar { display:flex; gap:5px; overflow-x:auto; border-right:0; border-bottom:1px solid var(--border); padding:8px }
+ .nav { width:auto; flex:0 0 auto; margin:0; padding:10px }
+ .main { padding:15px }
+ .lobby-grid { grid-template-columns:1fr }
+ .hero { padding:23px }
+}
+</style>
+</head>
+<body>
 
-const app = express();
+<header class="topbar">
+  <div class="logo">◈ CUBE WORLD</div>
+  <div class="user">
+    <div class="mini-avatar" id="topAvatar">◧</div>
+    <div><b id="topName">CubePlayer</b><br><small id="topStatus">Lokaler Prototyp</small></div>
+  </div>
+</header>
 
-const PORT = 3000;
+<div class="layout">
+  <aside class="sidebar">
+    <button class="nav active" data-page="home">⌂ Hauptmenü</button>
+    <button class="nav" data-page="lobbies">▦ Lobbys</button>
+    <button class="nav" data-page="profile">◉ Profil & Skin</button>
+    <button class="nav" data-page="friends">♧ Freunde</button>
+    <button class="nav" data-page="shop">🛍 Shop</button>
+  </aside>
 
+  <main class="main">
+    <section class="page active" id="page-home">
+      <div class="hero">
+        <span class="badge">DEIN TREFFPUNKT</span>
+        <h1>Willkommen in Cube World.</h1>
+        <p>Triff Freunde, erstelle deine eigene Lobby und entscheidet gemeinsam,
+        welches Spiel ihr als Nächstes spielt.</p>
+        <div class="row">
+          <button class="primary" onclick="newLobby()">＋ Lobby erstellen</button>
+          <button onclick="showPage('lobbies')">Lobbys entdecken</button>
+          <button onclick="showPage('profile')">Profil / Skin</button>
+          <button onclick="showPage('friends')">Freunde</button>
+          <button onclick="showPage('shop')">Shop</button>
+        </div>
+      </div>
+      <div class="grid home-shortcuts">
+          <button class="card shortcut" onclick="showPage('lobbies')"><span>▦</span><b>Lobbys</b><small>Spiele finden oder erstellen</small></button>
+          <button class="card shortcut" onclick="showPage('profile')"><span>◉</span><b>Profil / Skin</b><small>Gestalte deinen Würfel</small></button>
+          <button class="card shortcut" onclick="showPage('friends')"><span>♧</span><b>Freunde</b><small>Freundesliste verwalten</small></button>
+          <button class="card shortcut" onclick="showPage('shop')"><span>🛍</span><b>Shop</b><small>Neue Würfelfarben freischalten</small></button>
+        </div>
+      <div class="section-title"><h2>Deine Spiele</h2><span class="muted">3 Spiele</span></div>
+      <div class="grid" id="homeGames"></div>
+      <div class="section-title"><h2>Deine Lobby</h2></div>
+      <div id="homeLobby" class="card">
+        <p>Du bist noch in keiner Lobby.</p>
+        <button class="primary" onclick="newLobby()">Lobby erstellen</button>
+      </div>
+    </section>
 
-/* =====================================================
-   DATENBANK
-===================================================== */
+    <section class="page" id="page-lobbies">
+      <div class="section-title"><h2>Lobbys entdecken</h2><button class="primary" onclick="newLobby()">＋ Erstellen</button></div>
+      <div class="card">
+        <label for="searchLobby">Lobby suchen</label>
+        <input id="searchLobby" placeholder="Lobbyname oder Code" oninput="renderLobbies()">
+        <div class="row" style="margin-top:12px">
+          <input id="joinCode" placeholder="Lobby-Code eingeben">
+          <button onclick="joinByCode()">Beitreten</button>
+        </div>
+        <p class="muted" style="margin:12px 0 0">Hinweis: In dieser Demo werden nur lokale Lobbys angezeigt.</p>
+      </div>
+      <div class="section-title"><h2>Verfügbare Lobbys</h2></div>
+      <div id="lobbyList" class="grid"></div>
+    </section>
 
-const db = new Database("nsah.db");
+    <section class="page" id="page-profile">
+      <h2>Profil & Skin</h2>
+      <div class="grid">
+        <div class="card">
+          <div id="avatarPreview" style="font-size:100px;text-align:center;line-height:1.5">😎</div>
+          <label for="nameInput">Spielername</label>
+          <input id="nameInput" maxlength="20" placeholder="Dein Name">
+          <label for="avatarUpload">Eigenes Profilbild auswählen</label>
+          <input id="avatarUpload" type="file" accept="image/*">
+          <button style="margin-top:14px" class="primary" onclick="saveProfile()">Profil speichern</button>
+          <button style="margin-top:14px" onclick="clearAvatar()">Eigenes Bild entfernen</button>
+        </div>
+        <div class="card">
+          <h3>Charakter-Farbe</h3>
+          <div class="color-row" id="colorChoices"></div>
+          <hr>
+          <h3>Augen · 10 Arten</h3>
+          <div class="skin-grid" id="eyeChoices"></div>
+          <hr>
+          <h3>Haare · 10 Arten</h3>
+          <div class="skin-grid" id="hairChoices"></div>
+          <hr>
+          <h3>Münder · 10 Arten</h3>
+          <div class="skin-grid" id="mouthChoices"></div>
+          <p class="muted">Deine Auswahl gilt für deinen Würfel-Avatar in der 2D-Lobby.</p>
+        </div>
+      </div>
+    </section>
 
+    <section class="page" id="page-friends">
+      <div class="section-title"><h2>Freunde</h2></div>
+      <div class="card">
+        <h3>Freunde hinzufügen</h3>
+        <label for="friendName">Spielername</label>
+        <input id="friendName" maxlength="20" placeholder="Name deines Freundes">
+        <button class="primary" style="margin-top:12px" onclick="addFriend()">Freund hinzufügen</button>
+        <hr>
+        <h3>Deine Freundesliste</h3>
+        <div id="friendList"></div>
+        <p class="muted">Freundesliste wird mit dem Server synchronisiert, sobald dieser erreichbar ist.</p>
+      </div>
+    </section>
 
-/* =====================================================
-   BENUTZER
-===================================================== */
+    <section class="page" id="page-shop">
+      <div class="section-title"><h2>Cube World Shop</h2><span class="badge">Demo-Shop</span></div>
+      <div class="card" style="margin-bottom:16px"><p>Deine Coins: <b id="coinBalance">100</b> 🪙</p>
+      <p class="muted">Coins und freigeschaltete Skins werden mit dem Server synchronisiert, wenn er erreichbar ist.</p></div>
+      <div class="grid" id="shopItems"></div>
+    </section>
 
-db.exec(`
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL,
-        email TEXT NOT NULL UNIQUE,
-        password TEXT NOT NULL,
-        friend_code TEXT UNIQUE
-    )
-`);
+    <section class="page" id="page-room">
+      <div class="lobby-head">
+        <div>
+          <span class="badge">LOBBY</span>
+          <h2 id="roomTitle" style="margin:10px 0">Meine Lobby</h2>
+          <span class="muted">Code: <b id="roomCode"></b></span>
+          <button onclick="copyCode()">Code kopieren</button>
+        </div>
+        <div class="row">
+          <button onclick="showPage('lobbies')">Lobbys</button>
+          <button class="danger" onclick="leaveLobby()">Verlassen</button>
+        </div>
+      </div>
 
+      <div class="lobby-grid">
+        <div>
+          <div class="card">
+            <h3>Deine Chill-Lobby</h3>
+            <p class="muted">Dein Würfel und die Avatare hüpfen in diesem 2D-Fenster.</p>
+            <canvas id="playground" width="900" height="300"></canvas>
+            <div class="row" style="margin-top:12px">
+              <button onclick="changeMovement()">Hüpf-Modus wechseln</button>
+              <button onclick="showPage('profile')">Skin ändern</button>
+            </div>
+          </div>
 
-/*
-   Falls deine alte users-Tabelle noch keine
-   friend_code-Spalte hatte, wird sie hier ergänzt.
-*/
+          <div class="card" style="margin-top:16px">
+            <h3>Spiele auswählen</h3>
+            <p class="muted">Wählt gemeinsam aus, was ihr spielen wollt.</p>
+            <div class="grid" id="roomGames"></div>
+            <button id="startGameBtn" class="primary" style="margin-top:15px;width:100%" onclick="startGame()">Spiel starten</button>
+            <p id="gameNotice" class="muted" style="margin:12px 0 0"></p>
+          </div>
+
+          <div id="gameArea" class="hidden">
+            <div class="section-title">
+              <h2 id="gameTitle">Spiel</h2>
+              <button onclick="closeGame()">Zurück zur Lobby</button>
+            </div>
+            <div id="gameContent"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <div class="section-title"><h3>Spieler</h3><span id="playerCount" class="badge">1 Spieler</span></div>
+            <div id="roomPlayers" class="players"></div>
+            <hr>
+            <button class="primary" style="width:100%" onclick="inviteFriend()">♧ Freund einladen</button>
+            <div id="inviteOptions" class="hidden" style="margin-top:12px"></div>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <h3>Lobby-Verwaltung</h3>
+            <p class="muted">Admin und Co-Owner können die Lobby verwalten.</p>
+            <div id="adminControls"></div>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <h3>Aktivitäten</h3>
+            <div id="log"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="modalWrap" class="modal-wrap hidden">
+  <div class="modal" id="modal"></div>
+</div>
+<div id="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const API_BASE = "";
+let playerId = localStorage.getItem("cw2_player_id");
+if (!playerId) { playerId = (crypto.randomUUID ? crypto.randomUUID() : "cw-"+Math.random().toString(36).slice(2)+Date.now()); localStorage.setItem("cw2_player_id",playerId); }
+let coins = 100, ownedItems = ["default"];
+const SHOP_ITEMS = [
+ {id:"mint",name:"Mint-Würfel",emoji:"🟩",price:30,color:"#61e6a7"},
+ {id:"sunset",name:"Sunset-Würfel",emoji:"🟧",price:45,color:"#ff7b36"},
+ {id:"violet",name:"Violet-Würfel",emoji:"🟪",price:50,color:"#9c70ff"},
+ {id:"pink",name:"Neon-Pink",emoji:"💗",price:60,color:"#ff70cb"},
+ {id:"gold",name:"Gold-Würfel",emoji:"🟨",price:80,color:"#f2ec6d"}
+];
+async function apiRequest(path,options={}) {
+ const r=await fetch(API_BASE+path,{...options,headers:{"Content-Type":"application/json",...(options.headers||{})}});
+ if(!r.ok) throw new Error(await r.text()||"Serverfehler");
+ return r.status===204?null:r.json();
+}
+function syncStateToServer() {
+ apiRequest("/api/state/"+encodeURIComponent(playerId),{method:"PUT",body:JSON.stringify({name,avatarData,skin,friends,coins,ownedItems})})
+ .then(()=>{$("topStatus").textContent="Mit Server verbunden";})
+ .catch(()=>{$("topStatus").textContent="Offline-Modus";});
+}
+async function loadServerState() {
+ try {
+  const st=await apiRequest("/api/state/"+encodeURIComponent(playerId));
+  if(st&&st.name){name=st.name;avatarData=st.avatarData||"";skin={...DEFAULT_SKIN,...(st.skin||{})};friends=Array.isArray(st.friends)?st.friends:friends;coins=Number.isFinite(st.coins)?st.coins:100;ownedItems=Array.isArray(st.ownedItems)?st.ownedItems:["default"];}
+  $("topStatus").textContent="Mit Server verbunden";
+ } catch(e) {$("topStatus").textContent="Offline-Modus";}
+ try { localStorage.setItem("cw2_name",name);localStorage.setItem("cw2_avatar",avatarData);localStorage.setItem("cw2_skin",JSON.stringify(skin));localStorage.setItem("cw2_friends",JSON.stringify(friends)); } catch(e){}
+ updateHeader();renderSkin();renderFriends();renderShop();
+}
+function renderShop() {
+ if(!$("shopItems"))return;
+ $("coinBalance").textContent=coins;
+ $("shopItems").innerHTML=SHOP_ITEMS.map(it=>{const own=ownedItems.includes(it.id);return `<div class="card"><div style="font-size:42px">${it.emoji}</div><h3>${it.name}</h3><p>Farbe für deinen Würfel-Avatar.</p><span class="badge">${own?"Bereits gekauft":it.price+" 🪙"}</span><button class="${own?"":"primary"}" style="width:100%;margin-top:12px" ${own?"disabled":""} onclick="buyShopItem('${it.id}')">${own?"Im Besitz":"Kaufen"}</button></div>`}).join("");
+}
+async function buyShopItem(id) {
+ const it=SHOP_ITEMS.find(x=>x.id===id);if(!it)return;
+ if(ownedItems.includes(id))return toast("Diesen Skin besitzt du bereits.");
+ try {const result=await apiRequest("/api/shop/buy",{method:"POST",body:JSON.stringify({playerId,itemId:id})});coins=result.coins;ownedItems=result.ownedItems;}
+ catch(e){if(coins<it.price)return toast("Nicht genug Coins.");coins-=it.price;ownedItems.push(id);toast("Offline: Kauf nur lokal gespeichert.");}
+ skin.color=it.color;persist();renderSkin();renderShop();syncStateToServer();toast(it.name+" freigeschaltet!");
+}
+const GAME_DATA = [
+ {id:"mensch",name:"Mensch ärgere dich nicht",emoji:"🎲",desc:"Der Brettspiel-Klassiker.",min:2,max:4},
+ {id:"uno",name:"UNO",emoji:"🃏",desc:"Farbkarten ablegen und als Erster alle Karten loswerden.",min:2,max:10},
+ {id:"malefitz",name:"Malefitz",emoji:"🔴",desc:"Ein Hindernis-Brettspiel für mehrere Spieler.",min:2,max:4}
+];
+const COLORS = ["#38c9ff","#ff657a","#9c70ff","#61e6a7","#ffbd54","#f4f5ff","#ff70cb","#ff7b36","#80a5ff","#f2ec6d"];
+const EYES = ["• •","◉ ◉","^ ^","♥ ♥","✦ ✦","◕ ◕","- -","◉ •","⊙ ⊙","ಠ ಠ"];
+const HAIR = ["—","♠","▲","〰","◆","♣","✦","⌁","▰","✿"];
+const MOUTHS = ["‿","ω","ᴗ","﹏","o","▽","‸","︶","◡","▱"];
+const SKIN_KEYS = ["color","eyes","hair","mouth"];
+const DEFAULT_SKIN = {color:COLORS[0],eyes:0,hair:0,mouth:0};
+let skin = {...DEFAULT_SKIN};
+let name = "CubePlayer";
+let avatarData = "";
+let friends = [];
+let lobbies = [];
+let currentLobby = null;
+let selectedGame = "mensch";
+let movementStyle = 0;
+let canvasFrame = 0;
+let animation = null;
+let gameState = null;
+let roomChat = [];
 
 try {
+ name = localStorage.getItem("cw2_name") || name;
+ avatarData = localStorage.getItem("cw2_avatar") || "";
+ skin = {...DEFAULT_SKIN,...JSON.parse(localStorage.getItem("cw2_skin") || "{}")};
+ friends = JSON.parse(localStorage.getItem("cw2_friends") || "[]");
+} catch(e) {}
 
-    db.prepare(
-        "ALTER TABLE users ADD COLUMN friend_code TEXT UNIQUE"
-    ).run();
+function persist() {
+ try {
+  localStorage.setItem("cw2_name",name);
+  localStorage.setItem("cw2_avatar",avatarData);
+  localStorage.setItem("cw2_skin",JSON.stringify(skin));
+  localStorage.setItem("cw2_friends",JSON.stringify(friends));
+ } catch(e) {}
+ syncStateToServer();
+}
+function escapeHTML(s) {
+ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function toast(msg) {
+ $("toast").textContent=msg;
+ $("toast").style.display="block";
+ clearTimeout(toast.timer);
+ toast.timer=setTimeout(()=>$("toast").style.display="none",2600);
+}
+function showPage(page) {
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ $("page-"+page).classList.add("active");
+ document.querySelectorAll(".nav").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+ if(page==="lobbies") renderLobbies();
+ if(page==="friends") renderFriends();
+ if(page==="profile") renderSkin();\n  if(page==="shop") renderShop();
+ if(page==="room" && currentLobby) renderRoom();
+}
+document.querySelectorAll(".nav").forEach(b=>b.onclick=()=>showPage(b.dataset.page));
 
-} catch (error) {
-
-    /*
-       Wenn die Spalte bereits existiert,
-       ist alles in Ordnung.
-    */
-
+function avatarFace(s=skin) {
+ return {color:s.color||COLORS[0],eyes:EYES[s.eyes]||EYES[0],hair:HAIR[s.hair]||HAIR[0],mouth:MOUTHS[s.mouth]||MOUTHS[0]};
+}
+function avatarHTML(s=skin) {
+ const a=avatarFace(s);
+ return `<span style="display:inline-grid;place-items:center;width:58px;height:58px;border-radius:13px;background:${a.color};color:#111827;border:2px solid #d6f7ff;font-weight:bold;line-height:1.3;font-size:13px;overflow:hidden"><span>${a.hair}</span><span style="font-size:15px">${a.eyes}</span><span>${a.mouth}</span></span>`;
+}
+function updateHeader() {
+ $("topName").textContent=name;
+ $("topAvatar").innerHTML=avatarData ? `<img src="${avatarData}" alt="Profilbild" style="width:40px;height:40px;object-fit:cover;border-radius:10px">` : avatarHTML();
+ $("avatarPreview").innerHTML=avatarData ? `<img src="${avatarData}" alt="Profilbild" style="width:100px;height:100px;object-fit:cover;border-radius:16px">` : avatarHTML();
+}
+function renderSkin() {
+ $("nameInput").value=name;
+ $("colorChoices").innerHTML=COLORS.map(c=>`<button title="${c}" class="color-choice ${skin.color===c?"selected":""}" style="background:${c}" onclick="setSkin('color','${c}')"></button>`).join("");
+ for(const [key,arr,id] of [["eyes",EYES,"eyeChoices"],["hair",HAIR,"hairChoices"],["mouth",MOUTHS,"mouthChoices"]]) {
+  $(id).innerHTML=arr.map((v,i)=>`<button class="skin-option ${skin[key]===i?"selected":""}" onclick="setSkin('${key}',${i})"><span class="skin-symbol">${v}</span><small>${i+1}</small></button>`).join("");
+ }
+ updateHeader();
+}
+function setSkin(key,value) {
+ skin[key]=value; renderSkin(); persist(); renderRoom();
+}
+function saveProfile() {
+ const newName=$("nameInput").value.trim();
+ if(newName) name=newName.slice(0,20);
+ persist(); updateHeader(); renderRoom(); toast("Profil gespeichert!");
+}
+$("avatarUpload").onchange=e=>{
+ const f=e.target.files[0]; if(!f)return;
+ if(!f.type.startsWith("image/")) return toast("Bitte eine Bilddatei wählen.");
+ if(f.size>2*1024*1024) return toast("Bitte wähle ein Bild unter 2 MB.");
+ const r=new FileReader();
+ r.onload=()=>{avatarData=r.result;persist();updateHeader();toast("Profilbild aktualisiert.");};
+ r.readAsDataURL(f);
+};
+function clearAvatar() {
+ avatarData=""; $("avatarUpload").value=""; persist(); updateHeader(); toast("Eigenes Bild entfernt.");
 }
 
-
-/* =====================================================
-   FREUNDSCHAFTEN
-===================================================== */
-
-db.exec(`
-    CREATE TABLE IF NOT EXISTS friendships (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-        user_id INTEGER NOT NULL,
-
-        friend_id INTEGER NOT NULL,
-
-        status TEXT NOT NULL DEFAULT 'pending',
-
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-
-        UNIQUE(user_id, friend_id),
-
-        FOREIGN KEY(user_id)
-            REFERENCES users(id)
-            ON DELETE CASCADE,
-
-        FOREIGN KEY(friend_id)
-            REFERENCES users(id)
-            ON DELETE CASCADE
-    )
-`);
-
-
-/* =====================================================
-   FEHLENDE FREUNDESCODES ERSTELLEN
-===================================================== */
-
-function freundesCodeErstellen() {
-
-    const zeichen =
-        "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-
-    let code = "NSAH-";
-
-    for (let i = 0; i < 6; i++) {
-
-        code +=
-            zeichen[
-                Math.floor(
-                    Math.random() * zeichen.length
-                )
-            ];
-    }
-
-    return code;
+function renderGameCards(target, inRoom=false) {
+ $(target).innerHTML=GAME_DATA.map(g=>`
+ <div class="card game-choice ${selectedGame===g.id?"selected":""}" onclick="chooseGame('${g.id}')">
+  <div style="font-size:32px">${g.emoji}</div><h3>${g.name}</h3>
+  <p>${g.desc}</p>
+  <span class="badge">${g.min}–${g.max} Spieler</span>
+  ${inRoom?`<p>${selectedGame===g.id?"✓ Ausgewählt":"Zum Auswählen klicken"}</p>`:""}
+ </div>`).join("");
+}
+function chooseGame(id) {
+ selectedGame=id;
+ renderGameCards("homeGames");
+ renderGameCards("roomGames",true);
+ if(currentLobby) {
+  currentLobby.game=id;
+  renderRoom();
+ }
+}
+function canManage() {
+ if(!currentLobby)return false;
+ const p=currentLobby.players.find(p=>p.id===currentLobby.me);
+ return p && (p.role==="Admin"||p.role==="Co-Owner");
+}
+function isAdmin() {
+ if(!currentLobby)return false;
+ const p=currentLobby.players.find(p=>p.id===currentLobby.me);
+ return p && p.role==="Admin";
+}
+function makeCode() {
+ return Math.random().toString(36).slice(2,7).toUpperCase();
+}
+function newLobby() {
+ openModal(`<h2>Neue Lobby erstellen</h2>
+ <label>Lobby-Name</label><input id="newRoomName" maxlength="40" value="${escapeHTML(name)}s Lobby">
+ <label>Lobby-Sichtbarkeit</label><select id="newRoomPublic"><option value="public">Öffentlich</option><option value="private">Privat (Code nötig)</option></select>
+ <label>Maximale Spieler</label><select id="newRoomMax"><option>4</option><option selected>8</option><option>10</option><option>16</option></select>
+ <label>Spielauswahl</label><select id="newRoomGame">${GAME_DATA.map(g=>`<option value="${g.id}">${g.name}</option>`).join("")}</select>
+ <label>Hüpfen in der Lobby</label><select id="newRoomHop"><option value="yes">Erlaubt</option><option value="no">Aus</option></select>
+ <div class="row" style="margin-top:18px"><button class="primary" onclick="createLobby()">Erstellen</button><button onclick="closeModal()">Abbrechen</button></div>`);
+}
+function createLobby() {
+ const title=$("newRoomName").value.trim()||"Neue Lobby";
+ const pub=$("newRoomPublic").value==="public";
+ const max=+$("newRoomMax").value;
+ const game=$("newRoomGame").value;
+ const l={
+  id:makeCode(),title,public:pub,max,game,hop:$("newRoomHop").value==="yes",
+  players:[{id:"me",name,role:"Admin",skin:{...skin},avatar:avatarData}],
+  me:"me",started:false,log:[],settings:{allowInvites:true}
+ };
+ lobbies.push(l); currentLobby=l; selectedGame=game;
+ closeModal(); showPage("room"); logEvent("Lobby erstellt."); toast("Deine Lobby wurde erstellt!");
+}
+function joinByCode() {
+ const code=$("joinCode").value.trim().toUpperCase();
+ const l=lobbies.find(x=>x.id===code);
+ if(!l)return toast("Keine passende lokale Lobby gefunden.");
+ joinLobby(l.id);
+}
+function joinLobby(id) {
+ const l=lobbies.find(x=>x.id===id);
+ if(!l)return toast("Lobby nicht gefunden.");
+ if(l.players.length>=l.max)return toast("Die Lobby ist voll.");
+ if(l.players.some(p=>p.id==="me")) {currentLobby=l;showPage("room");return;}
+ // In der Offline-Demo kann derselbe Browser keine anderen Geräte simulieren.
+ toast("Diese Demo unterstützt keine echten Remote-Spieler. Nutze den Code auf einem verbundenen Multiplayer-Server.");
+}
+function renderLobbies() {
+ const q=($("searchLobby").value||"").toLowerCase();
+ const list=lobbies.filter(l=>l.public&&(l.title.toLowerCase().includes(q)||l.id.toLowerCase().includes(q)));
+ $("lobbyList").innerHTML=list.length?list.map(l=>`
+  <div class="card"><span class="badge">${l.public?"Öffentlich":"Privat"}</span>
+   <h3>${escapeHTML(l.title)}</h3><p>Code: ${l.id}<br>Spiel: ${GAME_DATA.find(g=>g.id===l.game)?.name}<br>Spieler: ${l.players.length}/${l.max}</p>
+   <button class="primary" onclick="joinLobby('${l.id}')">Beitreten</button>
+  </div>`).join(""):`<div class="card"><p>Keine lokalen Lobbys gefunden. Erstelle eine neue Lobby!</p><button class="primary" onclick="newLobby()">Lobby erstellen</button></div>`;
+}
+function copyCode() {
+ if(!currentLobby)return;
+ if(navigator.clipboard) navigator.clipboard.writeText(currentLobby.id).then(()=>toast("Lobby-Code kopiert!")).catch(()=>toast("Lobby-Code: "+currentLobby.id));
+ else toast("Lobby-Code: "+currentLobby.id);
+}
+function leaveLobby() {
+ if(!currentLobby)return;
+ if(isAdmin()&&currentLobby.players.length>1) return toast("Übergib zuerst die Admin-Rechte.");
+ const old=currentLobby;
+ lobbies=lobbies.filter(l=>l!==old);
+ currentLobby=null; closeGame(); showPage("home"); toast("Lobby verlassen.");
+}
+function logEvent(s) {
+ if(!currentLobby)return;
+ currentLobby.log.unshift(s);
+ currentLobby.log=currentLobby.log.slice(0,12);
+ renderLog();
+}
+function renderLog() {
+ $("log").innerHTML=currentLobby?.log.map(s=>`<div>• ${escapeHTML(s)}</div>`).join("")||"Noch keine Aktivitäten.";
+}
+function renderRoom() {
+ if(!currentLobby)return;
+ const l=currentLobby;
+ $("roomTitle").textContent=l.title;
+ $("roomCode").textContent=l.id;
+ $("playerCount").textContent=`${l.players.length} Spieler`;
+ $("roomPlayers").innerHTML=l.players.map(p=>`
+  <div class="player">
+   <div class="row">${avatarHTML(p.skin||DEFAULT_SKIN)}<div class="player-name"><b>${escapeHTML(p.name)}</b><br><small>${p.role}</small></div></div>
+   ${canManage()&&p.id!=="me"?`<button onclick="managePlayer('${p.id}')">⋯</button>`:""}
+  </div>`).join("");
+ $("adminControls").innerHTML=canManage()?`
+  <button style="width:100%;margin-bottom:8px" onclick="editSettings()">⚙ Lobby-Einstellungen</button>
+  <button style="width:100%;margin-bottom:8px" onclick="transferAdmin()">♛ Admin übertragen</button>
+  <button style="width:100%" onclick="setCoOwner()">✦ Co-Owner ernennen</button>
+ `:`<p class="muted">Nur Admin und Co-Owner können diese Lobby verwalten.</p>`;
+ $("gameNotice").textContent=`Ausgewählt: ${GAME_DATA.find(g=>g.id===l.game)?.name}. Benötigt ${GAME_DATA.find(g=>g.id===l.game)?.min}–${GAME_DATA.find(g=>g.id===l.game)?.max} Spieler.`;
+ renderGameCards("roomGames",true);
+ $("startGameBtn").disabled=l.players.length<GAME_DATA.find(g=>g.id===l.game).min;
+ $("homeLobby").innerHTML=`<h3>${escapeHTML(l.title)}</h3><p>Code: ${l.id} · ${l.players.length} Spieler</p><button class="primary" onclick="showPage('room')">Lobby öffnen</button>`;
+ renderLog(); drawPlayground();
+}
+function managePlayer(id) {
+ const p=currentLobby?.players.find(x=>x.id===id);
+ if(!p)return;
+ openModal(`<h2>${escapeHTML(p.name)}</h2>
+ <p>Rolle: ${p.role}</p>
+ <div class="row"><button onclick="kickPlayer('${id}')">Spieler kicken</button>
+ <button onclick="makeCoOwner('${id}')">Co-Owner geben</button></div>
+ <button style="margin-top:12px" onclick="closeModal()">Schließen</button>`);
+}
+function kickPlayer(id) {
+ if(!canManage())return toast("Keine Rechte.");
+ if(id==="me")return toast("Du kannst dich nicht selbst kicken.");
+ const p=currentLobby.players.find(x=>x.id===id);
+ currentLobby.players=currentLobby.players.filter(x=>x.id!==id);
+ closeModal();logEvent((p?.name||"Spieler")+" wurde entfernt.");renderRoom();
+}
+function transferAdmin() {
+ if(!isAdmin())return toast("Nur der Admin kann Rechte übertragen.");
+ const options=currentLobby.players.filter(p=>p.id!=="me");
+ if(!options.length)return toast("Dafür muss ein weiterer Spieler in der Lobby sein.");
+ openModal(`<h2>Admin übertragen</h2><p>Du verlierst deine Admin-Rechte. Der neue Admin übernimmt die Lobby.</p>
+ ${options.map(p=>`<button style="width:100%;margin:5px 0" onclick="confirmAdmin('${p.id}')">${escapeHTML(p.name)}</button>`).join("")}
+ <button style="margin-top:12px" onclick="closeModal()">Abbrechen</button>`);
+}
+function confirmAdmin(id) {
+ const target=currentLobby.players.find(p=>p.id===id);
+ const me=currentLobby.players.find(p=>p.id==="me");
+ if(!target||!me)return;
+ target.role="Admin";me.role="Spieler";
+ closeModal();logEvent("Admin-Rechte wurden übertragen.");renderRoom();toast("Admin übertragen.");
+}
+function setCoOwner() {
+ if(!isAdmin())return toast("Nur der Admin kann Co-Owner ernennen.");
+ const options=currentLobby.players.filter(p=>p.id!=="me");
+ if(!options.length)return toast("Es ist noch kein anderer Spieler in der Lobby.");
+ openModal(`<h2>Co-Owner ernennen</h2>${options.map(p=>`<button style="width:100%;margin:5px 0" onclick="confirmCoOwner('${p.id}')">${escapeHTML(p.name)}</button>`).join("")}<button onclick="closeModal()">Abbrechen</button>`);
+}
+function confirmCoOwner(id) {
+ const p=currentLobby.players.find(p=>p.id===id);
+ if(p){p.role="Co-Owner";logEvent(p.name+" ist jetzt Co-Owner.");}
+ closeModal();renderRoom();
+}
+function editSettings() {
+ if(!canManage())return toast("Keine Rechte.");
+ openModal(`<h2>Lobby-Einstellungen</h2>
+ <label>Name</label><input id="editTitle" maxlength="40" value="${escapeHTML(currentLobby.title)}">
+ <label>Sichtbarkeit</label><select id="editPublic"><option value="public" ${currentLobby.public?"selected":""}>Öffentlich</option><option value="private" ${!currentLobby.public?"selected":""}>Privat</option></select>
+ <label>Hüpfen</label><select id="editHop"><option value="yes" ${currentLobby.hop?"selected":""}>An</option><option value="no" ${!currentLobby.hop?"selected":""}>Aus</option></select>
+ <button class="primary" style="margin-top:14px" onclick="saveSettings()">Speichern</button>
+ <button onclick="closeModal()">Abbrechen</button>`);
+}
+function saveSettings() {
+ currentLobby.title=$("editTitle").value.trim()||currentLobby.title;
+ currentLobby.public=$("editPublic").value==="public";
+ currentLobby.hop=$("editHop").value==="yes";
+ closeModal();renderRoom();renderLobbies();logEvent("Lobby-Einstellungen geändert.");
+}
+function inviteFriend() {
+ const opts=friends.filter(f=>!currentLobby.players.some(p=>p.name===f));
+ $("inviteOptions").classList.remove("hidden");
+ $("inviteOptions").innerHTML=opts.length?opts.map(f=>`<div class="player"><span>${escapeHTML(f)}</span><button onclick="inviteOne('${encodeURIComponent(f)}')">Einladen</button></div>`).join(""):`<p class="muted">Keine verfügbaren Freunde. Füge Freunde im Freunde-Menü hinzu.</p>`;
+}
+function inviteOne(enc) {
+ const f=decodeURIComponent(enc);
+ toast("Einladung vorbereitet für "+f+". Für echte Einladungen wird ein Online-Server benötigt.");
+ logEvent("Einladung für "+f+" vorbereitet.");
+}
+function addFriend() {
+ const f=$("friendName").value.trim();
+ if(!f)return toast("Gib zuerst einen Namen ein.");
+ if(f.toLowerCase()===name.toLowerCase())return toast("Du kannst dich nicht selbst hinzufügen.");
+ if(friends.some(x=>x.toLowerCase()===f.toLowerCase()))return toast("Dieser Name ist bereits in deiner Liste.");
+ friends.push(f);persist();$("friendName").value="";renderFriends();toast(f+" wurde lokal hinzugefügt.");
+}
+function removeFriend(f) {
+ friends=friends.filter(x=>x!==f);persist();renderFriends();
+}
+function renderFriends() {
+ $("friendList").innerHTML=friends.length?friends.map(f=>`<div class="player"><span>♙ ${escapeHTML(f)}</span><button onclick="removeFriend('${encodeURIComponent(f)}')">Entfernen</button></div>`).join(""):`<p class="muted">Noch keine Freunde. Füge oben einen Namen hinzu.</p>`;
 }
 
-
-function eindeutigenFreundesCodeErstellen() {
-
-    let code;
-    let vorhanden = true;
-
-    while (vorhanden) {
-
-        code =
-            freundesCodeErstellen();
-
-        const user =
-            db.prepare(
-                "SELECT id FROM users WHERE friend_code = ?"
-            ).get(code);
-
-        vorhanden = !!user;
-    }
-
-    return code;
+function drawPlayground() {
+ const c=$("playground"); if(!c||!currentLobby)return;
+ const ctx=c.getContext("2d");
+ const w=c.width,h=c.height;
+ ctx.clearRect(0,0,w,h);
+ const g=ctx.createLinearGradient(0,0,0,h);
+ g.addColorStop(0,"#101b35");g.addColorStop(1,"#182a48");
+ ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+ for(let x=0;x<w;x+=40){ctx.strokeStyle="#304a6c";ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}
+ ctx.fillStyle="#243e5d";ctx.fillRect(0,h-50,w,50);
+ ctx.fillStyle="#00cfff";ctx.fillRect(0,h-50,w,3);
+ const people=currentLobby.players;
+ const t=performance.now()/330;
+ people.forEach((p,i)=>{
+  const x=(110+i*150+Math.sin(t+i)*35)%(w-80)+30;
+  const y=h-62-Math.abs(Math.sin(t*1.6+i*1.5))*45;
+  const s=p.skin||DEFAULT_SKIN;
+  ctx.fillStyle="#0005";ctx.beginPath();ctx.ellipse(x+24,h-50,27,6,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=s.color;ctx.fillRect(x,y,48,42);
+  ctx.strokeStyle="#d6f7ff";ctx.lineWidth=2;ctx.strokeRect(x,y,48,42);
+  ctx.fillStyle="#101629";ctx.font="bold 10px Arial";ctx.textAlign="center";
+  ctx.fillText(EYES[s.eyes]||EYES[0],x+24,y+18);
+  ctx.fillText(MOUTHS[s.mouth]||MOUTHS[0],x+24,y+33);
+  ctx.fillStyle="#fff";ctx.font="12px Arial";ctx.fillText(p.name,x+24,y-9);
+  ctx.fillStyle=s.color;ctx.fillRect(x,y-8,48,5);
+ });
+ if(currentLobby.hop) animation=requestAnimationFrame(drawPlayground);
+}
+function changeMovement() {
+ movementStyle=(movementStyle+1)%3;
+ toast(["Normal hüpfen","Hohe Sprünge","Schnelles Hüpfen"][movementStyle]);
+ if(currentLobby) drawPlayground();
 }
 
-
-/*
-   Alte Benutzer bekommen automatisch
-   einen Freundescode.
-*/
-
-const benutzerOhneCode =
-    db.prepare(`
-        SELECT id
-        FROM users
-        WHERE friend_code IS NULL
-           OR friend_code = ''
-    `).all();
-
-
-for (const user of benutzerOhneCode) {
-
-    const code =
-        eindeutigenFreundesCodeErstellen();
-
-    db.prepare(`
-        UPDATE users
-        SET friend_code = ?
-        WHERE id = ?
-    `).run(
-        code,
-        user.id
-    );
+// Kleine lokale Brettspiel-Prototypen
+function startGame() {
+ if(!currentLobby)return;
+ const g=GAME_DATA.find(g=>g.id===currentLobby.game);
+ if(currentLobby.players.length<g.min)return toast("Mindestens "+g.min+" Spieler werden benötigt.");
+ if(currentLobby.players.length>g.max)return toast("Dieses Spiel erlaubt maximal "+g.max+" Spieler.");
+ gameState={turn:0,round:0,deck:[],hands:[],discard:[],scores:[],pos:currentLobby.players.map(()=>0)};
+ $("gameArea").classList.remove("hidden");
+ $("gameTitle").textContent=g.name;
+ if(g.id==="mensch") renderMensch();
+ if(g.id==="malefitz") renderMalefitz();
+ if(g.id==="uno") initUno();
+ $("gameArea").scrollIntoView({behavior:"smooth",block:"start"});
 }
-
-
-/* =====================================================
-   EXPRESS
-===================================================== */
-
-app.use(
-    express.json()
-);
-
-app.use(
-    express.urlencoded({
-        extended: true
-    })
-);
-
-
-/* =====================================================
-   SESSION
-===================================================== */
-
-app.use(
-    session({
-
-        secret:
-            "NSAH-Geheimer-Schluessel-2026",
-
-        resave: false,
-
-        saveUninitialized: false,
-
-        cookie: {
-
-            httpOnly: true,
-
-            maxAge:
-                1000 *
-                60 *
-                60 *
-                24 *
-                7
-        }
-
-    })
-);
-
-
-/* =====================================================
-   WEBSITE
-===================================================== */
-
-app.use(
-    express.static(__dirname)
-);
-
-
-app.get("/", (req, res) => {
-
-    res.sendFile(
-        path.join(
-            __dirname,
-            "index.html"
-        )
-    );
-
-});
-
-
-/* =====================================================
-   REGISTRIEREN
-===================================================== */
-
-app.post(
-    "/api/register",
-    async (req, res) => {
-
-        try {
-
-            const {
-                username,
-                email,
-                password
-            } = req.body;
-
-
-            if (
-                !username ||
-                !email ||
-                !password
-            ) {
-
-                return res.json({
-
-                    success: false,
-
-                    message:
-                        "Bitte alle Felder ausfüllen."
-
-                });
-            }
-
-
-            if (
-                password.length < 6
-            ) {
-
-                return res.json({
-
-                    success: false,
-
-                    message:
-                        "Das Passwort muss mindestens 6 Zeichen haben."
-
-                });
-            }
-
-
-            const vorhandenerBenutzer =
-                db.prepare(
-                    "SELECT id FROM users WHERE email = ?"
-                ).get(email);
-
-
-            if (vorhandenerBenutzer) {
-
-                return res.json({
-
-                    success: false,
-
-                    message:
-                        "Diese E-Mail-Adresse ist bereits registriert."
-
-                });
-            }
-
-
-            const passwortHash =
-                await bcrypt.hash(
-                    password,
-                    12
-                );
-
-
-            const friendCode =
-                eindeutigenFreundesCodeErstellen();
-
-
-            const ergebnis =
-                db.prepare(`
-                    INSERT INTO users
-                    (
-                        username,
-                        email,
-                        password,
-                        friend_code
-                    )
-                    VALUES (?, ?, ?, ?)
-                `).run(
-
-                    username,
-
-                    email,
-
-                    passwortHash,
-
-                    friendCode
-
-                );
-
-
-            req.session.userId =
-                ergebnis.lastInsertRowid;
-
-
-            res.json({
-
-                success: true,
-
-                username:
-                    username,
-
-                email:
-                    email,
-
-                friendCode:
-                    friendCode
-
-            });
-
-
-        } catch (error) {
-
-            console.error(
-                "Registrierungsfehler:",
-                error
-            );
-
-
-            res.json({
-
-                success: false,
-
-                message:
-                    "Bei der Registrierung ist ein Fehler aufgetreten."
-
-            });
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   ANMELDEN
-===================================================== */
-
-app.post(
-    "/api/login",
-    async (req, res) => {
-
-        try {
-
-            const {
-                email,
-                password
-            } = req.body;
-
-
-            const user =
-                db.prepare(
-                    "SELECT * FROM users WHERE email = ?"
-                ).get(email);
-
-
-            if (!user) {
-
-                return res.json({
-
-                    success: false,
-
-                    message:
-                        "E-Mail oder Passwort ist falsch."
-
-                });
-            }
-
-
-            const passwortRichtig =
-                await bcrypt.compare(
-                    password,
-                    user.password
-                );
-
-
-            if (!passwortRichtig) {
-
-                return res.json({
-
-                    success: false,
-
-                    message:
-                        "E-Mail oder Passwort ist falsch."
-
-                });
-            }
-
-
-            /*
-               Sicherheitshalber auch bei alten
-               Benutzern einen Code erzeugen.
-            */
-
-            if (
-                !user.friend_code
-            ) {
-
-                const neuerCode =
-                    eindeutigenFreundesCodeErstellen();
-
-
-                db.prepare(`
-                    UPDATE users
-                    SET friend_code = ?
-                    WHERE id = ?
-                `).run(
-                    neuerCode,
-                    user.id
-                );
-
-
-                user.friend_code =
-                    neuerCode;
-            }
-
-
-            req.session.userId =
-                user.id;
-
-
-            res.json({
-
-                success: true,
-
-                username:
-                    user.username,
-
-                email:
-                    user.email,
-
-                friendCode:
-                    user.friend_code
-
-            });
-
-
-        } catch (error) {
-
-            console.error(
-                "Anmeldefehler:",
-                error
-            );
-
-
-            res.json({
-
-                success: false,
-
-                message:
-                    "Bei der Anmeldung ist ein Fehler aufgetreten."
-
-            });
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   AKTUELLER BENUTZER
-===================================================== */
-
-app.get(
-    "/api/me",
-    (req, res) => {
-
-        if (
-            !req.session.userId
-        ) {
-
-            return res.json({
-
-                loggedIn: false
-
-            });
-
-        }
-
-
-        const user =
-            db.prepare(`
-                SELECT
-                    id,
-                    username,
-                    email,
-                    friend_code
-                FROM users
-                WHERE id = ?
-            `).get(
-                req.session.userId
-            );
-
-
-        if (!user) {
-
-            return res.json({
-
-                loggedIn: false
-
-            });
-
-        }
-
-
-        res.json({
-
-            loggedIn: true,
-
-            username:
-                user.username,
-
-            email:
-                user.email,
-
-            friendCode:
-                user.friend_code
-
-        });
-
-    }
-);
-
-
-/* =====================================================
-   FREUNDESDATEN
-===================================================== */
-
-app.get(
-    "/api/friends",
-    (req, res) => {
-
-        if (
-            !req.session.userId
-        ) {
-
-            return res.status(401).json({
-
-                success: false,
-
-                message:
-                    "Du musst angemeldet sein."
-
-            });
-
-        }
-
-
-        const userId =
-            req.session.userId;
-
-
-        const user =
-            db.prepare(`
-                SELECT
-                    username,
-                    friend_code
-                FROM users
-                WHERE id = ?
-            `).get(userId);
-
-
-        /*
-           Bestätigte Freunde
-        */
-
-        const freunde =
-            db.prepare(`
-                SELECT
-                    u.id,
-                    u.username,
-                    u.email
-                FROM friendships f
-                JOIN users u
-                    ON (
-                        CASE
-                            WHEN f.user_id = ?
-                            THEN u.id = f.friend_id
-                            ELSE u.id = f.user_id
-                        END
-                    )
-                WHERE
-                    (
-                        f.user_id = ?
-                        OR f.friend_id = ?
-                    )
-                    AND f.status = 'accepted'
-            `).all(
-                userId,
-                userId,
-                userId
-            );
-
-
-        /*
-           Eingehende Anfragen
-        */
-
-        const anfragen =
-            db.prepare(`
-                SELECT
-                    f.id,
-                    u.username,
-                    u.email
-                FROM friendships f
-                JOIN users u
-                    ON u.id = f.user_id
-                WHERE
-                    f.friend_id = ?
-                    AND f.status = 'pending'
-            `).all(userId);
-
-
-        res.json({
-
-            success: true,
-
-            friendCode:
-                user.friend_code,
-
-            friends:
-                freunde,
-
-            requests:
-                anfragen
-
-        });
-
-    }
-);
-
-
-/* =====================================================
-   FREUND HINZUFÜGEN
-===================================================== */
-
-app.post(
-    "/api/friends/add",
-    (req, res) => {
-
-        if (
-            !req.session.userId
-        ) {
-
-            return res.status(401).json({
-
-                success: false,
-
-                message:
-                    "Du musst angemeldet sein."
-
-            });
-
-        }
-
-
-        const userId =
-            req.session.userId;
-
-
-        let {
-            friendCode
-        } = req.body;
-
-
-        if (
-            !friendCode
-        ) {
-
-            return res.json({
-
-                success: false,
-
-                message:
-                    "Bitte einen Freundescode eingeben."
-
-            });
-
-        }
-
-
-        friendCode =
-            friendCode
-                .trim()
-                .toUpperCase();
-
-
-        const friend =
-            db.prepare(`
-                SELECT
-                    id,
-                    username
-                FROM users
-                WHERE friend_code = ?
-            `).get(friendCode);
-
-
-        if (!friend) {
-
-            return res.json({
-
-                success: false,
-
-                message:
-                    "Dieser Freundescode wurde nicht gefunden."
-
-            });
-
-        }
-
-
-        if (
-            friend.id === userId
-        ) {
-
-            return res.json({
-
-                success: false,
-
-                message:
-                    "Du kannst dich nicht selbst hinzufügen."
-
-            });
-
-        }
-
-
-        /*
-           Prüfen, ob bereits eine Verbindung
-           in irgendeine Richtung existiert.
-        */
-
-        const bestehende =
-            db.prepare(`
-                SELECT *
-                FROM friendships
-                WHERE
-                    (
-                        user_id = ?
-                        AND friend_id = ?
-                    )
-                    OR
-                    (
-                        user_id = ?
-                        AND friend_id = ?
-                    )
-            `).get(
-
-                userId,
-                friend.id,
-
-                friend.id,
-                userId
-
-            );
-
-
-        if (bestehende) {
-
-            if (
-                bestehende.status ===
-                "accepted"
-            ) {
-
-                return res.json({
-
-                    success: false,
-
-                    message:
-                        "Ihr seid bereits befreundet."
-
-                });
-
-            }
-
-
-            if (
-                bestehende.status ===
-                "pending"
-            ) {
-
-                return res.json({
-
-                    success: false,
-
-                    message:
-                        "Eine Freundschaftsanfrage existiert bereits."
-
-                });
-
-            }
-
-        }
-
-
-        db.prepare(`
-            INSERT INTO friendships
-            (
-                user_id,
-                friend_id,
-                status
-            )
-            VALUES (?, ?, 'pending')
-        `).run(
-
-            userId,
-
-            friend.id
-
-        );
-
-
-        res.json({
-
-            success: true,
-
-            message:
-                "Freundschaftsanfrage gesendet."
-
-        });
-
-    }
-);
-
-
-/* =====================================================
-   FREUNDSCHAFTSANFRAGE ANNEHMEN
-===================================================== */
-
-app.post(
-    "/api/friends/accept",
-    (req, res) => {
-
-        if (
-            !req.session.userId
-        ) {
-
-            return res.status(401).json({
-
-                success: false,
-
-                message:
-                    "Du musst angemeldet sein."
-
-            });
-
-        }
-
-
-        const userId =
-            req.session.userId;
-
-
-        const {
-            requestId
-        } = req.body;
-
-
-        if (!requestId) {
-
-            return res.json({
-
-                success: false,
-
-                message:
-                    "Ungültige Anfrage."
-
-            });
-
-        }
-
-
-        const anfrage =
-            db.prepare(`
-                SELECT *
-                FROM friendships
-                WHERE
-                    id = ?
-                    AND friend_id = ?
-                    AND status = 'pending'
-            `).get(
-
-                requestId,
-
-                userId
-
-            );
-
-
-        if (!anfrage) {
-
-            return res.json({
-
-                success: false,
-
-                message:
-                    "Freundschaftsanfrage nicht gefunden."
-
-            });
-
-        }
-
-
-        db.prepare(`
-            UPDATE friendships
-            SET status = 'accepted'
-            WHERE id = ?
-        `).run(
-            requestId
-        );
-
-
-        res.json({
-
-            success: true,
-
-            message:
-                "Ihr seid jetzt befreundet."
-
-        });
-
-    }
-);
-
-
-/* =====================================================
-   FREUNDSCHAFTSANFRAGE ABLEHNEN
-===================================================== */
-
-app.post(
-    "/api/friends/decline",
-    (req, res) => {
-
-        if (
-            !req.session.userId
-        ) {
-
-            return res.status(401).json({
-
-                success: false,
-
-                message:
-                    "Du musst angemeldet sein."
-
-            });
-
-        }
-
-
-        const userId =
-            req.session.userId;
-
-
-        const {
-            requestId
-        } = req.body;
-
-
-        db.prepare(`
-            DELETE FROM friendships
-            WHERE
-                id = ?
-                AND friend_id = ?
-                AND status = 'pending'
-        `).run(
-
-            requestId,
-
-            userId
-
-        );
-
-
-        res.json({
-
-            success: true
-
-        });
-
-    }
-);
-
-
-/* =====================================================
-   FREUND ENTFERNEN
-===================================================== */
-
-app.post(
-    "/api/friends/remove",
-    (req, res) => {
-
-        if (
-            !req.session.userId
-        ) {
-
-            return res.status(401).json({
-
-                success: false,
-
-                message:
-                    "Du musst angemeldet sein."
-
-            });
-
-        }
-
-
-        const userId =
-            req.session.userId;
-
-
-        const {
-            friendId
-        } = req.body;
-
-
-        db.prepare(`
-            DELETE FROM friendships
-            WHERE
-                (
-                    user_id = ?
-                    AND friend_id = ?
-                )
-                OR
-                (
-                    user_id = ?
-                    AND friend_id = ?
-                )
-        `).run(
-
-            userId,
-            friendId,
-
-            friendId,
-            userId
-
-        );
-
-
-        res.json({
-
-            success: true,
-
-            message:
-                "Freund entfernt."
-
-        });
-
-    }
-);
-
-
-/* =====================================================
-   ABMELDEN
-===================================================== */
-
-app.post(
-    "/api/logout",
-    (req, res) => {
-
-        req.session.destroy(
-            (error) => {
-
-                if (error) {
-
-                    return res.json({
-
-                        success: false,
-
-                        message:
-                            "Abmelden fehlgeschlagen."
-
-                    });
-
-                }
-
-
-                res.json({
-
-                    success: true
-
-                });
-
-            }
-        );
-
-    }
-);
-
-
-/* =====================================================
-   SERVER STARTEN
-===================================================== */
-
-app.listen(
-    PORT,
-    () => {
-
-        console.log("");
-        console.log("==============================");
-        console.log("          NSAH SERVER");
-        console.log("==============================");
-        console.log("");
-        console.log(
-            "NSAH läuft auf http://localhost:"
-            + PORT
-        );
-        console.log("");
-        console.log(
-            "Freundesystem: AKTIV"
-        );
-        console.log("");
-
-    }
-);
+function closeGame() {
+ $("gameArea").classList.add("hidden");gameState=null;
+}
+function renderMensch() {
+ const n=currentLobby.players.length;
+ const cells=Array.from({length:121},(_,i)=>{
+  const row=Math.floor(i/11),col=i%11;
+  const path=(row===5||col===5);
+  return `<div class="cell ${path?"path":""}">${path&&((row+col)%3===0)?"·":""}</div>`;
+ });
+ const colors=["#f66","#f7d64a","#45a7ff","#66e39a"];
+ const pieces=currentLobby.players.map((p,i)=>`${colors[i]} ${escapeHTML(p.name)}`).join("<br>");
+ $("gameContent").innerHTML=`<p>Ein vereinfachtes lokales Spielbrett. Würfle und bewege deine Figur.</p>
+ <div class="row"><button class="primary" onclick="rollDice()">🎲 Würfeln</button><b id="diceResult">Würfel bereit</b></div>
+ <div class="board">${cells.join("")}</div><p>Spieler: ${pieces}</p>
+ <p id="boardMessage" class="muted">Du bist am Zug.</p>`;
+}
+function rollDice() {
+ if(!gameState)return;
+ const n=1+Math.floor(Math.random()*6);
+ gameState.pos[gameState.turn]=(gameState.pos[gameState.turn]+n)%40;
+ $("diceResult").textContent="🎲 "+n;
+ const p=currentLobby.players[gameState.turn];
+ $("boardMessage").textContent=p.name+" ist "+n+" Felder weitergezogen.";
+ gameState.turn=(gameState.turn+1)%currentLobby.players.length;
+}
+function renderMalefitz() {
+ const cells=Array.from({length:81},(_,i)=>{
+  const special=i%8===0;
+  return `<div class="cell ${special?"home":"path"}">${special?"✦":""}</div>`;
+ });
+ $("gameContent").innerHTML=`<p>Vereinfachtes Malefitz-Demobrett. Würfle, um deinen Zug zu bestimmen.</p>
+ <button class="primary" onclick="malefitzRoll()">🔴 Zug würfeln</button><b id="malefitzResult"></b>
+ <div class="board" style="grid-template-columns:repeat(9,minmax(22px,1fr))">${cells.join("")}</div>
+ <p id="malefitzMessage" class="muted">Alle Spieler sind bereit.</p>`;
+}
+function malefitzRoll() {
+ const n=1+Math.floor(Math.random()*6);
+ const p=currentLobby.players[gameState.turn];
+ gameState.pos[gameState.turn]=(gameState.pos[gameState.turn]+n)%40;
+ $("malefitzResult").textContent=" "+n;
+ $("malefitzMessage").textContent=p.name+" bewegt sich "+n+" Felder.";
+ gameState.turn=(gameState.turn+1)%currentLobby.players.length;
+}
+const UNO_COLORS=["#e83d50","#2786e8","#28a85c","#e8ad27"];
+function initUno() {
+ const deck=[];
+ for(let color=0;color<4;color++) {
+  for(let n=0;n<=9;n++)deck.push({color,n:String(n)});
+  for(const n of ["＋2","⟳","⊘"])deck.push({color,n});
+ }
+ deck.sort(()=>Math.random()-.5);
+ gameState.hands=currentLobby.players.map(()=>deck.splice(0,7));
+ gameState.discard=[deck.pop()];
+ gameState.deck=deck;
+ gameState.turn=0;
+ renderUno();
+}
+function renderUno() {
+ const current=gameState.hands[gameState.turn];
+ const discard=gameState.discard[gameState.discard.length-1];
+ $("gameContent").innerHTML=`<p>Am Zug: <b>${escapeHTML(currentLobby.players[gameState.turn].name)}</b></p>
+ <p>Abwurfstapel: <span class="badge" style="background:${UNO_COLORS[discard.color]}">${discard.n}</span> · Karten im Stapel: ${gameState.deck.length}</p>
+ <p>Wähle eine passende Farbe oder Zahl. Sonderkarten sind vereinfacht.</p>
+ <div id="unoHand">${current.map((c,i)=>`<button class="unocard" style="background:${UNO_COLORS[c.color]}" onclick="unoPlay(${i})">${c.n}</button>`).join("")}</div>
+ <p id="unoMessage" class="muted">Wenn du nicht legen kannst, ziehe eine Karte.</p>
+ <button onclick="unoDraw()">Karte ziehen</button>`;
+}
+function unoPlay(i) {
+ const hand=gameState.hands[gameState.turn],card=hand[i];
+ const top=gameState.discard[gameState.discard.length-1];
+ if(card.color!==top.color&&card.n!==top.n)return toast("Farbe oder Zahl muss passen.");
+ hand.splice(i,1);gameState.discard.push(card);
+ if(hand.length===0) {
+  $("gameContent").innerHTML=`<h2>🎉 ${escapeHTML(currentLobby.players[gameState.turn].name)} gewinnt!</h2><button onclick="initUno()">Neue Runde</button>`;
+  return;
+ }
+ let step=1;
+ if(card.n==="⟳")step=currentLobby.players.length-1;
+ if(card.n==="＋2") {
+  const next=(gameState.turn+1)%currentLobby.players.length;
+  gameState.hands[next].push(gameState.deck.pop()||{color:card.color,n:"0"},{color:card.color,n:"1"});
+ }
+ gameState.turn=(gameState.turn+step)%currentLobby.players.length;
+ renderUno();
+}
+function unoDraw() {
+ const card=gameState.deck.pop();
+ if(card)gameState.hands[gameState.turn].push(card);
+ gameState.turn=(gameState.turn+1)%currentLobby.players.length;
+ renderUno();
+}
+function openModal(html) { $("modal").innerHTML=html;$("modalWrap").classList.remove("hidden"); }
+function closeModal() { $("modalWrap").classList.add("hidden"); }
+
+function init() {
+ updateHeader();renderSkin();renderFriends();
+ renderGameCards("homeGames");renderGameCards("roomGames",true);
+ // Das Spielzimmer zeigt eine Animation nur, wenn eine Lobby offen ist.
+ $("page-room").addEventListener("transitionend",()=>{});
+}
+init();
+</script>
+</body>
+</html>
