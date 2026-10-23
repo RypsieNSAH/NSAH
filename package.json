@@ -1,16 +1,14 @@
 {
-  "name": "nsah",
+  "name": "cube-world",
   "version": "1.0.0",
   "private": true,
-  "description": "NSAH Website mit Login, Registrierung und Freundesystem",
+  "description": "Cube World Website und API",
   "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" },
   "dependencies": {
-    "bcryptjs": "^3.0.2",
-    "better-sqlite3": "^11.10.0",
-    "express": "^5.1.0",
-    "express-session": "^1.18.2"
+    "better-sqlite3": "^11.8.1",
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
   }
 }
